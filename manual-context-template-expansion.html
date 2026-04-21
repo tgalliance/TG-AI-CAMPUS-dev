@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>템플릿 응용 및 실전 확장 - TG AI 캠퍼스</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/samsung-nav.css?v=3">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        .manual-container { display: flex; max-width: 1400px; margin: 50px auto; gap: 30px; padding: 0 20px; }
+        .manual-sidebar { width: 280px; background: white; border-radius: 15px; padding: 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); position: sticky; top: 100px; height: fit-content; }
+        .manual-sidebar h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 20px; color: #1a202c; }
+        .manual-sidebar ul { list-style: none; padding: 0; }
+        .manual-sidebar li { margin-bottom: 12px; }
+        .manual-sidebar a { color: #666; text-decoration: none; display: block; padding: 8px 12px; border-radius: 8px; transition: all 0.3s; }
+        .manual-sidebar a:hover, .manual-sidebar a.active { background: #667eea; color: white; }
+        .manual-content { flex: 1; background: white; border-radius: 15px; padding: 50px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+        .manual-header { border-bottom: 3px solid #667eea; padding-bottom: 30px; margin-bottom: 40px; }
+        .manual-header h1 { font-size: 2.5rem; font-weight: 700; color: #1a202c; margin-bottom: 15px; }
+        .manual-meta { display: flex; gap: 20px; color: #666; font-size: 0.95rem; }
+        .manual-meta span { display: flex; align-items: center; gap: 8px; }
+        .pdf-button { position: fixed; bottom: 30px; right: 30px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 15px 30px; border-radius: 50px; font-size: 1rem; font-weight: 600; cursor: pointer; box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4); transition: all 0.3s; z-index: 1000; }
+        .pdf-button:hover { transform: translateY(-3px); box-shadow: 0 6px 30px rgba(102, 126, 234, 0.6); }
+        .section { margin-bottom: 50px; }
+        .section h2 { font-size: 1.8rem; font-weight: 700; color: #1a202c; margin-bottom: 20px; padding-left: 15px; border-left: 5px solid #667eea; }
+        .section h3 { font-size: 1.3rem; font-weight: 600; color: #2d3748; margin: 30px 0 15px; }
+        .section p { font-size: 1.05rem; line-height: 1.8; color: #4a5568; margin-bottom: 15px; }
+        .highlight-box { background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%); border-left: 4px solid #667eea; padding: 20px 25px; border-radius: 10px; margin: 25px 0; }
+        .tip-box { background: #f0fff4; border-left: 4px solid #48bb78; padding: 20px 25px; border-radius: 10px; margin: 25px 0; }
+        .tip-box::before { content: "💡 알아두기"; font-weight: 700; color: #48bb78; display: block; margin-bottom: 10px; }
+        ul, ol { padding-left: 30px; margin: 20px 0; }
+        li { margin-bottom: 12px; line-height: 1.7; color: #4a5568; }
+        @media (max-width: 768px) {
+            .manual-container { flex-direction: column; }
+            .manual-sidebar { width: 100%; position: static; }
+            .manual-content { padding: 30px 20px; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="utility-bar">
+            <div class="container">
+                <div class="utility-wrapper">
+                    <a href="news.html" class="utility-link">TG 라운지</a>
+                    <a href="notices.html" class="utility-link">공지사항</a>
+                    <a href="tg-family.html" class="utility-link">TG패밀리</a>
+                    <a href="https://tgnco.kr/tg-alliance/" target="_blank" class="external-link tg-alliance">TG Alliance <i class="fas fa-external-link-alt"></i></a>
+                    <span class="external-link" style="color: #ff8c00; cursor: default;">
+                        TG 에듀테크
+                    </span>
+                </div>
+            </div>
+        </div>
+        <nav class="navbar">
+            <div class="container">
+                <div class="nav-wrapper">
+                    <div class="nav-left">
+                        <a href="index.html" class="logo"><i class="fas fa-brain"></i><span><span class="logo-tg">TG</span> AI 캠퍼스</span></a>
+                                                <ul class="nav-menu">
+                            <li><a href="about.html">TG AI 캠퍼스소개</a></li>
+                            <li><a href="manuals.html">AI 활용메뉴얼</a></li>
+                            <li><a href="dictionary.html">AI 용어사전</a></li>
+                            <li><a href="recommended.html">AI 활용추천영상</a></li>
+                            <li><a href="curriculum.html">교육과정</a></li>
+                            <li><a href="support.html" style="color: #3b82f6; font-weight: 600;">나만의 AI 코치</a></li>
+                            <li><a href="dashboard.html">학습 현황</a></li>
+                        </ul>
+                    </div>
+                    <div class="nav-right">
+                        <div class="icon-actions">
+                            <a href="mypage.html" class="icon-link"><img src="assets/images/mypage-icon-new.png?v=2" alt="마이페이지" style="height: 20px;"></a>
+                            <a href="login.html" class="icon-link"><img src="assets/images/logout-icon.png" alt="로그인" style="height: 24px;"></a>
+                        </div>
+                        <button class="mobile-menu-toggle"><i class="fas fa-bars"></i></button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="manual-container">
+        <aside class="manual-sidebar">
+            <h3><i class="fas fa-list"></i> 목차</h3>
+            <ul>
+                <li><a href="#what-is-generative" class="active">1. 응용 전략 개요</a></li>
+                <li><a href="#llm-chat-basics">2. 템플릿 파라미터화</a></li>
+                <li><a href="#tokens-context">3. 조건 분기 설계</a></li>
+                <li><a href="#hallucination-verify">4. 다단계 체인 확장</a></li>
+                <li><a href="#first-prompts">5. 예외 처리 패턴</a></li>
+                <li><a href="#workplace-ready">6. 재사용/버전관리</a></li>
+                <li><a href="#iterate-refine">7. 운영 모니터링</a></li>
+                <li><a href="#beginner-checklist">8. 확장 체크리스트</a></li>
+            </ul>
+            <hr style="margin: 30px 0; border: none; border-top: 1px solid #e2e8f0;">
+            <a href="manuals.html" class="btn btn-outline" style="width: 100%; text-align: center;">
+                <i class="fas fa-arrow-left"></i> 목록으로
+            </a>
+        </aside>
+
+        <main class="manual-content" id="manual-content">
+            <div class="manual-header">
+                <h1><i class="fas fa-arrows-spin"></i> 템플릿 응용 및 실전 확장</h1>
+                <div class="manual-meta">
+                    <span><i class="fas fa-clock"></i> 읽는 시간: 약 30분</span>
+                    <span><i class="fas fa-signal"></i> 난이도: 입문</span>
+                    <span><i class="fas fa-star"></i> 확장 중심</span>
+                </div>
+            </div>
+
+            <section class="section" id="what-is-generative">
+                <h2>1. 응용 전략 개요</h2>
+                <p>생성형 AI는 학습한 패턴을 바탕으로 글, 이미지, 코드처럼 새 결과물을 만들어 내는 시스템입니다. 검색 엔진이 “이미 있는 문서를 찾아주는” 것과 달리, 모델이 확률에 따라 다음 토큰을 이어 붙이며 답을 구성합니다. 그래서 같은 질문을 해도 실행 시점·설정·모델 버전에 따라 문장 표현이 조금씩 달라질 수 있으며, 이는 오류가 아니라 통계적 생성 과정의 특성입니다.</p>
+                <p>업무에서 자주 쓰는 챗봇 형태의 서비스는 대부분 이런 생성형 모델을 뒤에 두고, 대화창으로 질문과 답을 주고받게 만든 것입니다. 중요한 점은 “모델이 무엇을 잘하고 무엇을 모르는지”를 구분하는 일입니다. 학습 데이터에 자주 등장한 주제일수록 유창하게 말하지만, 희귀하거나 최근에 생긴 사실은 틀리거나 추측으로 메울 수 있습니다. 입문자는 먼저 이 한계를 전제로 두고, 답을 그대로 복사하기보다 초안·아이디어·정리용으로 쓰는 습관을 들이는 것이 좋습니다.</p>
+                
+                <div class="highlight-box">
+                    <h3>🧠 한눈에 보는 특징</h3>
+                    <p>입문 단계에서 꼭 짚고 갈 개념입니다. 아래 항목을 이해해 두면 이후 장에서 나오는 토큰·할루시네이션 설명이 훨씬 수월합니다.</p>
+                    <ul>
+                        <li><strong>예측 기반:</strong> “가장 그럴듯한 다음 문장”을 고르는 방식으로 동작합니다. 그래서 논리 증명기가 아니라, 통계적으로 자연스러운 문장을 만드는 엔진에 가깝습니다.</li>
+                        <li><strong>도구가 아닌 조수:</strong> 판단과 최종 책임은 항상 사람에게 있습니다. 특히 대외 발표·계약·의료·재무처럼 책임 소재가 분명한 영역에서는 사람의 검토가 필수입니다.</li>
+                        <li><strong>학습 데이터의 영향:</strong> 자주 등장한 표현·관점에 끌려갈 수 있습니다. 영어권 자료가 많으면 예시나 비유가 서구 중심으로 나올 수 있고, 특정 산업 용어는 과장되거나 단순화될 수 있습니다.</li>
+                        <li><strong>갱신 한계:</strong> 모델이 알고 있는 지식은 학습 시점과 연동되는 경우가 많아, “지금 이 순간의 뉴스”를 항상 정확히 반영하지 못할 수 있습니다. 최신 사실은 검색·공식 공지와 함께 확인하는 것이 안전합니다.</li>
+                    </ul>
+                </div>
+                
+                <div class="highlight-box">
+                    <h3>📝 일상 업무에서의 위치</h3>
+                    <p>생성형 AI는 “시간을 벌어 주는 도구”로 쓸 때 효과가 큽니다. 아래는 팀에서 자주 쓰는 패턴입니다.</p>
+                    <p><strong>초안 작성:</strong> 메일·보고서·기획안의 첫 버전을 빠르게 받아보고, 수신자·톤·수치는 사람이 다듬습니다. 특히 내부 결재용 문서는 팀 템플릿과 맞추는 작업이 필요합니다.</p>
+                    <p><strong>정리·요약:</strong> 긴 회의록이나 자료를 목차와 불릿으로 압축하고, “누가 무엇을 결정했는지”만 추려 달라고 요청해 후속 조치를 명확히 할 수 있습니다.</p>
+                    <p><strong>아이디어 확장:</strong> 같은 주제에 대해 여러 각도의 질문을 던져 선택지를 넓힙니다. 이때 “장단점을 나란히 표로”처럼 형식을 정해 두면 비교가 쉬워집니다.</p>
+                    <p><strong>역할 놀이:</strong> “비판적 독자”, “초보 고객”처럼 역할을 바꿔 같은 기획안에 대한 반응을 시뮬레이션하면 리허설 자료로 활용할 수 있습니다.</p>
+                </div>
+                
+                <div class="tip-box">
+                    <strong>활용 팁:</strong> “정답 기계”가 아니라 “빠른 브레인스토밍 파트너”로 생각하면 기대치를 맞추기 쉽습니다. 한 번에 완벽한 결과를 요구하기보다, 1차 초안을 받고 사람이 방향을 잡는 흐름이 실무에서는 더 안정적입니다.
+                </div>
+            </section>
+
+            <section class="section" id="llm-chat-basics">
+                <h2>2. 템플릿 파라미터화</h2>
+                <p>LLM(Large Language Model)은 방대한 텍스트로 학습한 대규모 언어 모델을 말합니다. 우리가 화면에서 보는 챗봇은 이 LLM에 “대화형으로 질문하고 답을 받는 창”을 씌운 형태라고 보면 됩니다. 같은 LLM이라도 서비스마다 시스템 지침(안전 규칙·말투·금지 주제)이 다르게 걸려 있어, A사 챗봇과 B사 챗봇의 답이 조금씩 다를 수 있습니다.</p>
+                <p>입문 단계에서 알아 두면 좋은 구분은 “모델 자체”와 “그 위에 올라간 제품 기능”입니다. 예를 들어 파일 첨부·웹 검색·코드 실행 같은 기능은 모델만으로 되는 것이 아니라, 서비스가 추가로 연결한 도구일 수 있습니다. 그래서 “이 답이 검색 결과인지, 모델의 기억인지”를 헷갈리지 않도록, 출처가 표시될 때는 반드시 링크나 문서를 직접 확인하는 습관이 필요합니다.</p>
+                
+                <div class="highlight-box">
+                    <h3>🔌 인터페이스마다 다른 점</h3>
+                    <ul>
+                        <li><strong>대화 세션:</strong> 새 채팅을 열면 이전 대화 맥락이 비어 있는 경우가 많습니다. 중요한 조건은 매 세션마다 다시 적어 두거나, “지금까지 요약: …”으로 앞부분을 압축해 넣습니다.</li>
+                        <li><strong>시스템·사용자 메시지:</strong> 사용자에게 보이지 않는 시스템 규칙이 있을 수 있어, “왜 이 주제는 거절됐지?” 같은 현상이 생기기도 합니다. 이는 정상적인 안전 설계의 일부입니다.</li>
+                        <li><strong>모델 선택:</strong> 여러 모델을 고를 수 있다면, 짧은 질문·창의 작업·코드 등 목적에 맞게 바꿔 쓰는 편이 효율적입니다. 입문자는 먼저 기본 모델로 익힌 뒤, 필요할 때만 상위 모델을 쓰는 방식을 추천합니다.</li>
+                    </ul>
+                </div>
+                
+                <div class="highlight-box">
+                    <h3>📎 멀티모달과 확장 기능(개념만)</h3>
+                    <p>텍스트뿐 아니라 이미지·음성을 함께 이해하는 서비스도 많아졌습니다. 업무에서는 “화면 캡처를 올리고 질문한다”, “회의 녹취를 올리고 요약한다” 같은 식으로 활용할 수 있습니다. 다만 이미지 속 글자 인식이나 표 해석은 항상 100% 정확하지 않을 수 있으므로, 숫자·이름은 원본과 대조하는 것이 좋습니다.</p>
+                </div>
+                
+                <div class="tip-box">
+                    <strong>활용 팁:</strong> “이 서비스가 제공하는 기능 목록(파일 업로드, 검색, 플러그인)”을 한 번 훑어보고 나서 질문을 설계하면, 모델만으로는 불가능한 요청을 줄일 수 있습니다.
+                </div>
+            </section>
+
+            <section class="section" id="tokens-context">
+                <h2>3. 조건 분기 설계</h2>
+                <p>대화형 AI는 글자 단위가 아니라 잘게 쪼갠 단위인 토큰으로 입력을 읽습니다. 한글·영문·기호마다 토큰 길이가 달라서, “글자 수”와 “토큰 수”가 비례하지 않을 수 있습니다. 한 번에 넣을 수 있는 토큰의 총량이 곧 컨텍스트(문맥) 창이며, 이 범위를 넘기면 앞부분이 잘리거나 요약되어 품질이 달라질 수 있습니다. 긴 문서를 통째로 붙여 넣었다가 중요한 조건이 잘린 채로 답이 나오는 경우가 바로 이런 이유입니다.</p>
+                <p>실무에서는 “한 번에 다 넣기”보다 “나누어 요청하고, 마지막에 통합 요약을 시키기”가 더 안정적인 경우가 많습니다. 예를 들어 규정집 전체를 요약하게 하기보다, 장별로 요약 → 최종적으로 전체 목차 형태로 합치기처럼 단계를 나누면 토큰 한계와 품질 문제를 동시에 줄일 수 있습니다.</p>
+                
+                <div class="highlight-box">
+                    <h3>🎯 왜 중요한가</h3>
+                    <ul>
+                        <li><strong>긴 자료 붙여넣기:</strong> 중요한 조건이 잘릴 수 있으니 핵심만 남기거나 나눠 요청하세요. 특히 “반드시 지켜야 할 제외 조건”은 질문 상단에 짧게 반복하는 것이 도움이 됩니다.</li>
+                        <li><strong>짧고 명확한 지시:</strong> 같은 의미를 장황하게 반복하기보다, 목표·제약·출력 형식을 한 블록으로 정리하는 편이 유리합니다. 불필요한 예의 표현은 토큰만 잡아먹을 수 있습니다.</li>
+                        <li><strong>대화 이어가기:</strong> 이전 맥락이 길어질수록 앞쪽 내용이 약해질 수 있어, 필요하면 “다시 한 번 조건: …”처럼 상단에 요약을 붙입니다. 긴 프로젝트 대화에서는 주기적으로 “지금까지 합의된 사항 5줄 요약”을 AI에게 시키는 것도 방법입니다.</li>
+                        <li><strong>코드·표·로그:</strong> 에러 로그나 스프레드시트를 통째로 넣을 때는 민감한 값은 가명 처리하고, “이 부분만 분석해줘”처럼 범위를 한정하세요.</li>
+                    </ul>
+                </div>
+                
+                <div class="highlight-box">
+                    <h3>💼 업무에서의 활용 예</h3>
+                    <p><strong>상황:</strong> 30페이지 분량의 사내 가이드를 한 번에 넣고 질문했는데 답이 엉뚱하다.</p>
+                    <p><strong>접근:</strong> 목차별로 나누어 “3장 ‘보안’ 절만 인용해서 질문에 답해줘”처럼 범위를 좁힙니다. 필요하면 각 장 요약을 먼저 뽑고, 그 요약본만 가지고 상위 질문을 이어갑니다.</p>
+                    <p><strong>상황:</strong> 회의 중 빠르게 후속 메일 초안이 필요하다.</p>
+                    <p><strong>접근:</strong> 수신자·톤·필수 포함 문구(예: 일정, 다음 액션)만 짧게 적어 토큰을 아끼면서도 품질을 올립니다. 회의 직후에는 “결정 사항 3가지 / 미결정 2가지”를 먼저 적고 초안을 요청하면 수정 횟수가 줄어듭니다.</p>
+                    <p><strong>상황:</strong> 여러 버전의 기획서를 비교해야 한다.</p>
+                    <p><strong>접근:</strong> 두 파일을 한 번에 넣기보다, “차이점만 표로”를 요청할 때는 각 파일에서 핵심 섹션만 추려 넣거나, 파일명·버전을 명시해 혼동을 막습니다.</p>
+                </div>
+            </section>
+
+            <section class="section" id="hallucination-verify">
+                <h2>4. 다단계 체인 확장</h2>
+                <p>모델은 때때로 사실처럼 들리지만 틀린 내용을 만들어 냅니다. 이를 할루시네이션(환각)이라 부르며, 숫자·인용·법규·제품 스펙처럼 검증 가능한 정보일수록 특히 주의가 필요합니다. 겉으로는 출처와 인용 형식까지 갖춘 답이 나와도, 실제로는 존재하지 않는 논문이나 잘못된 조항 번호일 수 있으므로, “형식이 정교하다”고 해서 신뢰도가 높아지는 것은 아닙니다.</p>
+                <p>입문자에게 권하는 태도는 “먼저 의심하고, 쉽게 검증할 수 있는 것부터 확인한다”입니다. 예를 들어 제품 사양은 제조사 공식 페이지를, 법령은 국가 법령 정보 시스템 등 공식 경로를, 논문은 학술 DB나 DOI로 확인합니다. AI가 “요약해 준 덕분에 어디를 봐야 할지 빨리 알았다” 수준이면 충분히 가치 있는 활용입니다.</p>
+                
+                <div class="highlight-box">
+                    <h3>⚙️ 흔한 패턴</h3>
+                    <ul>
+                        <li><strong>없는 출처:</strong> 논문 제목·링크·인용문을 지어낼 수 있습니다. 링크는 클릭해 보거나, 제목을 검색 엔진으로 재검증하세요.</li>
+                        <li><strong>날짜·수치 혼동:</strong> “대략 맞는” 숫자로 채워 넣는 경우가 있습니다. 회계·재고·KPI처럼 정확한 수치가 중요하면 원본 데이터를 항상 우선합니다.</li>
+                        <li><strong>과신한 단정:</strong> 불확실한데도 단정적으로 말하는 톤이 나올 수 있습니다. “확실하지 않은 부분은 ‘추정’이라고 표시해줘”처럼 요청하면 구분이 나아질 때가 있습니다.</li>
+                        <li><strong>혼합된 사실:</strong> 두 가지 사실을 섞어 그럴듯한 설명을 만들기도 합니다. 각 문장을 끊어 “이 문장만 근거를 대줘”처럼 쪼개서 물어보면 허점이 드러나기도 합니다.</li>
+                    </ul>
+                </div>
+                
+                <div class="highlight-box">
+                    <h3>🎯 검증 루틴(입문용)</h3>
+                    <ul>
+                        <li><strong>한 번 더 질문:</strong> “위 답 중 사실 확인이 필요한 문장만 골라줘”처럼 메타 질문을 던집니다. “가정으로 쓴 문장과 사실로 단정한 문장을 구분해줘”도 유용합니다.</li>
+                        <li><strong>원문 대조:</strong> 사내 문서·공식 사이트·DB와 직접 맞춰봅니다. 특히 내부 용어·약어는 AI가 일반적인 의미로 풀어 쓸 수 있습니다.</li>
+                        <li><strong>전문 영역:</strong> 법·의료·재무 등은 AI 출력을 초안으로만 두고 반드시 담당자 검토를 거칩니다. 외부에 나가는 문서는 결재 라인을 지키는 것이 기본입니다.</li>
+                        <li><strong>버전 고정:</strong> “2026년 기준으로”, “우리 회사 정책 문서 v3 기준으로”처럼 기준 시점과 문서를 명시하면 추측 비율을 줄이는 데 도움이 됩니다.</li>
+                    </ul>
+                </div>
+                
+                <div class="tip-box">
+                    <strong>주의사항:</strong> “AI가 그렇게 말했다”만으로는 근거가 되지 않습니다. 중요한 결정에는 항상 사람이 근거 자료를 붙이고, 회의 자료에는 출처 링크나 문서 번호를 남기는 습관을 들이세요.
+                </div>
+            </section>
+
+            <section class="section" id="first-prompts">
+                <h2>5. 예외 처리 패턴</h2>
+                <p>입문 단계에서는 짧더라도 “목표·맥락·형식” 세 가지를 적어 주는 것만으로도 결과 품질이 달라집니다. 목표는 “무엇을 얻고 싶은지”, 맥락은 “누가·언제·어떤 제약 안에서”, 형식은 “몇 문단·표·불릿·말투”처럼 출력 모양을 가리킵니다. 세 가지 중 하나라도 빠지면, AI는 일반적인 답으로 메우려 하기 때문에 후속 수정이 늘어납니다.</p>
+                <p>처음부터 긴 프롬프트를 쓰기 어렵다면, 한 줄 목표 → 한 줄 맥락 → 한 줄 형식 순으로 메모장에 적은 뒤 붙여 넣는 방식으로 연습해 보세요. 익숙해지면 부서별 템플릿(회의록 요약, 고객 응대 초안, 주간 보고 뼈대)으로 확장할 수 있습니다.</p>
+                
+                <div class="highlight-box">
+                    <h3>🔄 기본 골격</h3>
+                    <p>아래 순서를 습관화하면 같은 질문이라도 훨씬 쓸모 있는 답을 받기 쉽습니다.</p>
+                    <ul>
+                        <li><strong>역할(선택):</strong> “너는 OO 담당자로 답한다”처럼 관점을 한 줄 고정합니다.</li>
+                        <li><strong>입력:</strong> 판단에 필요한 사실만 남깁니다. 불필요한 배경 서술은 줄입니다.</li>
+                        <li><strong>작업:</strong> “요약해줘 / 비교해줘 / 단점만 짚어줘”처럼 동사 하나로 의도를 명확히 합니다.</li>
+                        <li><strong>형식:</strong> 글자 수, 표, 마크다운, 이메일 형식 등 원하는 꼴을 적습니다.</li>
+                    </ul>
+                    <div class="tip-box">
+                        <strong>예시:</strong> “너는 사내 교육 담당자야. 신입 사원 10명을 대상으로 ChatGPT 사용 시 주의사항을 5줄 이내 불릿으로 정리해줘. 말투는 존댓말, 각 줄 끝에 이모지는 쓰지 마.”
+                    </div>
+                </div>
+                
+                <div class="highlight-box">
+                    <h3>👥 역할을 주는 이유</h3>
+                    <p>“누구의 관점에서 쓸 것인지”를 한 줄 넣으면 톤과 깊이가 맞춰집니다. 같은 내용이라도 임원 보고용과 동료 공유용은 문장 길이와 전문 용어 빈도가 달라야 합니다. 역할을 바꿔 같은 질문을 두 번 던져 보고, 차이를 비교하는 것도 학습에 도움이 됩니다.</p>
+                    <div class="tip-box">
+                        <strong>예시:</strong> “비개발 직군 팀장 입장에서, API라는 단어 없이 클라우드 비용 절감 아이디어 3가지만 제시해줘.”
+                    </div>
+                </div>
+                
+                <div class="highlight-box">
+                    <h3>🎬 출력 형식 고정</h3>
+                    <p>표·번호 목록·표준 양식 등 원하는 형태를 명시하면 후처리 시간이 줄어듭니다. “표로”만 말하기보다 열 이름까지 적으면 재작업이 거의 없어집니다.</p>
+                    <div class="tip-box">
+                        <strong>예시:</strong> “각 아이디어마다 제목 한 줄, 근거 한 줄, 리스크 한 줄로 표 형태로 만들어줘.”
+                    </div>
+                </div>
+                
+                <div class="tip-box">
+                    <strong>한 줄 더:</strong> 제한이 있으면 미리 밝히세요. “근거가 불충분하면 ‘확인 필요’라고 써줘”, “모르는 부분은 추측하지 말고 모른다고 해줘” 같은 문장은 환각을 줄이는 데 도움이 될 때가 많습니다.
+                </div>
+            </section>
+
+            <section class="section" id="workplace-ready">
+                <h2>6. 재사용/버전관리</h2>
+                <p>개인 학습용과 회사 업무용은 기준이 다릅니다. 기초 단계에서도 내부 규정과 보안 범위를 먼저 확인하는 것이 안전합니다. 사내에서는 클라우드형 생성형 AI 사용 허용 여부, 허용되는 데이터 등급, 로그 보관 정책 등이 정해져 있을 수 있으므로, IT·보안 부서 안내를 한 번 확인해 두는 것을 권장합니다. “일단 쓰고 나중에 물어보자”는 개인 기기에서도 위험하고, 회사 자료에서는 더욱 그렇습니다.</p>
+                <p>또한 AI가 만들어 낸 문장의 저작권·라이선스 이슈는 국가·서비스 약관에 따라 다를 수 있습니다. 마케팅 카피·상세 페이지 문구처럼 대외 노출이 큰 경우, 내부 가이드에 따라 검수·출처 표기를 거치는 것이 안전합니다.</p>
+                
+                <div class="highlight-box">
+                    <h3>📊 입력 정보의 경계</h3>
+                    <p><strong>원칙:</strong> 고객명·계약금액·미공개 제품 정보·개인식별정보는 사전에 허용된 채널에서만 다룹니다. 허용 여부가 불명확하면 상급자나 보안 담당자에게 먼저 확인합니다.</p>
+                    <p><strong>습관:</strong> 실제 수치 대신 “매출은 A사 대비 10% 높다”처럼 익명화한 시나리오로 질문해 구조만 얻고, 실데이터는 사람이 채웁니다. 회의록에서 이름·프로젝트 코드를 가명으로 바꾸는 정도만으로도 리스크를 크게 줄일 수 있습니다.</p>
+                    <p><strong>업로드:</strong> 파일을 올리는 기능이 있다면, 그 파일이 외부 서버에 저장되는지·재학습에 쓰이는지 약관을 확인합니다. 불안하면 텍스트 중 일부만 복사해 넣습니다.</p>
+                </div>
+                
+                <div class="highlight-box">
+                    <h3>🎯 산출물의 소유와 표기</h3>
+                    <p><strong>저작·검수:</strong> 대외 공문·계약서 등은 AI 초안 여부와 관계없이 최종 승인자가 책임집니다. AI가 작성했다는 이유로 검토를 생략하면 안 됩니다.</p>
+                    <p><strong>투명성:</strong> 조직에서 요구하는 경우, 사용한 도구와 검증 절차를 남겨 두는 것이 좋습니다. 교육 자료나 내부 공유 문서에는 “초안: 생성형 AI + 검토: OOO”처럼 간단히 표기하는 팀도 있습니다.</p>
+                    <p><strong>동료 협업:</strong> 공유 전에 민감 표현·내부 코드명이 섞이지 않았는지 한 번 더 읽는 습관을 들입니다.</p>
+                </div>
+                
+                <div class="highlight-box">
+                    <h3>🔍 도구 선택 시 질문</h3>
+                    <p>여러 SaaS를 쓰는 팀이라면, 어떤 도구에 어떤 종류의 데이터를 넣어도 되는지 표로 정리해 두면 신입 구성원 온보딩에 도움이 됩니다. AI에게는 가상 시나리오로 “비교 항목 목록”을 뽑게 한 뒤, 실제 정책은 사람이 채워 넣는 방식이 안전합니다.</p>
+                    <p><strong>프롬프트:</strong> “우리 팀이 쓰는 SaaS 목록(가상)이 있을 때, 각각 로그인·파일 업로드·API 연동 중 어떤 방식이 가장 민감정보 노출 위험이 큰지, 입문자용으로 표로 비교해줘. 결론은 조언 수준이고 법적 판단은 아님을 명시해줘.”</p>
+                </div>
+            </section>
+
+            <section class="section" id="iterate-refine">
+                <h2>7. 운영 모니터링</h2>
+                <p>한 번에 완벽한 답을 기대하기보다, “초안 → 피드백 → 수정”을 짧게 여러 번 반복하는 방식이 입문자에게 더 잘 맞는 경우가 많습니다. 생성형 AI는 대화형이므로, 같은 세션 안에서 “두 번째 문단만 더 짧게”, “반말 말고 격식 있게”, “근거를 한 줄씩만 달아줘”처럼 부분 지시를 주는 것이 자연스럽습니다.</p>
+                <p>수정 요청을 할 때는 불만만 말하기보다, 기대와의 차이를 구체적으로 적습니다. 예를 들어 “너무 일반론이다”보다 “우리 회사는 제조업이니까, 재고 관점에서 한 문단만 추가해줘”가 훨씬 유용합니다. 이렇게 하면 모델이 다음 토큰을 고를 때 방향이 좁혀져, 같은 대화 안에서 품질이 안정됩니다.</p>
+                
+                <div class="highlight-box">
+                    <h3>🔁 자주 쓰는 후속 문장</h3>
+                    <ul>
+                        <li>“위 답을 50% 길이로 줄여줘. 핵심은 3가지 불릿으로.”</li>
+                        <li>“비판적 관점에서 반박 근거 3가지를 덧붙여줘.”</li>
+                        <li>“초보자에게 설명한다고 가정하고, 전문 용어는 괄호로 풀어줘.”</li>
+                        <li>“한국어 존댓말로 바꾸고, 이메일 제목 후보를 3개만.”</li>
+                        <li>“지금 답에서 확신이 낮은 부분에 (추정) 표시를 달아줘.”</li>
+                    </ul>
+                </div>
+                
+                <div class="highlight-box">
+                    <h3>🧩 막혔을 때</h3>
+                    <p>답이 이상하면 새 채팅을 열기 전에, 같은 창에서 “질문을 다시 정리해서 한 문장으로 말해줘”처럼 메타 요청을 해 보세요. 모델이 사용자의 의도를 다시 요약해 주면, 그 요약문을 복사해 새 질문의 첫 줄로 쓰기 좋습니다. 완전히 다른 접근이 필요할 때만 새 세션을 권합니다.</p>
+                </div>
+                
+                <div class="tip-box">
+                    <strong>활용 팁:</strong> 한 번에 긴 문서를 고치게 하기보다, “1페이지만” “결론만”처럼 구역을 나눠 수정 요청하면 토큰 한계와 오류를 동시에 줄일 수 있습니다.
+                </div>
+            </section>
+
+            <section class="section" id="beginner-checklist">
+                <h2>8. 확장 체크리스트</h2>
+                <p>매번 짧게 점검하면 실수와 시간 낭비를 줄일 수 있습니다. 아래 목록을 북마크하거나 메모장에 두고, 중요한 업무 전에만이라도 훑어보세요. 처음에는 항목이 많게 느껴질 수 있지만, 익숙해지면 머릿속에서 자동으로 돌아가게 됩니다.</p>
+                
+                <div class="highlight-box">
+                    <h3>📋 질문 전</h3>
+                    <ul>
+                        <li>목표를 한 문장으로 적었는가. “무엇을 위해 쓸 결과물인지”가 분명한가.</li>
+                        <li>민감정보를 빼거나 가명·가상 수치로 바꿨는가. 회사명·제품명이 실제와 연결되지 않게 했는가.</li>
+                        <li>원하는 형식(글 길이, 말투, 표/글머리, 금지 표현)을 적었는가.</li>
+                        <li>참고할 사내 규정·용어집이 있으면 “반드시 지킬 조건”으로 한 줄 요약했는가.</li>
+                        <li>토큰이 길 것 같으면 질문을 나눌 계획인가. 한 번에 다 넣지 않아도 되는지 검토했는가.</li>
+                    </ul>
+                </div>
+                
+                <div class="highlight-box">
+                    <h3>🎯 답을 받은 뒤</h3>
+                    <ul>
+                        <li>숫자·날짜·규정·제품명은 원문·공식 출처와 대조했는가.</li>
+                        <li>한 번 더 “근거가 약한 문장만 골라줘”, “추정인지 사실인지 태그 달아줘”고 요청해 봤는가.</li>
+                        <li>실제 발송·보고·고객 전달 전에 담당자 검토·결재가 필요한지 판단했는가.</li>
+                        <li>동료에게 넘길 때 AI 초안임을 알리고, 검토 포인트를 짚어 주었는가.</li>
+                        <li>이상하면 같은 세션에서 수정 요청을 먼저 시도했는가. 필요할 때만 새 채팅을 열었는가.</li>
+                    </ul>
+                </div>
+                
+                <div class="highlight-box">
+                    <h3>⚡ 습관으로 남기기</h3>
+                    <ul>
+                        <li>잘 된 프롬프트는 메모장·노션 등에 템플릿으로 저장하고, 부서 공유 폴더가 있으면 거기에도 둔다.</li>
+                        <li>같은 작업은 “수정 요청”으로 이어 가며 한 번에 완벽을 기대하지 않는다.</li>
+                        <li>주 1회, 새로 배운 한 가지 표현(역할 지정, 표 형식, 길이 제한 등)만 실험해 본다.</li>
+                        <li>월 1회, 틀렸던 사례와 고친 프롬프트를 짧게 기록해 두면 실력이 누적된다.</li>
+                    </ul>
+                </div>
+                
+                <div class="highlight-box">
+                    <h3>🌱 다음에 읽으면 좋은 것</h3>
+                    <p>이 매뉴얼에서 다룬 내용을 바탕으로, 같은 사이트의 <strong>AI 기본 개념</strong>·<strong>프롬프트 작성법</strong> 매뉴얼로 이어 가면 실습 폭이 넓어집니다. 팀 단위로는 내부 가이드 한 페이지(허용 도구·금지 데이터·표기 규칙)를 만드는 것부터 시작해 보세요.</p>
+                </div>
+                
+                <div class="tip-box">
+                    <strong>핵심 원칙:</strong> 생성형 AI는 속도를 올려 주는 도구입니다. 그 속도만큼 검증과 책임의 기준도 함께 올리면, 입문자도 안전하게 활용 범위를 넓혀 갈 수 있습니다. 체크리스트는 부담 없이, 지금 업무에 꼭 맞는 항목만 골라 써도 됩니다.
+                </div>
+            </section>
+
+            <div style="text-align: center; margin-top: 60px; padding: 40px; background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%); border-radius: 15px;">
+                <h3 style="font-size: 1.5rem; margin-bottom: 20px;">다음 단계</h3>
+                <p style="margin-bottom: 30px;">AI 기본 개념을 이해했다면, 이제 실전으로!</p>
+                <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                    <a href="manual-basic.html" class="btn btn-outline">AI 기본 개념</a>
+                    <a href="manual-prompt-basic.html" class="btn btn-primary">프롬프트 작성법</a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <button class="pdf-button" onclick="downloadPDF()">
+        <i class="fas fa-file-pdf"></i> PDF 다운로드
+    </button>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo-section">
+                        <img src="assets/images/common/footer_tg.jpg" alt="TG 건물" class="footer-building-image">
+                        <div class="footer-text-content">
+                            <h4>TG AI 캠퍼스</h4>
+                            <p>AI 기술 교육 전문 플랫폼</p>
+                        </div>
+                    </div>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>AI 교육 과정</h4>
+                    <ul>
+                        <li><a href="manuals.html#tab-basics-link">기초편</a></li>
+                        <li><a href="manuals.html#tab-advanced-link">실전편</a></li>
+                        <li><a href="manuals.html#tab-prompt-link">프롬프트</a></li>
+                        <li><a href="manuals.html#tab-job-link">직무별 활용</a></li>
+                        <li><a href="manuals.html#tab-advanced-ai-link">AI 고도화</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>AI 실전</h4>
+                    <ul>
+                        <li><a href="manual-prompt-basic.html">프롬프트 작성법</a></li>
+                        <li><a href="manual-automation.html">업무 자동화</a></li>
+                        <li><a href="manual-workflow.html">워크플로우 구축</a></li>
+                        <li><a href="manual-collaboration.html">AI 협업 도구</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>학습 지원</h4>
+                    <ul>
+                        <li><a href="support.html">나만의 AI 코치</a></li>
+                        <li><a href="notices.html">공지사항</a></li>
+                        <li><a href="dictionary.html">AI 용어 사전</a></li>
+                        <li><a href="dashboard.html">학습 현황</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>TG 라운지</h4>
+                    <ul>
+                        <li><a href="about.html">TG AI 캠퍼스 소개</a></li>
+                        <li><a href="tg-family.html">TG 패밀리</a></li>
+                        <li><a href="news.html">TG Alliance 소식</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 TG AI 캠퍼스. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.querySelectorAll('.manual-sidebar a[href^="#"]').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const headerOffset = 120;
+                    const elementPosition = target.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                    
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+                    
+                    document.querySelectorAll('.manual-sidebar a').forEach(a => a.classList.remove('active'));
+                    this.classList.add('active');
+                }
+            });
+        });
+
+        async function downloadPDF() {
+            const button = document.querySelector('.pdf-button');
+            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 생성 중...';
+            button.disabled = true;
+
+            try {
+                const { jsPDF } = window.jspdf;
+                const content = document.getElementById('manual-content');
+                const canvas = await html2canvas(content, { scale: 2, useCORS: true, logging: false });
+                const imgData = canvas.toDataURL('image/png');
+                const pdf = new jsPDF('p', 'mm', 'a4');
+                const pageWidth = pdf.internal.pageSize.getWidth();
+                const pageHeight = pdf.internal.pageSize.getHeight();
+                const imgWidth = pageWidth - 20;
+                const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                let heightLeft = imgHeight;
+                let position = 10;
+
+                pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+                heightLeft -= pageHeight;
+
+                while (heightLeft >= 0) {
+                    position = heightLeft - imgHeight + 10;
+                    pdf.addPage();
+                    pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+                    heightLeft -= pageHeight;
+                }
+
+                pdf.save('TG_AI_템플릿응용실전확장.pdf');
+                button.innerHTML = '<i class="fas fa-check"></i> 다운로드 완료!';
+                setTimeout(() => {
+                    button.innerHTML = '<i class="fas fa-file-pdf"></i> PDF 다운로드';
+                    button.disabled = false;
+                }, 2000);
+            } catch (error) {
+                console.error('PDF 생성 오류:', error);
+                alert('PDF 생성 중 오류가 발생했습니다.');
+                button.innerHTML = '<i class="fas fa-file-pdf"></i> PDF 다운로드';
+                button.disabled = false;
+            }
+        }
+
+        document.querySelector('.mobile-menu-toggle')?.addEventListener('click', function() {
+            document.querySelector('.nav-menu').classList.toggle('active');
+        });
+    </script>
+</body>
+</html>

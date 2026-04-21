@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 생산성 극대화 실전 - TG AI 캠퍼스</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/samsung-nav.css?v=3">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        .manual-container { display: flex; max-width: 1400px; margin: 50px auto; gap: 30px; padding: 0 20px; }
+        .manual-sidebar { width: 280px; background: white; border-radius: 15px; padding: 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); position: sticky; top: 100px; height: fit-content; }
+        .manual-sidebar h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 20px; color: #1a202c; }
+        .manual-sidebar ul { list-style: none; padding: 0; }
+        .manual-sidebar li { margin-bottom: 12px; }
+        .manual-sidebar a { color: #666; text-decoration: none; display: block; padding: 8px 12px; border-radius: 8px; transition: all 0.3s; }
+        .manual-sidebar a:hover, .manual-sidebar a.active { background: #f97316; color: white; }
+        .manual-content { flex: 1; background: white; border-radius: 15px; padding: 50px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+        .manual-header { border-bottom: 3px solid #f97316; padding-bottom: 30px; margin-bottom: 40px; }
+        .manual-header h1 { font-size: 2.5rem; font-weight: 700; color: #1a202c; margin-bottom: 15px; }
+        .manual-meta { display: flex; gap: 20px; color: #666; font-size: 0.95rem; flex-wrap: wrap; }
+        .manual-meta span { display: flex; align-items: center; gap: 8px; }
+        .pdf-button { position: fixed; bottom: 30px; right: 30px; background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); color: white; border: none; padding: 15px 30px; border-radius: 50px; font-size: 1rem; font-weight: 600; cursor: pointer; box-shadow: 0 4px 20px rgba(249, 115, 22, 0.4); transition: all 0.3s; z-index: 1000; }
+        .pdf-button:hover { transform: translateY(-3px); box-shadow: 0 6px 30px rgba(249, 115, 22, 0.6); }
+        .section { margin-bottom: 50px; }
+        .section h2 { font-size: 1.8rem; font-weight: 700; color: #1a202c; margin-bottom: 20px; padding-left: 15px; border-left: 5px solid #f97316; }
+        .section h3 { font-size: 1.3rem; font-weight: 600; color: #2d3748; margin: 30px 0 15px; }
+        .section p { font-size: 1.05rem; line-height: 1.8; color: #4a5568; margin-bottom: 15px; }
+        .prompt-box { background: #fff7ed; border: 2px solid #f97316; border-radius: 10px; padding: 25px; margin: 25px 0; }
+        .prompt-box .label { font-weight: 700; color: #f97316; margin-bottom: 15px; display: block; font-size: 1.1rem; }
+        .prompt-box pre { background: white; padding: 20px; border-radius: 8px; border: 1px solid #fed7aa; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word; line-height: 1.6; }
+        .example-output { background: #eff6ff; border-left: 4px solid #3b82f6; padding: 20px 25px; border-radius: 10px; margin: 25px 0; }
+        .example-output::before { content: "✅ AI 생성 예시"; font-weight: 700; color: #3b82f6; display: block; margin-bottom: 10px; }
+        .tip-box { background: #fef3c7; border-left: 4px solid #f59e0b; padding: 20px 25px; border-radius: 10px; margin: 25px 0; }
+        .tip-box::before { content: "💡 활용 팁"; font-weight: 700; color: #f59e0b; display: block; margin-bottom: 10px; }
+        .highlight-box { background: linear-gradient(135deg, #f9731615 0%, #ea580c15 100%); border-left: 4px solid #f97316; padding: 20px 25px; border-radius: 10px; margin: 25px 0; }
+        .highlight-box strong { color: #f97316; font-weight: 700; }
+        ul, ol { padding-left: 30px; margin: 20px 0; }
+        li { margin-bottom: 12px; line-height: 1.7; color: #4a5568; }
+        @media (max-width: 768px) {
+            .manual-container { flex-direction: column; }
+            .manual-sidebar { width: 100%; position: static; }
+            .manual-content { padding: 30px 20px; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="utility-bar">
+            <div class="container">
+                <div class="utility-wrapper">
+                    <a href="news.html" class="utility-link">TG 라운지</a>
+                    <a href="notices.html" class="utility-link">공지사항</a>
+                    <a href="tg-family.html" class="utility-link">TG패밀리</a>
+                    <a href="https://tgnco.kr/tg-alliance/" target="_blank" class="external-link tg-alliance">TG Alliance <i class="fas fa-external-link-alt"></i></a>
+                    <span class="external-link" style="color: #ff8c00; cursor: default;">
+                        TG 에듀테크
+                    </span>
+                </div>
+            </div>
+        </div>
+        <nav class="navbar">
+            <div class="container">
+                <div class="nav-wrapper">
+                    <div class="nav-left">
+                        <a href="index.html" class="logo"><i class="fas fa-brain"></i><span><span class="logo-tg">TG</span> AI 캠퍼스</span></a>
+                        <ul class="nav-menu">
+                            <li><a href="about.html">TG AI 캠퍼스소개</a></li>
+                            <li><a href="manuals.html">AI 활용메뉴얼</a></li>
+                            <li><a href="dictionary.html">AI 용어사전</a></li>
+                            <li><a href="recommended.html">AI 활용추천영상</a></li>
+                            <li><a href="curriculum.html">교육과정</a></li>
+                            <li><a href="support.html" style="color: #3b82f6; font-weight: 600;">나만의 AI 코치</a></li>
+                            <li><a href="dashboard.html">학습 현황</a></li>
+                        </ul>
+                    </div>
+                    <div class="nav-right">
+                        <div class="icon-actions">
+                            <a href="mypage.html" class="icon-link"><img src="assets/images/mypage-icon-new.png?v=2" alt="마이페이지" style="height: 20px;"></a>
+                            <a href="login.html" class="icon-link"><img src="assets/images/logout-icon.png" alt="로그인" style="height: 24px;"></a>
+                        </div>
+                        <button class="mobile-menu-toggle"><i class="fas fa-bars"></i></button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="manual-container">
+        <aside class="manual-sidebar">
+            <h3><i class="fas fa-list"></i> 목차</h3>
+            <ul>
+                <li><a href="#time-reduction" class="active">1. 업무 시간 50% 단축</a></li>
+                <li><a href="#automation">2. 반복 업무 자동화</a></li>
+                <li><a href="#decision">3. AI 기반 의사결정</a></li>
+                <li><a href="#collaboration">4. 협업 생산성 향상</a></li>
+            </ul>
+            <hr style="margin: 30px 0; border: none; border-top: 1px solid #e2e8f0;">
+            <a href="manuals.html" class="btn btn-outline" style="width: 100%; text-align: center;">
+                <i class="fas fa-arrow-left"></i> 목록으로
+            </a>
+        </aside>
+
+        <main class="manual-content" id="manual-content">
+            <div class="manual-header">
+                <h1><i class="fas fa-bolt"></i> AI 생산성 극대화 실전</h1>
+                <div class="manual-meta">
+                    <span><i class="fas fa-clock"></i> 읽는 시간: 35분</span>
+                    <span><i class="fas fa-briefcase"></i> 대상: 전 직원</span>
+                    <span><i class="fas fa-fire"></i> 실전 전략 20+</span>
+                </div>
+            </div>
+
+            <div class="highlight-box">
+                <strong>이 매뉴얼의 핵심:</strong> AI를 올바르게 활용하면 하루 업무의 절반을 자동화할 수 있습니다.
+                복잡한 기술 없이도, 지금 당장 실무에 적용 가능한 전략을 소개합니다.
+            </div>
+
+            <!-- Section 1 -->
+            <section class="section" id="time-reduction">
+                <h2>1. 업무 시간 50% 단축 전략</h2>
+
+                <p>AI를 활용하면 정보 수집, 초안 작성, 요약 등 시간 소모가 큰 작업을 대폭 줄일 수 있습니다.
+                핵심은 "AI에게 적절한 맥락을 주고 초안을 맡기는 것"입니다.</p>
+
+                <h3>⚡ 긴 문서 빠르게 요약하기</h3>
+                <div class="prompt-box">
+                    <span class="label">🎯 실전 프롬프트:</span>
+                    <pre>**문서 유형:** 30페이지 분량의 시장 조사 보고서
+
+**요청:**
+핵심 내용을 다음 형식으로 요약해줘.
+
+**출력 형식:**
+1. 핵심 결론 (3줄 이내)
+2. 주요 데이터 포인트 (숫자 중심, 5개)
+3. 우리 팀에 시사하는 바 (3가지)
+4. 즉시 활용 가능한 액션 아이템
+
+**주의:** 전문 용어는 쉽게 풀어서, 임원 보고용 톤으로</pre>
+                </div>
+
+                <div class="example-output">
+                    <strong>📋 시장 조사 보고서 핵심 요약</strong><br><br>
+
+                    <strong>1. 핵심 결론</strong><br>
+                    국내 AI SaaS 시장은 연 34% 성장 중이며, 중소기업 도입률이 급등하고 있다. 가격 경쟁력과 사용 편의성이 구매 결정의 핵심 요인으로 부상했다.<br><br>
+
+                    <strong>2. 주요 데이터 포인트</strong><br>
+                    • 시장 규모: 2026년 기준 4.2조원 (전년 대비 +34%)<br>
+                    • 중소기업 도입률: 28% → 47% (2년 내 목표)<br>
+                    • 1위 경쟁사 점유율: 31% (하락 추세)<br>
+                    • 고객 이탈 원인 1위: 복잡한 UI (응답자의 43%)<br>
+                    • 재계약률 평균: 78%<br><br>
+
+                    <strong>3. 시사점</strong><br>
+                    ① 중소기업 대상 진입 장벽 낮추기가 최우선 과제<br>
+                    ② UI/UX 간소화로 이탈률 감소 가능<br>
+                    ③ 경쟁사 약점(가격, 복잡성)을 집중 공략할 기회<br><br>
+
+                    <strong>4. 액션 아이템</strong><br>
+                    • 다음 달 중소기업 전용 요금제 출시 검토<br>
+                    • UI 간소화 TF팀 구성
+                </div>
+
+                <h3>📧 이메일·메시지 초안 2분 완성</h3>
+                <div class="prompt-box">
+                    <span class="label">🎯 실전 프롬프트:</span>
+                    <pre>**상황:** 외부 협력사에 미팅 일정을 잡으려고 함
+
+**핵심 내용:**
+- 목적: 신규 프로젝트 협업 논의
+- 일정 후보: 4월 21일(월) 오후 2시, 4월 23일(수) 오전 10시
+- 장소: 우리 회사 회의실 (또는 화상회의 가능)
+- 담당자: 기획팀 이OO 부장
+
+**요청:**
+정중하고 간결한 미팅 제안 이메일 작성
+제목도 같이 작성해줘</pre>
+                </div>
+
+                <div class="example-output">
+                    <strong>제목:</strong> [미팅 제안] 신규 프로젝트 협업 논의 일정 확인 요청<br><br>
+
+                    안녕하세요, OO 담당자님.<br><br>
+
+                    TG 기획팀 이OO 부장입니다.<br>
+                    최근 논의된 신규 프로젝트 협업 건과 관련하여 미팅을 제안드리고자 연락드립니다.<br><br>
+
+                    <strong>미팅 일정 후보</strong><br>
+                    ① 4월 21일(월) 오후 2시<br>
+                    ② 4월 23일(수) 오전 10시<br><br>
+
+                    장소는 저희 사무실 회의실 또는 화상회의 모두 가능합니다.<br>
+                    편하신 일정을 알려주시면 즉시 확정하겠습니다.<br><br>
+
+                    감사합니다.
+                </div>
+
+                <div class="tip-box">
+                    같은 유형의 이메일을 자주 보낸다면, AI에게 "이 이메일을 템플릿으로 만들어줘"라고 요청하세요.
+                    변수 부분(날짜, 이름, 목적)만 채우면 다음 번엔 30초 안에 작성 완료됩니다.
+                </div>
+            </section>
+
+            <!-- Section 2 -->
+            <section class="section" id="automation">
+                <h2>2. 반복 업무 자동화</h2>
+
+                <p>매일, 매주 반복되는 업무를 AI로 구조화하면 처음 한 번만 설계하고 이후엔 AI가 처리합니다.
+                보고서 초안, 주간 업무 정리, 공지사항 작성 등이 대표적입니다.</p>
+
+                <h3>📊 주간 업무 보고서 자동 생성</h3>
+                <div class="prompt-box">
+                    <span class="label">🎯 실전 프롬프트:</span>
+                    <pre>**이번 주 업무 메모 (날것 그대로):**
+- 월: 기획서 초안 작성, 팀장 피드백 반영
+- 화: 협력사 미팅, 계약 조건 논의
+- 수: 마케팅팀과 캠페인 기획 회의 (2시간)
+- 목: 데이터 정리, 보고서 수정본 제출
+- 금: 사내 발표 준비 및 발표 완료
+
+**성과:** 기획서 최종 승인, 협력사 계약 가계약 완료
+**이슈:** 데이터 수집 지연 (해결: 타팀 협조 요청)
+**다음주 계획:** 계약 본계약, 캠페인 기안서 완성
+
+**요청:**
+위 내용을 깔끔한 주간 업무 보고서 형식으로 작성해줘
+임원 보고용, 간결하게</pre>
+                </div>
+
+                <div class="example-output">
+                    <strong>📋 주간 업무 보고 (4월 2주차)</strong><br><br>
+
+                    <strong>주요 추진 업무</strong><br>
+                    • 신규 프로젝트 기획서 작성 및 최종 승인 완료<br>
+                    • 협력사 미팅 및 가계약 체결<br>
+                    • 마케팅팀 캠페인 기획 회의 참여<br>
+                    • 분석 데이터 정리 및 보고서 제출<br>
+                    • 사내 기획안 발표 완료<br><br>
+
+                    <strong>주요 성과</strong><br>
+                    ✅ 기획서 팀장 최종 승인<br>
+                    ✅ OO 협력사 가계약 완료<br><br>
+
+                    <strong>이슈 및 대응</strong><br>
+                    ⚠️ 데이터 수집 일정 지연 → 유관 부서 협조 요청으로 해소<br><br>
+
+                    <strong>차주 핵심 과제</strong><br>
+                    ① OO 협력사 본계약 체결<br>
+                    ② 마케팅 캠페인 기안서 작성 완료
+                </div>
+
+                <h3>📢 반복 공지사항 템플릿 자동화</h3>
+                <div class="prompt-box">
+                    <span class="label">🎯 실전 프롬프트:</span>
+                    <pre>**용도:** 매월 사내 교육 프로그램 공지 이메일
+
+**고정 내용:**
+- 교육명: [교육명]
+- 일시: [날짜] [시간]
+- 장소: [장소 또는 온라인 링크]
+- 대상: [대상]
+- 신청 마감: [마감일]
+
+**요청:**
+위 형식의 공지 이메일 템플릿을 만들어줘.
+매월 [  ] 안의 변수만 바꿔서 즉시 발송할 수 있게</pre>
+                </div>
+
+                <div class="example-output">
+                    <strong>제목:</strong> [필독] [교육명] 안내 및 신청 요청<br><br>
+
+                    안녕하세요, 임직원 여러분.<br><br>
+
+                    이번 달 사내 교육 프로그램을 안내드립니다. 적극적인 참여 부탁드립니다.<br><br>
+
+                    <strong>📚 교육 안내</strong><br>
+                    • 교육명: [교육명]<br>
+                    • 일 시: [날짜] [시간]<br>
+                    • 장 소: [장소 / Zoom 링크: 링크]<br>
+                    • 대 상: [대상]<br>
+                    • 신청 마감: [마감일]<br><br>
+
+                    신청은 [신청 링크 또는 방법]을 통해 해주시기 바랍니다.<br>
+                    문의 사항은 교육담당자(내선: OOO)에게 연락 주세요.<br><br>
+
+                    감사합니다.
+                </div>
+
+                <div class="tip-box">
+                    반복 업무를 자동화할 때는 먼저 "가장 자주 하는 업무 TOP 5"를 목록으로 만들어보세요.
+                    그 중 텍스트 작업(이메일, 보고서, 공지 등)은 80% 이상 AI로 초안을 해결할 수 있습니다.
+                </div>
+            </section>
+
+            <!-- Section 3 -->
+            <section class="section" id="decision">
+                <h2>3. AI 기반 의사결정 지원</h2>
+
+                <p>복잡한 선택지 앞에서 AI에게 분석을 맡기면 더 빠르고 논리적인 결정을 내릴 수 있습니다.
+                AI는 장단점 비교, 위험 요소 검토, 시나리오 분석을 순식간에 처리합니다.</p>
+
+                <h3>⚖️ 옵션 비교 및 의사결정 매트릭스</h3>
+                <div class="prompt-box">
+                    <span class="label">🎯 실전 프롬프트:</span>
+                    <pre>**의사결정 상황:** 신규 마케팅 채널 선정
+
+**검토 옵션:**
+- A안: 인스타그램 광고
+- B안: 유튜브 콘텐츠 마케팅
+- C안: 네이버 SEO 최적화
+
+**평가 기준 (중요도 순):**
+1. 단기 효과 (3개월 이내)
+2. 비용 효율
+3. 장기 브랜드 가치
+4. 팀 실행 난이도
+
+**요청:**
+각 옵션을 위 기준으로 비교 분석하고
+최종 추천안과 근거를 알려줘</pre>
+                </div>
+
+                <div class="example-output">
+                    <strong>📊 마케팅 채널 비교 분석</strong><br><br>
+
+                    <table style="width:100%; border-collapse:collapse; font-size:0.9rem;">
+                        <tr style="background:#f97316; color:white;">
+                            <th style="padding:8px; border:1px solid #ddd;">평가 기준</th>
+                            <th style="padding:8px; border:1px solid #ddd;">A. 인스타그램</th>
+                            <th style="padding:8px; border:1px solid #ddd;">B. 유튜브</th>
+                            <th style="padding:8px; border:1px solid #ddd;">C. SEO</th>
+                        </tr>
+                        <tr>
+                            <td style="padding:8px; border:1px solid #ddd;">단기 효과</td>
+                            <td style="padding:8px; border:1px solid #ddd;">⭐⭐⭐⭐⭐</td>
+                            <td style="padding:8px; border:1px solid #ddd;">⭐⭐</td>
+                            <td style="padding:8px; border:1px solid #ddd;">⭐⭐</td>
+                        </tr>
+                        <tr style="background:#f9fafb;">
+                            <td style="padding:8px; border:1px solid #ddd;">비용 효율</td>
+                            <td style="padding:8px; border:1px solid #ddd;">⭐⭐⭐</td>
+                            <td style="padding:8px; border:1px solid #ddd;">⭐⭐⭐⭐</td>
+                            <td style="padding:8px; border:1px solid #ddd;">⭐⭐⭐⭐⭐</td>
+                        </tr>
+                        <tr>
+                            <td style="padding:8px; border:1px solid #ddd;">장기 브랜드</td>
+                            <td style="padding:8px; border:1px solid #ddd;">⭐⭐⭐</td>
+                            <td style="padding:8px; border:1px solid #ddd;">⭐⭐⭐⭐⭐</td>
+                            <td style="padding:8px; border:1px solid #ddd;">⭐⭐⭐⭐</td>
+                        </tr>
+                        <tr style="background:#f9fafb;">
+                            <td style="padding:8px; border:1px solid #ddd;">실행 난이도</td>
+                            <td style="padding:8px; border:1px solid #ddd;">쉬움</td>
+                            <td style="padding:8px; border:1px solid #ddd;">어려움</td>
+                            <td style="padding:8px; border:1px solid #ddd;">중간</td>
+                        </tr>
+                    </table><br>
+
+                    <strong>✅ 최종 추천: A안 + C안 병행</strong><br>
+                    단기 성과(인스타그램 광고)로 빠른 유입을 만들면서, SEO 작업을 병행해 중장기 자산을 구축하는 전략이 효율적입니다. 유튜브는 리소스 여유가 생기는 2분기에 검토를 권장합니다.
+                </div>
+
+                <h3>🔍 리스크 체크리스트 자동 생성</h3>
+                <div class="prompt-box">
+                    <span class="label">🎯 실전 프롬프트:</span>
+                    <pre>**진행 예정 업무:** 신규 외부 업체와 데이터 공유 계약 체결
+
+**상황:**
+- 계약 규모: 연간 1억원
+- 공유 데이터: 고객 거래 데이터 일부
+- 계약 기간: 1년 자동 갱신
+
+**요청:**
+계약 전 반드시 확인해야 할 리스크 체크리스트를 만들어줘
+법률, 보안, 운영 측면으로 구분해서</pre>
+                </div>
+
+                <div class="example-output">
+                    <strong>⚠️ 데이터 공유 계약 리스크 체크리스트</strong><br><br>
+
+                    <strong>법률 리스크</strong><br>
+                    ☐ 개인정보보호법상 제3자 제공 동의 확보 여부<br>
+                    ☐ 데이터 목적 외 사용 금지 조항 포함 여부<br>
+                    ☐ 계약 해지 시 데이터 반환·삭제 의무 명시<br>
+                    ☐ 자동 갱신 조건 및 해지 통보 기한 확인<br><br>
+
+                    <strong>보안 리스크</strong><br>
+                    ☐ 상대방 정보보안 인증 현황 (ISMS 등)<br>
+                    ☐ 데이터 전송 구간 암호화 방식 확인<br>
+                    ☐ 데이터 접근 권한 최소화 원칙 적용 여부<br>
+                    ☐ 침해 사고 시 즉시 통보 의무 조항<br><br>
+
+                    <strong>운영 리스크</strong><br>
+                    ☐ SLA(서비스 수준 협약) 및 가용성 보장 조건<br>
+                    ☐ 데이터 오류 발생 시 책임 소재 명확화<br>
+                    ☐ 핵심 담당자 변경 시 인수인계 절차<br>
+                    ☐ 연간 1억원 규모 대비 ROI 측정 기준 설정
+                </div>
+
+                <div class="tip-box">
+                    의사결정이 어렵다면 AI에게 "악마의 변호인 역할로 이 결정의 약점을 공격해줘"라고 요청해보세요.
+                    자신의 계획에서 미처 보지 못한 맹점을 발견할 수 있습니다.
+                </div>
+            </section>
+
+            <!-- Section 4 -->
+            <section class="section" id="collaboration">
+                <h2>4. 협업 생산성 향상</h2>
+
+                <p>AI는 팀 내 소통과 협업에도 강력한 도구입니다.
+                회의 준비, 팀 공유 자료 작성, 의견 정리 등 협업의 모든 단계에서 AI를 활용하세요.</p>
+
+                <h3>🗂️ 회의 사전 준비 자료 자동화</h3>
+                <div class="prompt-box">
+                    <span class="label">🎯 실전 프롬프트:</span>
+                    <pre>**회의 정보:**
+- 회의 주제: 2분기 마케팅 전략 수립
+- 참석자: 마케팅팀(3명), 기획팀(2명), 영업팀(1명)
+- 시간: 60분
+- 목표: 2분기 핵심 캠페인 확정
+
+**요청:**
+효율적인 회의 진행을 위한 사전 준비 자료를 만들어줘
+1. 아젠다 (시간 배분 포함)
+2. 각 팀이 사전에 준비할 사항
+3. 회의 전 공유할 질문 목록</pre>
+                </div>
+
+                <div class="example-output">
+                    <strong>📋 2분기 마케팅 전략 회의 준비 자료</strong><br><br>
+
+                    <strong>1. 회의 아젠다 (60분)</strong><br>
+                    • 00~10분: 1분기 성과 공유 (마케팅팀)<br>
+                    • 10~25분: 2분기 시장 환경 및 기회 분석 (기획팀)<br>
+                    • 25~45분: 핵심 캠페인 후보 발표 및 토론 (전체)<br>
+                    • 45~55분: 2분기 캠페인 확정 및 예산 배분<br>
+                    • 55~60분: 액션 아이템 정리 및 마감 확인<br><br>
+
+                    <strong>2. 팀별 사전 준비 사항</strong><br>
+                    마케팅팀: 1분기 KPI 실적 정리, 캠페인 아이디어 3개 이상 준비<br>
+                    기획팀: 경쟁사 동향 및 시장 분석 자료 1장 요약<br>
+                    영업팀: 고객 피드백 TOP 5 및 현장 인사이트 공유<br><br>
+
+                    <strong>3. 사전 공유 질문</strong><br>
+                    Q1. 1분기 캠페인 중 가장 효과적이었던 것은?<br>
+                    Q2. 2분기에 우선적으로 공략할 타깃 고객층은?<br>
+                    Q3. 예산 제약이 있다면 어떤 채널에 집중해야 하는가?
+                </div>
+
+                <h3>📝 팀원 업무 현황 빠르게 정리</h3>
+                <div class="prompt-box">
+                    <span class="label">🎯 실전 프롬프트:</span>
+                    <pre>**팀원 업무 현황 메모 (각자 슬랙에 올린 내용):**
+- 김OO: 제안서 작업 중, 내일 오전 완료 예정
+- 박OO: 클라이언트 미팅 완료, 후속 견적서 작업 중
+- 이OO: 휴가 중 (복귀일: 4월 18일)
+- 최OO: 데이터 분석 보고서 검토 중, 지연 가능성 있음
+
+**요청:**
+위 내용을 팀장 보고용 간결한 현황 요약으로 정리해줘
+지연 리스크 항목은 강조해줘</pre>
+                </div>
+
+                <div class="example-output">
+                    <strong>📊 팀 업무 현황 요약 (4월 14일 기준)</strong><br><br>
+
+                    <strong>정상 진행</strong><br>
+                    ✅ 김OO — 제안서 작성 중 (4/15 오전 완료 예정)<br>
+                    ✅ 박OO — 클라이언트 미팅 완료, 견적서 작업 진행 중<br><br>
+
+                    <strong>부재</strong><br>
+                    📅 이OO — 휴가 (복귀: 4/18)<br><br>
+
+                    <strong>⚠️ 리스크 항목</strong><br>
+                    🔴 최OO — 데이터 분석 보고서 지연 가능성 (원인 파악 필요)<br>
+                    → 권고: 오늘 중 진행 상황 확인 및 지원 여부 결정
+                </div>
+
+                <div class="tip-box">
+                    팀 내 AI 활용도를 높이려면 먼저 "팀 프롬프트 라이브러리"를 공유 문서로 만드세요.
+                    자주 쓰는 프롬프트를 팀 전체가 재사용하면 생산성이 팀 단위로 배가됩니다.
+                </div>
+            </section>
+
+            <div style="text-align: center; margin-top: 60px; padding: 40px; background: linear-gradient(135deg, #f9731615 0%, #ea580c15 100%); border-radius: 15px;">
+                <h3 style="font-size: 1.5rem; margin-bottom: 20px;">⚡ 지금 바로 생산성을 높이세요!</h3>
+                <p style="margin-bottom: 30px;">AI로 반복 업무 시간을 줄이고, 핵심 의사결정에 집중하세요.</p>
+                <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                    <a href="manual-scenarios.html" class="btn btn-outline">업무 시나리오 활용</a>
+                    <a href="manual-automation.html" class="btn btn-outline">자동화 설계</a>
+                    <a href="manuals.html" class="btn btn-primary">전체 목록</a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <button class="pdf-button" onclick="downloadPDF()">
+        <i class="fas fa-file-pdf"></i> PDF 다운로드
+    </button>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo-section">
+                        <img src="assets/images/common/footer_tg.jpg" alt="TG 건물" class="footer-building-image">
+                        <div class="footer-text-content">
+                            <h4>TG AI 캠퍼스</h4>
+                            <p>AI 기술 교육 전문 플랫폼</p>
+                        </div>
+                    </div>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>AI 교육 과정</h4>
+                    <ul>
+                        <li><a href="manuals.html#tab-basics-link">기초편</a></li>
+                        <li><a href="manuals.html#tab-advanced-link">실전편</a></li>
+                        <li><a href="manuals.html#tab-prompt-link">프롬프트</a></li>
+                        <li><a href="manuals.html#tab-job-link">직무별 활용</a></li>
+                        <li><a href="manuals.html#tab-advanced-ai-link">AI 고도화</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>AI 실전</h4>
+                    <ul>
+                        <li><a href="manual-productivity.html">AI 생산성 극대화</a></li>
+                        <li><a href="manual-automation.html">업무 자동화</a></li>
+                        <li><a href="manual-workflow.html">워크플로우 구축</a></li>
+                        <li><a href="manual-collaboration.html">AI 협업 도구</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>학습 지원</h4>
+                    <ul>
+                        <li><a href="support.html">나만의 AI 코치</a></li>
+                        <li><a href="notices.html">공지사항</a></li>
+                        <li><a href="dictionary.html">AI 용어 사전</a></li>
+                        <li><a href="dashboard.html">학습 현황</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>TG 라운지</h4>
+                    <ul>
+                        <li><a href="about.html">TG AI 캠퍼스 소개</a></li>
+                        <li><a href="tg-family.html">TG 패밀리</a></li>
+                        <li><a href="news.html">TG Alliance 소식</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 TG AI 캠퍼스. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.querySelectorAll('.manual-sidebar a[href^="#"]').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const headerOffset = 120;
+                    const elementPosition = target.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+
+                    document.querySelectorAll('.manual-sidebar a').forEach(a => a.classList.remove('active'));
+                    this.classList.add('active');
+                }
+            });
+        });
+
+        async function downloadPDF() {
+            const button = document.querySelector('.pdf-button');
+            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 생성 중...';
+            button.disabled = true;
+
+            try {
+                const { jsPDF } = window.jspdf;
+                const content = document.getElementById('manual-content');
+                const canvas = await html2canvas(content, { scale: 2, useCORS: true, logging: false });
+                const imgData = canvas.toDataURL('image/png');
+                const pdf = new jsPDF('p', 'mm', 'a4');
+                const pageWidth = pdf.internal.pageSize.getWidth();
+                const pageHeight = pdf.internal.pageSize.getHeight();
+                const imgWidth = pageWidth - 20;
+                const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                let heightLeft = imgHeight;
+                let position = 10;
+
+                pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+                heightLeft -= pageHeight;
+
+                while (heightLeft >= 0) {
+                    position = heightLeft - imgHeight + 10;
+                    pdf.addPage();
+                    pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+                    heightLeft -= pageHeight;
+                }
+
+                pdf.save('TG_AI_생산성극대화_매뉴얼.pdf');
+                button.innerHTML = '<i class="fas fa-check"></i> 다운로드 완료!';
+                setTimeout(() => {
+                    button.innerHTML = '<i class="fas fa-file-pdf"></i> PDF 다운로드';
+                    button.disabled = false;
+                }, 2000);
+            } catch (error) {
+                console.error('PDF 생성 오류:', error);
+                button.innerHTML = '<i class="fas fa-file-pdf"></i> PDF 다운로드';
+                button.disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>

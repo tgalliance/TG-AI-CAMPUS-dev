@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TG 라운지 - TG AI 캠퍼스</title>
+    <link rel="stylesheet" href="assets/css/style.css?v=8">
+    <link rel="stylesheet" href="assets/css/samsung-nav.css?v=6">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --lounge-orange: #ff6b35;
+            --lounge-coral: #ff8c69;
+            --lounge-yellow: #ffd166;
+            --lounge-teal: #06d6a0;
+            --lounge-blue: #118ab2;
+            --lounge-navy: #073b4c;
+            --lounge-pink: #ef476f;
+            --lounge-purple: #7b2d8b;
+            --text-dark: #1a1a2e;
+            --text-mid: #4a4a6a;
+            --text-light: #9090a8;
+            --bg-warm: #fffbf7;
+            --card-shadow: 0 4px 24px rgba(0,0,0,0.08);
+            --card-hover: 0 12px 40px rgba(0,0,0,0.14);
+        }
+
+        body { background: var(--bg-warm); }
+
+        /* ===== HERO ===== */
+        .lounge-hero {
+            position: relative;
+            background: #0f1a2e;
+            overflow: hidden;
+            height: 700px;
+            padding: 0;
+            display: flex;
+            align-items: center;
+        }
+        .lounge-hero-video {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            object-fit: cover;
+            opacity: 0.9;
+            z-index: 0;
+        }
+        .lounge-hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.28);
+            z-index: 1;
+        }
+        .lounge-hero .container { z-index: 2; }
+        .lounge-hero::before {
+            content: '';
+            position: absolute;
+            top: -80px; right: -80px;
+            width: 400px; height: 400px;
+            background: radial-gradient(circle, rgba(255,107,53,0.25) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+        .lounge-hero::after {
+            content: '';
+            position: absolute;
+            bottom: -60px; left: -60px;
+            width: 300px; height: 300px;
+            background: radial-gradient(circle, rgba(6,214,160,0.2) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+        .lounge-hero .container {
+            max-width: 1200px; margin: 0 auto; padding: 0 30px;
+            position: relative; z-index: 2;
+            display: flex; align-items: flex-start; justify-content: space-between; gap: 40px;
+            padding-top: 30px;
+        }
+        .hero-left { flex: 1; }
+        .hero-badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            color: rgba(255,255,255,0.9);
+            font-size: 0.82rem; font-weight: 600;
+            margin-bottom: 20px;
+        }
+        .hero-badge span { display: none; }
+        @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(1.3)} }
+        .lounge-hero h1 {
+            font-size: 2.4rem; font-weight: 800; color: white;
+            line-height: 1.2; margin-bottom: 18px; letter-spacing: -0.5px;
+            white-space: nowrap;
+        }
+        .lounge-hero h1 .accent { color: var(--lounge-orange); }
+        .lounge-hero h1 .accent2 { color: var(--lounge-teal); }
+        .hero-desc {
+            color: rgba(255,255,255,0.72); font-size: 1.05rem;
+            line-height: 1.7; margin-bottom: 30px; max-width: 700px;
+            white-space: nowrap;
+        }
+        .hero-cta-row { display: flex; gap: 12px; flex-wrap: wrap; }
+        .hero-cta-btn {
+            padding: 9px 18px; border-radius: 10px;
+            font-weight: 700; font-size: 0.82rem;
+            cursor: pointer; border: none; transition: all 0.25s;
+            display: inline-flex; align-items: center; gap: 7px;
+            text-decoration: none;
+        }
+        .hero-cta-btn.primary { background: #2563eb; color: white; }
+        .hero-cta-btn.primary:hover { background: #1d4ed8; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(37,99,235,0.4); }
+        .hero-cta-btn.outline { background: rgba(255,255,255,0.1); color: white; border: 1.5px solid rgba(255,255,255,0.3); }
+        .hero-cta-btn.outline:hover { background: rgba(255,255,255,0.18); transform: translateY(-2px); }
+
+        .hero-right { display: flex; flex-direction: column; gap: 14px; }
+        .hero-stat-card {
+            background: rgba(255,255,255,0.08);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 16px; padding: 18px 22px;
+            display: flex; align-items: center; gap: 14px;
+            min-width: 220px;
+        }
+        .hero-stat-icon {
+            width: 44px; height: 44px; border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.3rem; flex-shrink: 0;
+        }
+        .hero-stat-card h4 { color: white; font-size: 1.4rem; font-weight: 800; margin: 0 0 2px; }
+        .hero-stat-card p { color: rgba(255,255,255,0.6); font-size: 0.8rem; margin: 0; }
+
+        /* ===== 실시간 티커 ===== */
+        .news-ticker {
+            background: var(--lounge-navy);
+            padding: 12px 0; overflow: hidden;
+        }
+        .ticker-inner { display: flex; align-items: center; max-width: 1200px; margin: 0 auto; padding: 0 30px; gap: 16px; }
+        .ticker-label {
+            background: var(--lounge-orange); color: white;
+            padding: 3px 12px; border-radius: 4px;
+            font-size: 0.78rem; font-weight: 700; white-space: nowrap; flex-shrink: 0;
+        }
+        .ticker-track { flex: 1; overflow: hidden; }
+        .ticker-text {
+            display: flex; gap: 50px; white-space: nowrap;
+            animation: ticker 30s linear infinite;
+            color: rgba(255,255,255,0.8); font-size: 0.88rem;
+        }
+        .ticker-text span { white-space: nowrap; }
+        .ticker-text span::before { content: '🔔 '; }
+        @keyframes ticker { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+        /* ===== 퀵 메뉴 ===== */
+        .quick-menu-section {
+            max-width: 1200px; margin: 0 auto; padding: 20px 30px 0;
+            position: relative; z-index: 10;
+        }
+        .quick-menu-grid {
+            display: grid; grid-template-columns: repeat(8, 1fr); gap: 12px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.12);
+            padding: 24px 20px;
+        }
+        .quick-menu-item {
+            display: flex; flex-direction: column; align-items: center; gap: 10px;
+            cursor: pointer; transition: all 0.25s; padding: 10px 6px; border-radius: 14px;
+            text-decoration: none;
+        }
+        .quick-menu-item:hover { background: #fff5f0; transform: translateY(-3px); }
+        .quick-menu-icon {
+            width: 52px; height: 52px; border-radius: 16px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.4rem; transition: transform 0.25s;
+        }
+        .quick-menu-item:hover .quick-menu-icon { transform: scale(1.1); }
+        .quick-menu-item span { font-size: 0.78rem; font-weight: 600; color: var(--text-mid); text-align: center; line-height: 1.3; }
+
+        /* ===== 메인 컨텐츠 레이아웃 ===== */
+        .lounge-container { max-width: 1200px; margin: 12px auto; padding: 0 30px; }
+        .lounge-layout { display: grid; grid-template-columns: 1fr 340px; gap: 28px; }
+        .lounge-main {}
+        .lounge-sidebar {}
+
+        /* ===== 섹션 헤더 ===== */
+        .section-header {
+            display: flex; align-items: center; justify-content: space-between;
+            margin-bottom: 18px;
+        }
+        .section-title-wrap { display: flex; align-items: center; gap: 10px; }
+        .section-badge {
+            width: 36px; height: 36px; border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1rem;
+        }
+        .section-title {
+            font-size: 1.15rem; font-weight: 700; color: var(--text-dark); margin: 0;
+        }
+        .section-more {
+            font-size: 0.82rem; color: var(--text-light); font-weight: 500;
+            text-decoration: none; display: flex; align-items: center; gap: 4px;
+            transition: color 0.2s;
+        }
+        .section-more:hover { color: var(--lounge-orange); }
+
+        /* ===== 회사 뉴스 피처드 ===== */
+        .news-featured { margin-bottom: 28px; }
+        .news-featured-card {
+            border-radius: 18px; overflow: hidden;
+            background: linear-gradient(135deg, #1a1a2e, #0f3460);
+            position: relative; cursor: pointer;
+            transition: all 0.3s;
+            height: 260px; display: flex; align-items: flex-end;
+        }
+        .news-featured-card:hover { transform: translateY(-4px); box-shadow: var(--card-hover); }
+        .news-featured-card img {
+            position: absolute; inset: 0; width: 100%; height: 100%;
+            object-fit: cover; opacity: 0.45;
+        }
+        .news-featured-content {
+            position: relative; z-index: 2;
+            padding: 28px; color: white; width: 100%;
+        }
+        .news-featured-tag {
+            display: inline-block; padding: 4px 12px;
+            background: var(--lounge-orange); border-radius: 20px;
+            font-size: 0.75rem; font-weight: 700; margin-bottom: 10px;
+        }
+        .news-featured-content h3 { font-size: 1.3rem; font-weight: 700; margin: 0 0 8px; line-height: 1.4; }
+        .news-featured-meta { display: flex; align-items: center; gap: 12px; font-size: 0.8rem; opacity: 0.75; }
+
+        .news-sub-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+        .news-sub-card {
+            background: white; border-radius: 14px; overflow: hidden;
+            box-shadow: var(--card-shadow); cursor: pointer; transition: all 0.3s;
+        }
+        .news-sub-card:hover { transform: translateY(-3px); box-shadow: var(--card-hover); }
+        .news-sub-img { height: 130px; overflow: hidden; }
+        .news-sub-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s; }
+        .news-sub-card:hover .news-sub-img img { transform: scale(1.06); }
+        .news-sub-info { padding: 14px; }
+        .news-sub-tag {
+            display: inline-block; padding: 2px 9px; border-radius: 10px;
+            font-size: 0.72rem; font-weight: 700; margin-bottom: 6px;
+        }
+        .news-sub-info h4 { font-size: 0.9rem; font-weight: 600; color: var(--text-dark); margin: 0 0 6px; line-height: 1.4; }
+        .news-sub-info p { font-size: 0.78rem; color: var(--text-light); margin: 0; }
+
+        /* ===== 이벤트 섹션 ===== */
+        .event-section { margin-bottom: 28px; }
+        .event-scroll { display: flex; gap: 14px; overflow-x: auto; padding-bottom: 8px; }
+        .event-scroll::-webkit-scrollbar { height: 4px; }
+        .event-scroll::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 2px; }
+        .event-scroll::-webkit-scrollbar-thumb { background: #ddd; border-radius: 2px; }
+        .event-card {
+            min-width: 200px; background: white; border-radius: 16px;
+            box-shadow: var(--card-shadow); overflow: hidden;
+            cursor: pointer; transition: all 0.3s; flex-shrink: 0;
+        }
+        .event-card:hover { transform: translateY(-4px); box-shadow: var(--card-hover); }
+        .event-card-top {
+            height: 100px; display: flex; align-items: center; justify-content: center;
+            font-size: 2.8rem; position: relative;
+        }
+        .event-dday {
+            position: absolute; top: 10px; right: 10px;
+            background: var(--lounge-pink); color: white;
+            font-size: 0.7rem; font-weight: 800; padding: 3px 8px; border-radius: 8px;
+        }
+        .event-card-body { padding: 14px; }
+        .event-card-body h4 { font-size: 0.9rem; font-weight: 700; color: var(--text-dark); margin: 0 0 5px; }
+        .event-card-body p { font-size: 0.78rem; color: var(--text-light); margin: 0 0 8px; }
+        .event-join-btn {
+            width: 100%; padding: 8px; border: none; border-radius: 8px;
+            font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: all 0.2s;
+        }
+
+        /* ===== 커뮤니티 피드 ===== */
+        .community-section { margin-bottom: 28px; }
+        .community-tabs { display: flex; gap: 8px; margin-bottom: 16px; }
+        .comm-tab {
+            padding: 7px 16px; border-radius: 20px; font-size: 0.83rem; font-weight: 600;
+            cursor: pointer; transition: all 0.2s; border: 1.5px solid #e5e7eb; background: white;
+            color: var(--text-mid);
+        }
+        .comm-tab.active { background: var(--lounge-orange); color: white; border-color: var(--lounge-orange); }
+        .community-post {
+            background: white; border-radius: 14px; padding: 18px;
+            box-shadow: var(--card-shadow); margin-bottom: 12px;
+            cursor: pointer; transition: all 0.25s;
+            display: flex; gap: 14px; align-items: flex-start;
+        }
+        .community-post:hover { box-shadow: var(--card-hover); transform: translateX(3px); }
+        .post-avatar {
+            width: 42px; height: 42px; border-radius: 50%; flex-shrink: 0;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem; font-weight: 700; color: white;
+        }
+        .post-content { flex: 1; }
+        .post-header { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; flex-wrap: wrap; }
+        .post-author { font-size: 0.85rem; font-weight: 700; color: var(--text-dark); }
+        .post-dept { font-size: 0.75rem; color: var(--text-light); background: #f3f4f6; padding: 2px 8px; border-radius: 8px; }
+        .post-tag { font-size: 0.72rem; font-weight: 700; padding: 2px 8px; border-radius: 8px; }
+        .post-time { font-size: 0.75rem; color: var(--text-light); margin-left: auto; }
+        .post-text { font-size: 0.88rem; color: var(--text-mid); line-height: 1.55; margin: 0 0 10px; }
+        .post-footer { display: flex; align-items: center; gap: 14px; }
+        .post-reaction { display: flex; align-items: center; gap: 5px; font-size: 0.78rem; color: var(--text-light); cursor: pointer; }
+        .post-reaction:hover { color: var(--lounge-orange); }
+        .write-post-btn {
+            width: 100%; padding: 14px; border-radius: 12px;
+            border: 2px dashed #e5e7eb; background: white;
+            color: var(--text-light); font-size: 0.9rem; font-weight: 500;
+            cursor: pointer; transition: all 0.2s; margin-top: 4px;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+        }
+        .write-post-btn:hover { border-color: var(--lounge-orange); color: var(--lounge-orange); background: #fff5f0; }
+
+        /* ===== 사이드바 ===== */
+        .sidebar-card {
+            background: white; border-radius: 16px;
+            box-shadow: var(--card-shadow); margin-bottom: 20px; overflow: hidden;
+        }
+        .sidebar-card-header {
+            padding: 16px 20px;
+            display: flex; align-items: center; gap: 10px;
+            border-bottom: 1px solid #f3f4f6;
+        }
+        .sidebar-card-header h3 { font-size: 0.95rem; font-weight: 700; color: var(--text-dark); margin: 0; }
+        .sidebar-card-body { padding: 16px 20px; }
+
+        /* OKR 카드 */
+        .okr-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 16px; padding: 22px; margin-bottom: 20px;
+            color: white;
+        }
+        .okr-card h3 { font-size: 1rem; font-weight: 700; margin: 0 0 6px; }
+        .okr-card p { font-size: 0.82rem; opacity: 0.85; margin: 0 0 16px; line-height: 1.5; }
+        .okr-progress { margin-bottom: 14px; }
+        .okr-label { display: flex; justify-content: space-between; font-size: 0.78rem; margin-bottom: 5px; opacity: 0.85; }
+        .okr-bar { height: 7px; background: rgba(255,255,255,0.25); border-radius: 4px; }
+        .okr-bar-fill { height: 100%; border-radius: 4px; background: var(--lounge-yellow); transition: width 1s ease; }
+        .okr-btn {
+            width: 100%; padding: 11px; background: rgba(255,255,255,0.2);
+            border: 1.5px solid rgba(255,255,255,0.4); color: white;
+            border-radius: 10px; font-size: 0.88rem; font-weight: 700;
+            cursor: pointer; transition: all 0.2s;
+            display: flex; align-items: center; justify-content: center; gap: 6px;
+        }
+        .okr-btn:hover { background: rgba(255,255,255,0.3); }
+
+        /* 이번 주 이벤트 사이드 */
+        .event-list-item {
+            display: flex; gap: 12px; align-items: center;
+            padding: 10px 0; border-bottom: 1px solid #f3f4f6;
+        }
+        .event-list-item:last-child { border-bottom: none; padding-bottom: 0; }
+        .event-date-badge {
+            min-width: 44px; height: 44px; border-radius: 12px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            font-size: 0.65rem; font-weight: 700; color: white; line-height: 1.2;
+        }
+        .event-date-badge strong { font-size: 1.1rem; }
+        .event-list-info h5 { font-size: 0.85rem; font-weight: 600; color: var(--text-dark); margin: 0 0 2px; }
+        .event-list-info p { font-size: 0.75rem; color: var(--text-light); margin: 0; }
+
+        /* 건의함 사이드 */
+        .suggest-list-item {
+            padding: 10px 0; border-bottom: 1px solid #f3f4f6;
+            cursor: pointer;
+        }
+        .suggest-list-item:last-child { border-bottom: none; padding-bottom: 0; }
+        .suggest-list-item:hover .suggest-title { color: var(--lounge-orange); }
+        .suggest-title { font-size: 0.85rem; font-weight: 600; color: var(--text-dark); margin: 0 0 4px; transition: color 0.2s; }
+        .suggest-meta { display: flex; align-items: center; gap: 8px; font-size: 0.75rem; color: var(--text-light); }
+        .suggest-status {
+            padding: 2px 8px; border-radius: 6px; font-size: 0.7rem; font-weight: 700;
+        }
+
+        /* 프리마켓 사이드 */
+        .market-item {
+            display: flex; gap: 10px; align-items: center;
+            padding: 10px 0; border-bottom: 1px solid #f3f4f6; cursor: pointer;
+        }
+        .market-item:last-child { border-bottom: none; padding-bottom: 0; }
+        .market-thumb {
+            width: 52px; height: 52px; border-radius: 10px;
+            background: #f3f4f6; display: flex; align-items: center;
+            justify-content: center; font-size: 1.5rem; flex-shrink: 0;
+        }
+        .market-info h5 { font-size: 0.85rem; font-weight: 600; color: var(--text-dark); margin: 0 0 3px; }
+        .market-price { font-size: 0.9rem; font-weight: 800; color: var(--lounge-orange); }
+        .market-seller { font-size: 0.73rem; color: var(--text-light); }
+
+        /* ===== 배너 ===== */
+        .lounge-banner-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 28px; }
+        .lounge-banner {
+            border-radius: 16px; padding: 22px 20px;
+            display: flex; align-items: center; gap: 14px;
+            cursor: pointer; transition: all 0.3s; text-decoration: none;
+        }
+        .lounge-banner:hover { transform: translateY(-3px); box-shadow: var(--card-hover); }
+        .banner-icon { font-size: 2rem; flex-shrink: 0; }
+        .banner-text h4 { font-size: 0.95rem; font-weight: 700; margin: 0 0 4px; }
+        .banner-text p { font-size: 0.78rem; margin: 0; opacity: 0.8; }
+
+        /* ===== 콘텐츠 카드 직사각형 처리 ===== */
+        .news-featured-card,
+        .news-list-item,
+        .event-card,
+        .post-card,
+        .sidebar-widget,
+        .okr-section,
+        .okr-item,
+        .market-item,
+        .comment-input,
+        .hero-cta-btn,
+        .section-badge,
+        .tab-btn,
+        .market-btn {
+            border-radius: 0 !important;
+        }
+
+        /* ===== 반응형 ===== */
+        @media (max-width: 1024px) {
+            .lounge-layout { grid-template-columns: 1fr; }
+            .lounge-sidebar { order: -1; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+            .lounge-sidebar > * { margin-bottom: 0 !important; }
+            .quick-menu-grid { grid-template-columns: repeat(4, 1fr); }
+            .lounge-banner-row { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 768px) {
+            .lounge-hero { padding: 50px 0 45px; }
+            .lounge-hero .container { flex-direction: column; }
+            .lounge-hero h1 { font-size: 2.2rem; }
+            .hero-right { flex-direction: row; flex-wrap: wrap; }
+            .hero-stat-card { min-width: 150px; flex: 1; }
+            .quick-menu-grid { grid-template-columns: repeat(4, 1fr); gap: 8px; padding: 16px 12px; }
+            .quick-menu-icon { width: 44px; height: 44px; font-size: 1.2rem; }
+            .news-sub-grid { grid-template-columns: 1fr; }
+            .lounge-sidebar { grid-template-columns: 1fr; }
+            .lounge-banner-row { grid-template-columns: 1fr; }
+            .lounge-container { padding: 0 16px; margin: 28px auto; }
+            .quick-menu-section { padding: 0 16px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="utility-bar">
+            <div class="container">
+                <div class="utility-wrapper">
+                    <a href="news.html" class="utility-link">TG 라운지</a>
+                    <a href="notices.html" class="utility-link">공지사항</a>
+                    <a href="tg-family.html" class="utility-link">TG패밀리</a>
+                    <a href="https://tgnco.kr/tg-alliance/" target="_blank" class="external-link tg-alliance">
+                        TG Alliance <i class="fas fa-external-link-alt"></i>
+                    </a>
+                    <span class="external-link" style="color: #ff8c00; cursor: default;">TG 에듀테크</span>
+                </div>
+            </div>
+        </div>
+        <nav class="navbar">
+            <div class="container">
+                <div class="nav-wrapper">
+                    <div class="nav-left">
+                        <a href="index.html" class="logo">
+                            <i class="fas fa-brain"></i>
+                            <span><span class="logo-tg">TG</span> AI 캠퍼스</span>
+                        </a>
+                        <ul class="nav-menu">
+                            <li><a href="about.html">TG AI 캠퍼스소개</a></li>
+                            <li><a href="manuals.html">AI 활용메뉴얼</a></li>
+                            <li><a href="dictionary.html">AI 용어사전</a></li>
+                            <li><a href="recommended.html">AI 활용추천영상</a></li>
+                            <li><a href="curriculum.html">교육과정</a></li>
+                            <li><a href="support.html" style="color: #3b82f6; font-weight: 600;">나만의 AI 코치</a></li>
+                            <li><a href="dashboard.html">학습 현황</a></li>
+                        </ul>
+                    </div>
+                    <div class="nav-right">
+                        <div class="search-wrapper">
+                            <form class="search-form">
+                                <button type="submit" class="search-btn"><i class="fas fa-search"></i></button>
+                                <input type="text" class="search-input" placeholder="검색" autocomplete="off">
+                            </form>
+                        </div>
+                        <div class="icon-actions">
+                            <a href="mypage.html" class="icon-link" title="마이페이지">
+                                <img src="assets/images/mypage-icon-new.png?v=2" alt="마이페이지" class="icon-img mypage-icon" style="width:auto!important;height:20px!important;max-height:20px!important;">
+                            </a>
+                            <a href="login.html" class="icon-link" id="authIcon" title="로그인">
+                                <img src="assets/images/logout-icon.png" alt="로그인" class="icon-img" style="width:24px!important;height:24px!important;">
+                            </a>
+                        </div>
+                        <button class="mobile-menu-toggle" id="mobileMenuToggle"><i class="fas fa-bars"></i></button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- ===== HERO ===== -->
+    <section class="lounge-hero">
+        <video class="lounge-hero-video" autoplay muted loop playsinline>
+            <source src="assets/videos/banner/banner_newst01.mp4" type="video/mp4">
+        </video>
+        <div class="lounge-hero-overlay"></div>
+        <div class="container">
+            <div class="hero-left">
+                <div class="hero-badge">
+                    <span></span> TG Alliance 전사 커뮤니티
+                </div>
+                <h1>TG 인의 <span style="color:#0099FF;">TG</span> 라운지</h1>
+                <p class="hero-desc">TG Alliance 구성원들이 소통하고, 공유하고, 함께 성장하는 우리만의 공간입니다.</p>
+                <div class="hero-cta-row">
+                    <a href="#community" class="hero-cta-btn primary"><i class="fas fa-pen"></i> 글 쓰기</a>
+                    <a href="#events" class="hero-cta-btn outline"><i class="fas fa-calendar-alt"></i> 이벤트 보기</a>
+                </div>
+            </div>
+            <!-- 통계 카드 숨김 -->
+        </div>
+    </section>
+
+    <!-- ===== 실시간 티커 (숨김) ===== -->
+    <!-- <div class="news-ticker">...</div> -->
+
+    <!-- ===== 퀵 메뉴 ===== -->
+    <!-- 퀵 메뉴 숨김 -->
+    <!-- <div class="quick-menu-section">...</div> -->
+
+    <!-- ===== 메인 컨텐츠 ===== -->
+    <div class="lounge-container">
+
+        <!-- OKR + 배너 숨김 -->
+
+        <div class="lounge-layout">
+            <!-- ===== 메인 영역 ===== -->
+            <div class="lounge-main">
+
+                <!-- 회사 뉴스 -->
+                <div class="news-featured" style="margin-bottom:28px;">
+                    <div class="news-featured-card" style="margin-bottom:14px;">
+                        <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&q=80" alt="">
+                        <p style="position:absolute; top:24px; left:28px; z-index:3; color:#fff; font-size:1.6rem; font-weight:800; margin:0; letter-spacing:-0.5px;">회사 주요 소식</p>
+                        <div class="news-featured-content">
+                            <span class="news-featured-tag" style="background:#2563eb;">🏢 경영</span>
+                            <h3>TG Alliance, 2분기 전사 AI 전환 가속화 로드맵 발표</h3>
+                            <div class="news-featured-meta">
+                                <span><i class="far fa-calendar"></i> 2026.04.15</span>
+                                <span><i class="far fa-eye"></i> 1,284</span>
+                                <span><i class="far fa-comment"></i> 47</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="news-sub-grid">
+                        <div class="news-sub-card">
+                            <div class="news-sub-img">
+                                <img src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=400&q=80" alt="">
+                            </div>
+                            <div class="news-sub-info">
+                                <span class="news-sub-tag" style="background:#e8f8f4;color:#06d6a0;">🎉 이벤트</span>
+                                <h4>5월 전사 체육대회 개최 안내 — 팀별 신청 접수 중</h4>
+                                <p>2026.04.12 · 👁 892</p>
+                            </div>
+                        </div>
+                        <div class="news-sub-card">
+                            <div class="news-sub-img">
+                                <img src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=400&q=80" alt="">
+                            </div>
+                            <div class="news-sub-info">
+                                <span class="news-sub-tag" style="background:#eef2ff;color:#667eea;">🏆 성과</span>
+                                <h4>AI 활용 우수부서 — 마케팅팀, 영업2팀 선정</h4>
+                                <p>2026.04.10 · 👁 1,103</p>
+                            </div>
+                        </div>
+                        <div class="news-sub-card">
+                            <div class="news-sub-img">
+                                <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=400&q=80" alt="">
+                            </div>
+                            <div class="news-sub-info">
+                                <span class="news-sub-tag" style="background:#fef9ec;color:#d97706;">💡 인사이트</span>
+                                <h4>CEO 메시지 — "AI는 도구가 아닌 우리의 동료입니다"</h4>
+                                <p>2026.04.08 · 👁 2,314</p>
+                            </div>
+                        </div>
+                        <div class="news-sub-card">
+                            <div class="news-sub-img">
+                                <img src="https://images.unsplash.com/photo-1543269664-56d93c1b41a6?w=400&q=80" alt="">
+                            </div>
+                            <div class="news-sub-info">
+                                <span class="news-sub-tag" style="background:#fde8ed;color:#ef476f;">❤️ 복지</span>
+                                <h4>2026 복지포인트 2차 지급 완료 — 마이페이지 확인</h4>
+                                <p>2026.04.05 · 👁 3,821</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 이벤트 -->
+                <div class="event-section" id="events">
+                    <div class="section-header">
+                        <div class="section-title-wrap">
+                            <div class="section-badge" style="background:#e8f8f4;">🎉</div>
+                            <h2 class="section-title">이달의 이벤트</h2>
+                        </div>
+                        <a href="#" class="section-more">전체보기 <i class="fas fa-chevron-right"></i></a>
+                    </div>
+                    <div class="event-scroll">
+                        <div class="event-card">
+                            <div class="event-card-top" style="background:linear-gradient(135deg,#ff9a9e,#fad0c4);">
+                                🏃
+                                <span class="event-dday">D-5</span>
+                            </div>
+                            <div class="event-card-body">
+                                <h4>전사 체육대회</h4>
+                                <p>5월 31일 · 올림픽공원</p>
+                                <button class="event-join-btn" style="background:#fff0eb;color:#ff6b35;" onclick="alert('체육대회 참가 신청이 완료되었습니다!')">참가 신청</button>
+                            </div>
+                        </div>
+                        <div class="event-card">
+                            <div class="event-card-top" style="background:linear-gradient(135deg,#a1c4fd,#c2e9fb);">
+                                🍽️
+                                <span class="event-dday" style="background:#118ab2;">D-12</span>
+                            </div>
+                            <div class="event-card-body">
+                                <h4>부서별 팀 회식의 날</h4>
+                                <p>6월 7일 · 부서별 자율</p>
+                                <button class="event-join-btn" style="background:#eef6ff;color:#118ab2;" onclick="alert('회식 장소 신청 페이지로 이동합니다!')">장소 신청</button>
+                            </div>
+                        </div>
+                        <div class="event-card">
+                            <div class="event-card-top" style="background:linear-gradient(135deg,#ffecd2,#fcb69f);">
+                                📸
+                                <span class="event-dday" style="background:#d97706;">D-16</span>
+                            </div>
+                            <div class="event-card-body">
+                                <h4>TG 사진전 공모</h4>
+                                <p>~5월 31일 · 사내 갤러리</p>
+                                <button class="event-join-btn" style="background:#fffbeb;color:#d97706;" onclick="alert('작품 제출 페이지로 이동합니다!')">작품 제출</button>
+                            </div>
+                        </div>
+                        <div class="event-card">
+                            <div class="event-card-top" style="background:linear-gradient(135deg,#d4fc79,#96e6a1);">
+                                🎤
+                                <span class="event-dday" style="background:#06d6a0;">D-23</span>
+                            </div>
+                            <div class="event-card-body">
+                                <h4>상반기 타운홀 미팅</h4>
+                                <p>6월 14일 · 대강당</p>
+                                <button class="event-join-btn" style="background:#edfdf6;color:#06d6a0;" onclick="alert('사전 질문 등록 페이지로 이동합니다!')">질문 등록</button>
+                            </div>
+                        </div>
+                        <div class="event-card">
+                            <div class="event-card-top" style="background:linear-gradient(135deg,#f6d365,#fda085);">
+                                🎆
+                                <span class="event-dday" style="background:#ef476f;">D-31</span>
+                            </div>
+                            <div class="event-card-body">
+                                <h4>창립기념일 야유회</h4>
+                                <p>6월 22일 · 가평</p>
+                                <button class="event-join-btn" style="background:#fde8ed;color:#ef476f;" onclick="alert('야유회 참가 신청 페이지로 이동합니다!')">참가 신청</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 커뮤니티 피드 -->
+                <div class="community-section" id="community" style="margin-top:28px;">
+                    <div class="section-header">
+                        <div class="section-title-wrap">
+                            <div class="section-badge" style="background:#eef2ff;">💬</div>
+                            <h2 class="section-title">커뮤니티</h2>
+                        </div>
+                        <a href="#" class="section-more">전체보기 <i class="fas fa-chevron-right"></i></a>
+                    </div>
+                    <div class="community-tabs">
+                        <button class="comm-tab active" onclick="filterPosts(this,'all')">전체</button>
+                        <button class="comm-tab" onclick="filterPosts(this,'hot')">🔥 인기</button>
+                        <button class="comm-tab" onclick="filterPosts(this,'info')">📌 정보공유</button>
+                        <button class="comm-tab" onclick="filterPosts(this,'fun')">😄 일상</button>
+                        <button class="comm-tab" onclick="filterPosts(this,'question')">❓ 질문</button>
+                    </div>
+
+                    <button class="write-post-btn" onclick="alert('글쓰기 페이지로 이동합니다!')">
+                        <i class="fas fa-pen"></i> 여기에 글을 남겨보세요...
+                    </button>
+
+                    <div style="margin-top:14px;" id="postsContainer">
+                        <div class="community-post" data-cat="hot info">
+                            <div class="post-avatar" style="background:linear-gradient(135deg,#ff6b35,#ff8c69);">🦁</div>
+                            <div class="post-content">
+                                <div class="post-header">
+                                    <span class="post-author">김민준</span>
+                                    <span class="post-dept">마케팅팀</span>
+                                    <span class="post-tag" style="background:#fff0eb;color:#ff6b35;">📌 정보</span>
+                                    <span class="post-time">10분 전</span>
+                                </div>
+                                <p class="post-text">AI로 주간 보고서 작성 시간 3시간 → 30분 단축했어요! 프롬프트 공유할게요. "당신은 마케팅 전문 보고서 작가입니다. 아래 데이터를 바탕으로 임원진 보고 형식으로 요약해주세요" 이 한 줄이 핵심이에요 🎯</p>
+                                <div class="post-footer">
+                                    <span class="post-reaction" onclick="addLike(this)">❤️ <span>42</span></span>
+                                    <span class="post-reaction">💬 <span>15</span> 댓글</span>
+                                    <span class="post-reaction">🔗 공유</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="community-post" data-cat="fun">
+                            <div class="post-avatar" style="background:linear-gradient(135deg,#06d6a0,#4facfe);">🐋</div>
+                            <div class="post-content">
+                                <div class="post-header">
+                                    <span class="post-author">이서연</span>
+                                    <span class="post-dept">인사팀</span>
+                                    <span class="post-tag" style="background:#e8f8f4;color:#06d6a0;">😄 일상</span>
+                                    <span class="post-time">1시간 전</span>
+                                </div>
+                                <p class="post-text">오늘 점심 뭐 드셨어요? 저는 11층 새로 생긴 비빔밥 먹었는데 완전 맛있었어요 😋 강추합니다! 다음에 같이 가실 분~</p>
+                                <div class="post-footer">
+                                    <span class="post-reaction" onclick="addLike(this)">❤️ <span>28</span></span>
+                                    <span class="post-reaction">💬 <span>23</span> 댓글</span>
+                                    <span class="post-reaction">🔗 공유</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="community-post" data-cat="question">
+                            <div class="post-avatar" style="background:linear-gradient(135deg,#667eea,#764ba2);">🦊</div>
+                            <div class="post-content">
+                                <div class="post-header">
+                                    <span class="post-author">박준혁</span>
+                                    <span class="post-dept">개발팀</span>
+                                    <span class="post-tag" style="background:#eef2ff;color:#667eea;">❓ 질문</span>
+                                    <span class="post-time">2시간 전</span>
+                                </div>
+                                <p class="post-text">Claude vs ChatGPT 코드 리뷰 용도로 어느 게 더 나은지 경험 있으신 분 있나요? 저는 복잡한 로직 설명은 Claude가 더 낫던데 의견 궁금합니다!</p>
+                                <div class="post-footer">
+                                    <span class="post-reaction" onclick="addLike(this)">❤️ <span>19</span></span>
+                                    <span class="post-reaction">💬 <span>34</span> 댓글</span>
+                                    <span class="post-reaction">🔗 공유</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="community-post" data-cat="hot info">
+                            <div class="post-avatar" style="background:linear-gradient(135deg,#f093fb,#f5576c);">🌸</div>
+                            <div class="post-content">
+                                <div class="post-header">
+                                    <span class="post-author">최유진</span>
+                                    <span class="post-dept">기획팀</span>
+                                    <span class="post-tag" style="background:#fde8ed;color:#ef476f;">🔥 인기</span>
+                                    <span class="post-time">3시간 전</span>
+                                </div>
+                                <p class="post-text">체육대회 응원단 모집합니다!! 🎉 기획팀 화이팅!! 같이 응원복 맞춰입고 우승 노려봐요~ 참가 의사 있으신 분 댓글 남겨주세요 🏆</p>
+                                <div class="post-footer">
+                                    <span class="post-reaction" onclick="addLike(this)">❤️ <span>67</span></span>
+                                    <span class="post-reaction">💬 <span>41</span> 댓글</span>
+                                    <span class="post-reaction">🔗 공유</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- ===== 사이드바 ===== -->
+            <div class="lounge-sidebar">
+
+                <!-- OKR 현황 -->
+                <div class="okr-card">
+                    <h3>🎯 Q2 OKR 현황</h3>
+                    <p>2026년 2분기 목표 달성 현황을 확인하세요</p>
+                    <div class="okr-progress">
+                        <div class="okr-label"><span>전사 AI 전환율</span><span>78%</span></div>
+                        <div class="okr-bar"><div class="okr-bar-fill" style="width:78%;background:#ffd166;"></div></div>
+                    </div>
+                    <div class="okr-progress">
+                        <div class="okr-label"><span>학습 완료율</span><span>64%</span></div>
+                        <div class="okr-bar"><div class="okr-bar-fill" style="width:64%;background:#06d6a0;"></div></div>
+                    </div>
+                    <div class="okr-progress">
+                        <div class="okr-label"><span>업무 자동화 도입</span><span>51%</span></div>
+                        <div class="okr-bar"><div class="okr-bar-fill" style="width:51%;background:#ff6b35;"></div></div>
+                    </div>
+                    <button class="okr-btn" onclick="alert('OKR 시스템으로 이동합니다!')">
+                        <i class="fas fa-external-link-alt"></i> OKR 시스템 바로가기
+                    </button>
+                </div>
+
+                <!-- 이번 주 이벤트 -->
+                <div class="sidebar-card">
+                    <div class="sidebar-card-header">
+                        <span style="font-size:1.1rem;">📅</span>
+                        <h3>이번 주 일정</h3>
+                    </div>
+                    <div class="sidebar-card-body">
+                        <div class="event-list-item">
+                            <div class="event-date-badge" style="background:#ff6b35;"><strong>26</strong><span>화</span></div>
+                            <div class="event-list-info">
+                                <h5>AI 활용 워크숍</h5>
+                                <p>14:00 · 회의실 B동 3층</p>
+                            </div>
+                        </div>
+                        <div class="event-list-item">
+                            <div class="event-date-badge" style="background:#06d6a0;"><strong>27</strong><span>수</span></div>
+                            <div class="event-list-info">
+                                <h5>부서장 OKR 점검</h5>
+                                <p>10:00 · 대회의실</p>
+                            </div>
+                        </div>
+                        <div class="event-list-item">
+                            <div class="event-date-badge" style="background:#667eea;"><strong>28</strong><span>목</span></div>
+                            <div class="event-list-info">
+                                <h5>신입사원 온보딩 발표</h5>
+                                <p>15:00 · 대강당</p>
+                            </div>
+                        </div>
+                        <div class="event-list-item">
+                            <div class="event-date-badge" style="background:#ef476f;"><strong>30</strong><span>토</span></div>
+                            <div class="event-list-info">
+                                <h5>체육대회 신청 마감</h5>
+                                <p>23:59 · 온라인</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 건의함 -->
+                <div class="sidebar-card">
+                    <div class="sidebar-card-header">
+                        <span style="font-size:1.1rem;">📣</span>
+                        <h3>건의함 HOT</h3>
+                    </div>
+                    <div class="sidebar-card-body">
+                        <div class="suggest-list-item">
+                            <p class="suggest-title">재택근무 요일 확대 검토 요청</p>
+                            <div class="suggest-meta">
+                                <span class="suggest-status" style="background:#e8f8f4;color:#06d6a0;">✅ 검토중</span>
+                                <span>👍 124</span>
+                            </div>
+                        </div>
+                        <div class="suggest-list-item">
+                            <p class="suggest-title">사내 AI 도구 구독 비용 지원 확대</p>
+                            <div class="suggest-meta">
+                                <span class="suggest-status" style="background:#fef9ec;color:#d97706;">⏳ 대기</span>
+                                <span>👍 98</span>
+                            </div>
+                        </div>
+                        <div class="suggest-list-item">
+                            <p class="suggest-title">주차장 전기차 충전소 확충 요청</p>
+                            <div class="suggest-meta">
+                                <span class="suggest-status" style="background:#eef2ff;color:#667eea;">📋 접수</span>
+                                <span>👍 76</span>
+                            </div>
+                        </div>
+                        <button style="width:100%;padding:10px;margin-top:12px;border-radius:10px;border:1.5px solid #e5e7eb;background:white;font-size:0.83rem;font-weight:600;cursor:pointer;color:#6b7280;transition:all .2s;" onmouseover="this.style.borderColor='#ff6b35';this.style.color='#ff6b35'" onmouseout="this.style.borderColor='#e5e7eb';this.style.color='#6b7280'" onclick="alert('건의사항 등록 페이지로 이동합니다!')">
+                            + 건의사항 남기기
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 프리마켓 -->
+                <div class="sidebar-card">
+                    <div class="sidebar-card-header">
+                        <span style="font-size:1.1rem;">🛍️</span>
+                        <h3>직원 프리마켓</h3>
+                    </div>
+                    <div class="sidebar-card-body">
+                        <div class="market-item">
+                            <div class="market-thumb">👟</div>
+                            <div class="market-info">
+                                <h5>나이키 운동화 270mm</h5>
+                                <div class="market-price">35,000원</div>
+                                <div class="market-seller">김민준 · 마케팅팀</div>
+                            </div>
+                        </div>
+                        <div class="market-item">
+                            <div class="market-thumb">📚</div>
+                            <div class="market-info">
+                                <h5>AI 관련 도서 5권 세트</h5>
+                                <div class="market-price">20,000원</div>
+                                <div class="market-seller">이서연 · 인사팀</div>
+                            </div>
+                        </div>
+                        <div class="market-item">
+                            <div class="market-thumb">🎮</div>
+                            <div class="market-info">
+                                <h5>닌텐도 스위치 게임 3개</h5>
+                                <div class="market-price">42,000원</div>
+                                <div class="market-seller">박준혁 · 개발팀</div>
+                            </div>
+                        </div>
+                        <button style="width:100%;padding:10px;margin-top:12px;border-radius:10px;background:linear-gradient(135deg,#4facfe,#00f2fe);border:none;font-size:0.83rem;font-weight:700;cursor:pointer;color:white;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'" onclick="alert('프리마켓 전체 페이지로 이동합니다!')">
+                            프리마켓 전체보기 →
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo-section">
+                        <img src="assets/images/common/footer_tg.jpg" alt="TG 건물" class="footer-building-image">
+                        <div class="footer-text-content">
+                            <h4>TG AI 캠퍼스</h4>
+                            <p>AI 기술 교육 전문 플랫폼</p>
+                        </div>
+                    </div>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>AI 교육 과정</h4>
+                    <ul>
+                        <li><a href="manuals.html#tab-basics-link">기초편</a></li>
+                        <li><a href="manuals.html#tab-advanced-link">실전편</a></li>
+                        <li><a href="manuals.html#tab-prompt-link">프롬프트</a></li>
+                        <li><a href="manuals.html#tab-job-link">직무별 활용</a></li>
+                        <li><a href="manuals.html#tab-advanced-ai-link">AI 고도화</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>AI 실전</h4>
+                    <ul>
+                        <li><a href="manual-prompt-basic.html">프롬프트 작성법</a></li>
+                        <li><a href="manual-automation.html">업무 자동화</a></li>
+                        <li><a href="manual-workflow.html">워크플로우 구축</a></li>
+                        <li><a href="manual-collaboration.html">AI 협업 도구</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>학습 지원</h4>
+                    <ul>
+                        <li><a href="support.html">나만의 AI 코치</a></li>
+                        <li><a href="notices.html">공지사항</a></li>
+                        <li><a href="dictionary.html">AI 용어 사전</a></li>
+                        <li><a href="dashboard.html">학습 현황</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>TG 라운지</h4>
+                    <ul>
+                        <li><a href="news.html">회사 뉴스</a></li>
+                        <li><a href="news.html#events">이벤트</a></li>
+                        <li><a href="news.html#community">커뮤니티</a></li>
+                        <li><a href="tg-family.html">TG 패밀리</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 TG AI 캠퍼스. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="assets/js/main.js"></script>
+    <script>
+        // 커뮤니티 탭 필터
+        function filterPosts(btn, cat) {
+            document.querySelectorAll('.comm-tab').forEach(t => t.classList.remove('active'));
+            btn.classList.add('active');
+            const posts = document.querySelectorAll('.community-post');
+            posts.forEach(p => {
+                if (cat === 'all') {
+                    p.style.display = 'flex';
+                } else {
+                    const cats = p.dataset.cat || '';
+                    p.style.display = cats.includes(cat) ? 'flex' : 'none';
+                }
+            });
+        }
+
+        // 좋아요
+        function addLike(el) {
+            const num = el.querySelector('span');
+            num.textContent = parseInt(num.textContent) + 1;
+            el.style.color = '#ff6b35';
+        }
+
+        // OKR 바 애니메이션
+        window.addEventListener('load', () => {
+            document.querySelectorAll('.okr-bar-fill').forEach(bar => {
+                const w = bar.style.width;
+                bar.style.width = '0%';
+                setTimeout(() => bar.style.width = w, 300);
+            });
+        });
+    </script>
+</body>
+</html>

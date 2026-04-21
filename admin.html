@@ -1,0 +1,1164 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>관리자 대시보드 - TG에듀테크</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Noto Sans KR', sans-serif; background: #f7fafc; }
+        
+        /* Header */
+        .admin-header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 1.5rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .admin-header .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .admin-logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        .btn-logout {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 0.5rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        
+        /* Tab Navigation */
+        .tab-nav {
+            background: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            margin-bottom: 2rem;
+        }
+        .tab-nav .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            gap: 0;
+        }
+        .tab-button {
+            padding: 1rem 2rem;
+            background: none;
+            border: none;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            color: #718096;
+            transition: all 0.3s;
+        }
+        .tab-button:hover { color: #667eea; }
+        .tab-button.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+        
+        /* Main Container */
+        .admin-main {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem 3rem;
+        }
+        
+        /* Tab Content */
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* Common Styles */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.5rem;
+            color: #2d3748;
+        }
+        .btn-primary {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        .btn-primary:hover { background: #5a67d8; }
+        
+        /* Data Table */
+        .data-table {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .data-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .data-table th {
+            background: #f7fafc;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: #2d3748;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .data-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+            color: #4a5568;
+        }
+        .data-table tr:last-child td {
+            border-bottom: none;
+        }
+        .data-table tr:hover {
+            background: #f7fafc;
+        }
+        .btn-edit, .btn-delete {
+            padding: 0.4rem 0.8rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            margin-right: 0.5rem;
+        }
+        .btn-edit { background: #4299e1; color: white; }
+        .btn-delete { background: #f56565; color: white; }
+        
+        /* Form Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.5);
+        }
+        .modal.active { display: flex; align-items: center; justify-content: center; }
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        .modal-title {
+            font-size: 1.5rem;
+            color: #2d3748;
+        }
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #a0aec0;
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #2d3748;
+        }
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+        }
+        .btn-cancel {
+            background: #e2e8f0;
+            color: #4a5568;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        
+        /* Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #2d3748;
+        }
+        .stat-label {
+            color: #718096;
+            margin-top: 0.5rem;
+        }
+        
+        /* Badge */
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        .badge-published { background: #c6f6d5; color: #22543d; }
+        .badge-draft { background: #fed7d7; color: #742a2a; }
+        .badge-pending { background: #feebc8; color: #7c2d12; }
+        .badge-answered { background: #bee3f8; color: #2c5282; }
+        
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #a0aec0;
+        }
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="admin-header">
+        <div class="container">
+            <div class="admin-logo">
+                <i class="fas fa-shield-alt"></i>
+                <span>TG에듀테크 관리자</span>
+            </div>
+            <button class="btn-logout" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i> 로그아웃
+            </button>
+        </div>
+    </header>
+
+    <!-- Tab Navigation -->
+    <nav class="tab-nav">
+        <div class="container">
+            <button class="tab-button active" onclick="switchTab('courses')">강의 관리</button>
+            <button class="tab-button" onclick="switchTab('videos')">영상 관리</button>
+            <button class="tab-button" onclick="switchTab('notices')">공지사항</button>
+            <button class="tab-button" onclick="switchTab('faqs')">FAQ</button>
+            <button class="tab-button" onclick="switchTab('inquiries')">문의 관리</button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="admin-main">
+        <!-- 강의 관리 탭 -->
+        <div id="tab-courses" class="tab-content active">
+            <div class="section-header">
+                <h2 class="section-title">강의 관리</h2>
+                <button class="btn-primary" onclick="openCourseModal()">
+                    <i class="fas fa-plus"></i> 강의 추가
+                </button>
+            </div>
+            <div class="data-table" id="coursesTable">
+                <div class="empty-state">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <p>데이터를 불러오는 중...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 영상 관리 탭 -->
+        <div id="tab-videos" class="tab-content">
+            <div class="section-header">
+                <h2 class="section-title">영상 관리</h2>
+                <button class="btn-primary" onclick="openVideoModal()">
+                    <i class="fas fa-plus"></i> 영상 추가
+                </button>
+            </div>
+            <div class="data-table" id="videosTable"></div>
+        </div>
+
+        <!-- 공지사항 탭 -->
+        <div id="tab-notices" class="tab-content">
+            <div class="section-header">
+                <h2 class="section-title">공지사항 관리</h2>
+                <button class="btn-primary" onclick="openNoticeModal()">
+                    <i class="fas fa-plus"></i> 공지 추가
+                </button>
+            </div>
+            <div class="data-table" id="noticesTable"></div>
+        </div>
+
+        <!-- FAQ 탭 -->
+        <div id="tab-faqs" class="tab-content">
+            <div class="section-header">
+                <h2 class="section-title">FAQ 관리</h2>
+                <button class="btn-primary" onclick="openFaqModal()">
+                    <i class="fas fa-plus"></i> FAQ 추가
+                </button>
+            </div>
+            <div class="data-table" id="faqsTable"></div>
+        </div>
+
+        <!-- 문의 관리 탭 -->
+        <div id="tab-inquiries" class="tab-content">
+            <div class="section-header">
+                <h2 class="section-title">문의 관리</h2>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value" id="pendingCount">0</div>
+                    <div class="stat-label">대기중</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="answeredCount">0</div>
+                    <div class="stat-label">답변완료</div>
+                </div>
+            </div>
+            <div class="data-table" id="inquiriesTable"></div>
+        </div>
+    </main>
+
+    <!-- Course Modal -->
+    <div id="courseModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="courseModalTitle">강의 추가</h3>
+                <button class="modal-close" onclick="closeCourseModal()">&times;</button>
+            </div>
+            <form id="courseForm" onsubmit="saveCourse(event)">
+                <input type="hidden" id="courseId">
+                <div class="form-group">
+                    <label class="form-label">강의명 *</label>
+                    <input type="text" class="form-input" id="courseTitle" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">설명</label>
+                    <textarea class="form-textarea" id="courseDescription"></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">카테고리</label>
+                    <select class="form-select" id="courseCategory">
+                        <option value="인공지능">인공지능</option>
+                        <option value="머신러닝">머신러닝</option>
+                        <option value="딥러닝">딥러닝</option>
+                        <option value="데이터분석">데이터분석</option>
+                        <option value="프로그래밍">프로그래밍</option>
+                        <option value="기타">기타</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">난이도</label>
+                    <select class="form-select" id="courseLevel">
+                        <option value="입문">입문</option>
+                        <option value="초급">초급</option>
+                        <option value="중급">중급</option>
+                        <option value="고급">고급</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">강사</label>
+                    <input type="text" class="form-input" id="courseInstructor">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">상태</label>
+                    <select class="form-select" id="courseStatus">
+                        <option value="공개">공개</option>
+                        <option value="비공개">비공개</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-cancel" onclick="closeCourseModal()">취소</button>
+                    <button type="submit" class="btn-primary">저장</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Video Modal -->
+    <div id="videoModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="videoModalTitle">영상 추가</h3>
+                <button class="modal-close" onclick="closeVideoModal()">&times;</button>
+            </div>
+            <form id="videoForm" onsubmit="saveVideo(event)">
+                <input type="hidden" id="videoId">
+                <div class="form-group">
+                    <label class="form-label">강의 선택 *</label>
+                    <select class="form-select" id="videoCourseId" required></select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">영상 제목 *</label>
+                    <input type="text" class="form-input" id="videoTitle" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">YouTube URL (embed) *</label>
+                    <input type="url" class="form-input" id="videoUrl" required placeholder="https://www.youtube.com/embed/VIDEO_ID">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">재생시간</label>
+                    <input type="text" class="form-input" id="videoDuration" placeholder="15:30">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">순서</label>
+                    <input type="number" class="form-input" id="videoOrder" value="1">
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-cancel" onclick="closeVideoModal()">취소</button>
+                    <button type="submit" class="btn-primary">저장</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Notice Modal -->
+    <div id="noticeModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="noticeModalTitle">공지사항 추가</h3>
+                <button class="modal-close" onclick="closeNoticeModal()">&times;</button>
+            </div>
+            <form id="noticeForm" onsubmit="saveNotice(event)">
+                <input type="hidden" id="noticeId">
+                <div class="form-group">
+                    <label class="form-label">제목 *</label>
+                    <input type="text" class="form-input" id="noticeTitle" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">내용 *</label>
+                    <textarea class="form-textarea" id="noticeContent" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">카테고리</label>
+                    <input type="text" class="form-input" id="noticeCategory" placeholder="일반">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">작성자</label>
+                    <input type="text" class="form-input" id="noticeAuthor" value="관리자">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">우선순위</label>
+                    <select class="form-select" id="noticePriority">
+                        <option value="normal">일반</option>
+                        <option value="urgent">중요</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">상태</label>
+                    <select class="form-select" id="noticeStatus">
+                        <option value="published">게시</option>
+                        <option value="draft">임시저장</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-cancel" onclick="closeNoticeModal()">취소</button>
+                    <button type="submit" class="btn-primary">저장</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- FAQ Modal -->
+    <div id="faqModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="faqModalTitle">FAQ 추가</h3>
+                <button class="modal-close" onclick="closeFaqModal()">&times;</button>
+            </div>
+            <form id="faqForm" onsubmit="saveFaq(event)">
+                <input type="hidden" id="faqId">
+                <div class="form-group">
+                    <label class="form-label">질문 *</label>
+                    <input type="text" class="form-input" id="faqQuestion" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">답변 *</label>
+                    <textarea class="form-textarea" id="faqAnswer" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">카테고리</label>
+                    <select class="form-select" id="faqCategory">
+                        <option value="수강신청">수강신청</option>
+                        <option value="결제/환불">결제/환불</option>
+                        <option value="강의수강">강의수강</option>
+                        <option value="기술지원">기술지원</option>
+                        <option value="기타">기타</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">순서</label>
+                    <input type="number" class="form-input" id="faqOrder" value="1">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">상태</label>
+                    <select class="form-select" id="faqStatus">
+                        <option value="published">게시</option>
+                        <option value="draft">임시저장</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-cancel" onclick="closeFaqModal()">취소</button>
+                    <button type="submit" class="btn-primary">저장</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Inquiry Reply Modal -->
+    <div id="inquiryModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">문의 답변</h3>
+                <button class="modal-close" onclick="closeInquiryModal()">&times;</button>
+            </div>
+            <form id="inquiryForm" onsubmit="saveInquiryReply(event)">
+                <input type="hidden" id="inquiryId">
+                <div class="form-group">
+                    <label class="form-label">문의자</label>
+                    <input type="text" class="form-input" id="inquiryName" readonly>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">문의 내용</label>
+                    <textarea class="form-textarea" id="inquiryMessage" readonly></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">답변 *</label>
+                    <textarea class="form-textarea" id="inquiryReply" required></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-cancel" onclick="closeInquiryModal()">취소</button>
+                    <button type="submit" class="btn-primary">답변 저장</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // 전역 변수
+        let courses = [];
+        let videos = [];
+        let notices = [];
+        let faqs = [];
+        let inquiries = [];
+        let currentEditId = null;
+
+        // 페이지 로드
+        document.addEventListener('DOMContentLoaded', async () => {
+            // 로그인 체크
+            if (!sessionStorage.getItem('adminLoggedIn')) {
+                window.location.href = 'admin-login.html';
+                return;
+            }
+            
+            await loadAllData();
+        });
+
+        // 모든 데이터 로드
+        async function loadAllData() {
+            await Promise.all([
+                loadCourses(),
+                loadVideos(),
+                loadNotices(),
+                loadFaqs(),
+                loadInquiries()
+            ]);
+        }
+
+        // 강의 로드
+        async function loadCourses() {
+            try {
+                const response = await fetch('tables/courses?limit=100');
+                const data = await response.json();
+                courses = data.data || [];
+                renderCoursesTable();
+                updateVideoCoursesSelect();
+            } catch (error) {
+                console.error('강의 로드 실패:', error);
+            }
+        }
+
+        // 영상 로드
+        async function loadVideos() {
+            try {
+                const response = await fetch('tables/videos?limit=100');
+                const data = await response.json();
+                videos = data.data || [];
+                renderVideosTable();
+            } catch (error) {
+                console.error('영상 로드 실패:', error);
+            }
+        }
+
+        // 공지사항 로드
+        async function loadNotices() {
+            try {
+                const response = await fetch('tables/notices?limit=100');
+                const data = await response.json();
+                notices = data.data || [];
+                renderNoticesTable();
+            } catch (error) {
+                console.error('공지사항 로드 실패:', error);
+            }
+        }
+
+        // FAQ 로드
+        async function loadFaqs() {
+            try {
+                const response = await fetch('tables/faqs?limit=100');
+                const data = await response.json();
+                faqs = data.data || [];
+                renderFaqsTable();
+            } catch (error) {
+                console.error('FAQ 로드 실패:', error);
+            }
+        }
+
+        // 문의 로드
+        async function loadInquiries() {
+            try {
+                const response = await fetch('tables/inquiries?limit=100');
+                const data = await response.json();
+                inquiries = data.data || [];
+                renderInquiriesTable();
+                updateInquiryStats();
+            } catch (error) {
+                console.error('문의 로드 실패:', error);
+            }
+        }
+
+        // 강의 테이블 렌더링
+        function renderCoursesTable() {
+            const table = document.getElementById('coursesTable');
+            if (courses.length === 0) {
+                table.innerHTML = '<div class="empty-state"><i class="fas fa-inbox"></i><p>등록된 강의가 없습니다</p></div>';
+                return;
+            }
+            table.innerHTML = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>강의명</th>
+                            <th>카테고리</th>
+                            <th>난이도</th>
+                            <th>강사</th>
+                            <th>상태</th>
+                            <th>관리</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${courses.map(course => `
+                            <tr>
+                                <td><strong>${course.title}</strong></td>
+                                <td>${course.category || '-'}</td>
+                                <td>${course.level || '-'}</td>
+                                <td>${course.instructor || '-'}</td>
+                                <td><span class="badge ${course.status === '공개' ? 'badge-published' : 'badge-draft'}">${course.status || '공개'}</span></td>
+                                <td>
+                                    <button class="btn-edit" onclick="editCourse('${course.id}')">수정</button>
+                                    <button class="btn-delete" onclick="deleteCourse('${course.id}')">삭제</button>
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
+
+        // 영상 테이블 렌더링
+        function renderVideosTable() {
+            const table = document.getElementById('videosTable');
+            if (videos.length === 0) {
+                table.innerHTML = '<div class="empty-state"><i class="fas fa-inbox"></i><p>등록된 영상이 없습니다</p></div>';
+                return;
+            }
+            table.innerHTML = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>강의</th>
+                            <th>영상 제목</th>
+                            <th>재생시간</th>
+                            <th>순서</th>
+                            <th>관리</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${videos.map(video => {
+                            const course = courses.find(c => c.id === video.course_id);
+                            return `
+                                <tr>
+                                    <td>${course ? course.title : '강의 없음'}</td>
+                                    <td><strong>${video.title}</strong></td>
+                                    <td>${video.duration || '-'}</td>
+                                    <td>${video.order || '-'}</td>
+                                    <td>
+                                        <button class="btn-edit" onclick="editVideo('${video.id}')">수정</button>
+                                        <button class="btn-delete" onclick="deleteVideo('${video.id}')">삭제</button>
+                                    </td>
+                                </tr>
+                            `;
+                        }).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
+
+        // 공지사항 테이블 렌더링
+        function renderNoticesTable() {
+            const table = document.getElementById('noticesTable');
+            if (notices.length === 0) {
+                table.innerHTML = '<div class="empty-state"><i class="fas fa-inbox"></i><p>등록된 공지사항이 없습니다</p></div>';
+                return;
+            }
+            table.innerHTML = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>제목</th>
+                            <th>카테고리</th>
+                            <th>작성자</th>
+                            <th>조회수</th>
+                            <th>상태</th>
+                            <th>관리</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${notices.map(notice => `
+                            <tr>
+                                <td><strong>${notice.title}</strong></td>
+                                <td>${notice.category || '-'}</td>
+                                <td>${notice.author || '관리자'}</td>
+                                <td>${notice.views || 0}</td>
+                                <td><span class="badge ${notice.status === 'published' ? 'badge-published' : 'badge-draft'}">${notice.status === 'published' ? '게시' : '임시저장'}</span></td>
+                                <td>
+                                    <button class="btn-edit" onclick="editNotice('${notice.id}')">수정</button>
+                                    <button class="btn-delete" onclick="deleteNotice('${notice.id}')">삭제</button>
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
+
+        // FAQ 테이블 렌더링
+        function renderFaqsTable() {
+            const table = document.getElementById('faqsTable');
+            if (faqs.length === 0) {
+                table.innerHTML = '<div class="empty-state"><i class="fas fa-inbox"></i><p>등록된 FAQ가 없습니다</p></div>';
+                return;
+            }
+            table.innerHTML = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>질문</th>
+                            <th>카테고리</th>
+                            <th>순서</th>
+                            <th>상태</th>
+                            <th>관리</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${faqs.map(faq => `
+                            <tr>
+                                <td><strong>${faq.question}</strong></td>
+                                <td>${faq.category || '-'}</td>
+                                <td>${faq.order || '-'}</td>
+                                <td><span class="badge ${faq.status === 'published' ? 'badge-published' : 'badge-draft'}">${faq.status === 'published' ? '게시' : '임시저장'}</span></td>
+                                <td>
+                                    <button class="btn-edit" onclick="editFaq('${faq.id}')">수정</button>
+                                    <button class="btn-delete" onclick="deleteFaq('${faq.id}')">삭제</button>
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
+
+        // 문의 테이블 렌더링
+        function renderInquiriesTable() {
+            const table = document.getElementById('inquiriesTable');
+            if (inquiries.length === 0) {
+                table.innerHTML = '<div class="empty-state"><i class="fas fa-inbox"></i><p>접수된 문의가 없습니다</p></div>';
+                return;
+            }
+            table.innerHTML = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>이름</th>
+                            <th>문의 유형</th>
+                            <th>제목</th>
+                            <th>이메일</th>
+                            <th>상태</th>
+                            <th>관리</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${inquiries.map(inquiry => `
+                            <tr>
+                                <td><strong>${inquiry.name}</strong></td>
+                                <td>${inquiry.type}</td>
+                                <td>${inquiry.subject}</td>
+                                <td>${inquiry.email}</td>
+                                <td><span class="badge ${inquiry.status === 'answered' ? 'badge-answered' : 'badge-pending'}">${inquiry.status === 'answered' ? '답변완료' : '대기중'}</span></td>
+                                <td>
+                                    <button class="btn-edit" onclick="replyInquiry('${inquiry.id}')">답변하기</button>
+                                    <button class="btn-delete" onclick="deleteInquiry('${inquiry.id}')">삭제</button>
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
+
+        // 문의 통계 업데이트
+        function updateInquiryStats() {
+            const pending = inquiries.filter(i => i.status !== 'answered').length;
+            const answered = inquiries.filter(i => i.status === 'answered').length;
+            document.getElementById('pendingCount').textContent = pending;
+            document.getElementById('answeredCount').textContent = answered;
+        }
+
+        // 탭 전환
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            event.target.classList.add('active');
+            document.getElementById(`tab-${tabName}`).classList.add('active');
+        }
+
+        // 강의 모달
+        function openCourseModal() {
+            currentEditId = null;
+            document.getElementById('courseModalTitle').textContent = '강의 추가';
+            document.getElementById('courseForm').reset();
+            document.getElementById('courseModal').classList.add('active');
+        }
+        function closeCourseModal() {
+            document.getElementById('courseModal').classList.remove('active');
+        }
+        async function saveCourse(e) {
+            e.preventDefault();
+            const data = {
+                title: document.getElementById('courseTitle').value,
+                description: document.getElementById('courseDescription').value,
+                category: document.getElementById('courseCategory').value,
+                level: document.getElementById('courseLevel').value,
+                instructor: document.getElementById('courseInstructor').value,
+                status: document.getElementById('courseStatus').value,
+                thumbnail: '',
+                duration: 0,
+                video_count: 0
+            };
+            try {
+                const url = currentEditId ? `tables/courses/${currentEditId}` : 'tables/courses';
+                const method = currentEditId ? 'PUT' : 'POST';
+                await fetch(url, {
+                    method: method,
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                await loadCourses();
+                closeCourseModal();
+            } catch (error) {
+                alert('저장 실패');
+            }
+        }
+        function editCourse(id) {
+            const course = courses.find(c => c.id === id);
+            if (!course) return;
+            currentEditId = id;
+            document.getElementById('courseModalTitle').textContent = '강의 수정';
+            document.getElementById('courseTitle').value = course.title;
+            document.getElementById('courseDescription').value = course.description || '';
+            document.getElementById('courseCategory').value = course.category || '';
+            document.getElementById('courseLevel').value = course.level || '입문';
+            document.getElementById('courseInstructor').value = course.instructor || '';
+            document.getElementById('courseStatus').value = course.status || '공개';
+            document.getElementById('courseModal').classList.add('active');
+        }
+        async function deleteCourse(id) {
+            if (!confirm('정말 삭제하시겠습니까?')) return;
+            try {
+                await fetch(`tables/courses/${id}`, { method: 'DELETE' });
+                await loadCourses();
+            } catch (error) {
+                alert('삭제 실패');
+            }
+        }
+
+        // 영상 모달
+        function updateVideoCoursesSelect() {
+            const select = document.getElementById('videoCourseId');
+            select.innerHTML = '<option value="">강의를 선택하세요</option>' +
+                courses.map(c => `<option value="${c.id}">${c.title}</option>`).join('');
+        }
+        function openVideoModal() {
+            currentEditId = null;
+            document.getElementById('videoModalTitle').textContent = '영상 추가';
+            document.getElementById('videoForm').reset();
+            document.getElementById('videoModal').classList.add('active');
+        }
+        function closeVideoModal() {
+            document.getElementById('videoModal').classList.remove('active');
+        }
+        async function saveVideo(e) {
+            e.preventDefault();
+            const data = {
+                course_id: document.getElementById('videoCourseId').value,
+                title: document.getElementById('videoTitle').value,
+                video_url: document.getElementById('videoUrl').value,
+                duration: document.getElementById('videoDuration').value,
+                order: parseInt(document.getElementById('videoOrder').value),
+                description: ''
+            };
+            try {
+                const url = currentEditId ? `tables/videos/${currentEditId}` : 'tables/videos';
+                const method = currentEditId ? 'PUT' : 'POST';
+                await fetch(url, {
+                    method: method,
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                await loadVideos();
+                closeVideoModal();
+            } catch (error) {
+                alert('저장 실패');
+            }
+        }
+        function editVideo(id) {
+            const video = videos.find(v => v.id === id);
+            if (!video) return;
+            currentEditId = id;
+            document.getElementById('videoModalTitle').textContent = '영상 수정';
+            document.getElementById('videoCourseId').value = video.course_id;
+            document.getElementById('videoTitle').value = video.title;
+            document.getElementById('videoUrl').value = video.video_url;
+            document.getElementById('videoDuration').value = video.duration || '';
+            document.getElementById('videoOrder').value = video.order || 1;
+            document.getElementById('videoModal').classList.add('active');
+        }
+        async function deleteVideo(id) {
+            if (!confirm('정말 삭제하시겠습니까?')) return;
+            try {
+                await fetch(`tables/videos/${id}`, { method: 'DELETE' });
+                await loadVideos();
+            } catch (error) {
+                alert('삭제 실패');
+            }
+        }
+
+        // 공지사항 모달
+        function openNoticeModal() {
+            currentEditId = null;
+            document.getElementById('noticeModalTitle').textContent = '공지사항 추가';
+            document.getElementById('noticeForm').reset();
+            document.getElementById('noticeModal').classList.add('active');
+        }
+        function closeNoticeModal() {
+            document.getElementById('noticeModal').classList.remove('active');
+        }
+        async function saveNotice(e) {
+            e.preventDefault();
+            const data = {
+                title: document.getElementById('noticeTitle').value,
+                content: document.getElementById('noticeContent').value,
+                category: document.getElementById('noticeCategory').value,
+                author: document.getElementById('noticeAuthor').value,
+                priority: document.getElementById('noticePriority').value,
+                status: document.getElementById('noticeStatus').value,
+                views: 0,
+                attachment: ''
+            };
+            try {
+                const url = currentEditId ? `tables/notices/${currentEditId}` : 'tables/notices';
+                const method = currentEditId ? 'PUT' : 'POST';
+                await fetch(url, {
+                    method: method,
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                await loadNotices();
+                closeNoticeModal();
+            } catch (error) {
+                alert('저장 실패');
+            }
+        }
+        function editNotice(id) {
+            const notice = notices.find(n => n.id === id);
+            if (!notice) return;
+            currentEditId = id;
+            document.getElementById('noticeModalTitle').textContent = '공지사항 수정';
+            document.getElementById('noticeTitle').value = notice.title;
+            document.getElementById('noticeContent').value = notice.content;
+            document.getElementById('noticeCategory').value = notice.category || '';
+            document.getElementById('noticeAuthor').value = notice.author || '관리자';
+            document.getElementById('noticePriority').value = notice.priority || 'normal';
+            document.getElementById('noticeStatus').value = notice.status || 'published';
+            document.getElementById('noticeModal').classList.add('active');
+        }
+        async function deleteNotice(id) {
+            if (!confirm('정말 삭제하시겠습니까?')) return;
+            try {
+                await fetch(`tables/notices/${id}`, { method: 'DELETE' });
+                await loadNotices();
+            } catch (error) {
+                alert('삭제 실패');
+            }
+        }
+
+        // FAQ 모달
+        function openFaqModal() {
+            currentEditId = null;
+            document.getElementById('faqModalTitle').textContent = 'FAQ 추가';
+            document.getElementById('faqForm').reset();
+            document.getElementById('faqModal').classList.add('active');
+        }
+        function closeFaqModal() {
+            document.getElementById('faqModal').classList.remove('active');
+        }
+        async function saveFaq(e) {
+            e.preventDefault();
+            const data = {
+                question: document.getElementById('faqQuestion').value,
+                answer: document.getElementById('faqAnswer').value,
+                category: document.getElementById('faqCategory').value,
+                order: parseInt(document.getElementById('faqOrder').value),
+                status: document.getElementById('faqStatus').value
+            };
+            try {
+                const url = currentEditId ? `tables/faqs/${currentEditId}` : 'tables/faqs';
+                const method = currentEditId ? 'PUT' : 'POST';
+                await fetch(url, {
+                    method: method,
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                await loadFaqs();
+                closeFaqModal();
+            } catch (error) {
+                alert('저장 실패');
+            }
+        }
+        function editFaq(id) {
+            const faq = faqs.find(f => f.id === id);
+            if (!faq) return;
+            currentEditId = id;
+            document.getElementById('faqModalTitle').textContent = 'FAQ 수정';
+            document.getElementById('faqQuestion').value = faq.question;
+            document.getElementById('faqAnswer').value = faq.answer;
+            document.getElementById('faqCategory').value = faq.category || '수강신청';
+            document.getElementById('faqOrder').value = faq.order || 1;
+            document.getElementById('faqStatus').value = faq.status || 'published';
+            document.getElementById('faqModal').classList.add('active');
+        }
+        async function deleteFaq(id) {
+            if (!confirm('정말 삭제하시겠습니까?')) return;
+            try {
+                await fetch(`tables/faqs/${id}`, { method: 'DELETE' });
+                await loadFaqs();
+            } catch (error) {
+                alert('삭제 실패');
+            }
+        }
+
+        // 문의 답변 모달
+        function replyInquiry(id) {
+            const inquiry = inquiries.find(i => i.id === id);
+            if (!inquiry) return;
+            currentEditId = id;
+            document.getElementById('inquiryId').value = id;
+            document.getElementById('inquiryName').value = inquiry.name;
+            document.getElementById('inquiryMessage').value = inquiry.message;
+            document.getElementById('inquiryReply').value = inquiry.reply || '';
+            document.getElementById('inquiryModal').classList.add('active');
+        }
+        function closeInquiryModal() {
+            document.getElementById('inquiryModal').classList.remove('active');
+        }
+        async function saveInquiryReply(e) {
+            e.preventDefault();
+            const reply = document.getElementById('inquiryReply').value;
+            try {
+                await fetch(`tables/inquiries/${currentEditId}`, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ reply: reply, status: 'answered' })
+                });
+                await loadInquiries();
+                closeInquiryModal();
+                alert('답변이 저장되었습니다.');
+            } catch (error) {
+                alert('답변 저장 실패');
+            }
+        }
+        async function deleteInquiry(id) {
+            if (!confirm('정말 삭제하시겠습니까?')) return;
+            try {
+                await fetch(`tables/inquiries/${id}`, { method: 'DELETE' });
+                await loadInquiries();
+            } catch (error) {
+                alert('삭제 실패');
+            }
+        }
+
+        // 로그아웃
+        function logout() {
+            sessionStorage.removeItem('adminLoggedIn');
+            window.location.href = 'admin-login.html';
+        }
+    </script>
+</body>
+</html>

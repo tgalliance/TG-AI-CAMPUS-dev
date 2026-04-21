@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 데이터 분석 실전 - TG AI 캠퍼스</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/samsung-nav.css?v=3">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        .manual-container { display: flex; max-width: 1400px; margin: 50px auto; gap: 30px; padding: 0 20px; }
+        .manual-sidebar { width: 280px; background: white; border-radius: 15px; padding: 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); position: sticky; top: 100px; height: fit-content; }
+        .manual-sidebar h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 20px; color: #1a202c; }
+        .manual-sidebar ul { list-style: none; padding: 0; }
+        .manual-sidebar li { margin-bottom: 12px; }
+        .manual-sidebar a { color: #666; text-decoration: none; display: block; padding: 8px 12px; border-radius: 8px; transition: all 0.3s; }
+        .manual-sidebar a:hover, .manual-sidebar a.active { background: #8b5cf6; color: white; }
+        .manual-content { flex: 1; background: white; border-radius: 15px; padding: 50px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+        .manual-header { border-bottom: 3px solid #8b5cf6; padding-bottom: 30px; margin-bottom: 40px; }
+        .manual-header h1 { font-size: 2.5rem; font-weight: 700; color: #1a202c; margin-bottom: 15px; }
+        .manual-meta { display: flex; gap: 20px; color: #666; font-size: 0.95rem; flex-wrap: wrap; }
+        .manual-meta span { display: flex; align-items: center; gap: 8px; }
+        .pdf-button { position: fixed; bottom: 30px; right: 30px; background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%); color: white; border: none; padding: 15px 30px; border-radius: 50px; font-size: 1rem; font-weight: 600; cursor: pointer; box-shadow: 0 4px 20px rgba(139,92,246,0.4); transition: all 0.3s; z-index: 1000; }
+        .pdf-button:hover { transform: translateY(-3px); box-shadow: 0 6px 30px rgba(139,92,246,0.6); }
+        .section { margin-bottom: 50px; }
+        .section h2 { font-size: 1.8rem; font-weight: 700; color: #1a202c; margin-bottom: 20px; padding-left: 15px; border-left: 5px solid #8b5cf6; }
+        .section h3 { font-size: 1.3rem; font-weight: 600; color: #2d3748; margin: 30px 0 15px; }
+        .section p { font-size: 1.05rem; line-height: 1.8; color: #4a5568; margin-bottom: 15px; }
+        .prompt-box { background: #f5f3ff; border: 2px solid #8b5cf6; border-radius: 10px; padding: 25px; margin: 25px 0; }
+        .prompt-box .label { font-weight: 700; color: #8b5cf6; margin-bottom: 15px; display: block; font-size: 1.1rem; }
+        .prompt-box pre { background: white; padding: 20px; border-radius: 8px; border: 1px solid #ddd6fe; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word; line-height: 1.6; }
+        .example-output { background: #eff6ff; border-left: 4px solid #3b82f6; padding: 20px 25px; border-radius: 10px; margin: 25px 0; }
+        .example-output::before { content: "✅ AI 생성 예시"; font-weight: 700; color: #3b82f6; display: block; margin-bottom: 10px; }
+        .tip-box { background: #fef3c7; border-left: 4px solid #f59e0b; padding: 20px 25px; border-radius: 10px; margin: 25px 0; }
+        .tip-box::before { content: "💡 활용 팁"; font-weight: 700; color: #f59e0b; display: block; margin-bottom: 10px; }
+        .highlight-box { background: linear-gradient(135deg, #8b5cf615 0%, #6d28d915 100%); border-left: 4px solid #8b5cf6; padding: 20px 25px; border-radius: 10px; margin: 25px 0; }
+        .highlight-box strong { color: #7c3aed; font-weight: 700; }
+        ul, ol { padding-left: 30px; margin: 20px 0; }
+        li { margin-bottom: 12px; line-height: 1.7; color: #4a5568; }
+        @media (max-width: 768px) {
+            .manual-container { flex-direction: column; }
+            .manual-sidebar { width: 100%; position: static; }
+            .manual-content { padding: 30px 20px; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="utility-bar">
+            <div class="container">
+                <div class="utility-wrapper">
+                    <a href="news.html" class="utility-link">TG 라운지</a>
+                    <a href="notices.html" class="utility-link">공지사항</a>
+                    <a href="tg-family.html" class="utility-link">TG패밀리</a>
+                    <a href="https://tgnco.kr/tg-alliance/" target="_blank" class="external-link tg-alliance">TG Alliance <i class="fas fa-external-link-alt"></i></a>
+                    <span class="external-link" style="color: #ff8c00; cursor: default;">TG 에듀테크</span>
+                </div>
+            </div>
+        </div>
+        <nav class="navbar">
+            <div class="container">
+                <div class="nav-wrapper">
+                    <div class="nav-left">
+                        <a href="index.html" class="logo"><i class="fas fa-brain"></i><span><span class="logo-tg">TG</span> AI 캠퍼스</span></a>
+                        <ul class="nav-menu">
+                            <li><a href="about.html">TG AI 캠퍼스소개</a></li>
+                            <li><a href="manuals.html">AI 활용메뉴얼</a></li>
+                            <li><a href="dictionary.html">AI 용어사전</a></li>
+                            <li><a href="recommended.html">AI 활용추천영상</a></li>
+                            <li><a href="curriculum.html">교육과정</a></li>
+                            <li><a href="support.html" style="color: #3b82f6; font-weight: 600;">나만의 AI 코치</a></li>
+                            <li><a href="dashboard.html">학습 현황</a></li>
+                        </ul>
+                    </div>
+                    <div class="nav-right">
+                        <div class="icon-actions">
+                            <a href="mypage.html" class="icon-link"><img src="assets/images/mypage-icon-new.png?v=2" alt="마이페이지" style="height: 20px;"></a>
+                            <a href="login.html" class="icon-link"><img src="assets/images/logout-icon.png" alt="로그인" style="height: 24px;"></a>
+                        </div>
+                        <button class="mobile-menu-toggle"><i class="fas fa-bars"></i></button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="manual-container">
+        <aside class="manual-sidebar">
+            <h3><i class="fas fa-list"></i> 목차</h3>
+            <ul>
+                <li><a href="#interpret" class="active">1. 데이터 해석·요약</a></li>
+                <li><a href="#insight">2. 인사이트 도출</a></li>
+                <li><a href="#visual">3. 시각화 기획</a></li>
+                <li><a href="#forecast">4. 예측·시나리오 분석</a></li>
+            </ul>
+            <hr style="margin: 30px 0; border: none; border-top: 1px solid #e2e8f0;">
+            <a href="manuals.html" class="btn btn-outline" style="width: 100%; text-align: center;">
+                <i class="fas fa-arrow-left"></i> 목록으로
+            </a>
+        </aside>
+
+        <main class="manual-content" id="manual-content">
+            <div class="manual-header">
+                <h1><i class="fas fa-chart-bar"></i> AI 데이터 분석 실전</h1>
+                <div class="manual-meta">
+                    <span><i class="fas fa-clock"></i> 읽는 시간: 45분</span>
+                    <span><i class="fas fa-briefcase"></i> 대상: 전 직원</span>
+                    <span><i class="fas fa-star"></i> 실전 예제 15+</span>
+                </div>
+            </div>
+
+            <div class="highlight-box">
+                <strong>이 매뉴얼의 핵심:</strong> 코딩 몰라도 됩니다. 엑셀 데이터와 숫자를 AI에 붙여넣으면
+                해석·인사이트·시각화 방향까지 즉시 도출됩니다.
+            </div>
+
+            <section class="section" id="interpret">
+                <h2>1. 데이터 해석·요약</h2>
+                <p>숫자만 가득한 표를 AI에게 넘기면 의미 있는 언어로 번역해줍니다. 엑셀 복사 후 붙여넣기면 충분합니다.</p>
+
+                <h3>📊 매출 데이터 빠른 해석</h3>
+                <div class="prompt-box">
+                    <span class="label">🎯 실전 프롬프트:</span>
+                    <pre>**역할:** 비즈니스 데이터 분석 전문가
+
+**데이터 (1분기 월별 매출):**
+| 월 | 매출(만원) | 신규고객 | 재구매율 | 해지율 |
+|----|-----------|---------|---------|-------|
+| 1월 | 42,000 | 180 | 34% | 5.8% |
+| 2월 | 38,500 | 145 | 36% | 6.2% |
+| 3월 | 51,200 | 220 | 41% | 4.1% |
+
+**요청:**
+1. 핵심 트렌드 3가지를 짧게 설명해줘
+2. 주목해야 할 이상 신호가 있으면 알려줘
+3. 2분기 전략에 시사하는 바를 3가지로 정리해줘</pre>
+                </div>
+                <div class="example-output">
+                    <strong>📈 1분기 데이터 분석 결과</strong><br><br>
+                    <strong>핵심 트렌드 3가지</strong><br>
+                    ① <strong>3월 급반등:</strong> 2월 대비 매출 33% 급증, 신규 고객도 52% 증가 — 3월에 집중한 마케팅 또는 시즌 효과로 추정<br>
+                    ② <strong>재구매율 상승세:</strong> 1월 34% → 3월 41%로 7%p 개선, 제품·서비스 만족도가 높아지는 긍정 신호<br>
+                    ③ <strong>해지율 개선:</strong> 2월 고점(6.2%) 이후 3월 4.1%로 빠르게 안정화<br><br>
+                    <strong>⚠️ 주목할 이상 신호</strong><br>
+                    • 2월 매출·신규 고객 동반 하락: 1~2월 격차가 크므로 계절성인지, 영업 공백인지 원인 파악 필요<br>
+                    • 2월 해지율 6.2%는 1분기 중 최고점 — 특정 고객군이나 제품 문제 여부 확인 권장<br><br>
+                    <strong>2분기 전략 시사점</strong><br>
+                    ① 3월 성공 요인(마케팅·캠페인 등)을 분석하여 2분기 초반에 재현<br>
+                    ② 재구매율 상승세를 활용한 기존 고객 업셀링 캠페인 추진<br>
+                    ③ 2월 해지 고객 이탈 원인 심층 분석 후 온보딩 개선 적용
+                </div>
+
+                <div class="tip-box">
+                    데이터가 많을 때는 AI에게 "가장 중요한 숫자 5개만 골라서 설명해줘"라고 먼저 요청하세요.
+                    핵심 지표에 집중한 해석을 빠르게 얻을 수 있습니다.
+                </div>
+            </section>
+
+            <section class="section" id="insight">
+                <h2>2. 인사이트 도출</h2>
+                <p>데이터를 설명하는 것에서 한 발 나아가, "왜 이런 결과가 나왔는가"와 "앞으로 어떻게 해야 하는가"를 AI가 도와줍니다.</p>
+
+                <h3>🔍 원인 분석 및 가설 도출</h3>
+                <div class="prompt-box">
+                    <span class="label">🎯 실전 프롬프트:</span>
+                    <pre>**상황:** 고객 만족도 조사 결과 분석
+
+**데이터:**
+- 전체 만족도: 3.8/5.0 (전분기 4.1에서 하락)
+- 항목별 점수:
+  · 제품 품질: 4.3 (상승)
+  · 고객 응대 속도: 2.9 (대폭 하락)
+  · 가격 적정성: 3.7 (소폭 하락)
+  · UI 편의성: 4.0 (유지)
+
+**요청:**
+1. 만족도 하락의 핵심 원인을 분석해줘
+2. 즉시 개선 가능한 방법 3가지
+3. 중장기 개선 방향 2가지</pre>
+                </div>
+                <div class="example-output">
+                    <strong>🔎 만족도 하락 원인 분석</strong><br><br>
+                    <strong>핵심 원인</strong><br>
+                    전체 만족도 하락(4.1→3.8)의 주 원인은 고객 응대 속도 급락(2.9점)입니다.
+                    제품 품질(4.3)과 UI(4.0)는 오히려 개선됐음에도 전체 점수를 끌어내렸다는 것은
+                    고객이 제품보다 서비스 경험에서 강한 불만을 느꼈음을 의미합니다.<br><br>
+                    <strong>✅ 즉시 개선 가능한 방법</strong><br>
+                    ① 고객 문의 응답 목표 시간 설정 (예: 2시간 이내 1차 응답 의무화)<br>
+                    ② FAQ·챗봇 도입으로 반복 문의 자동 응대, 담당자 부하 경감<br>
+                    ③ 문의 유형별 담당자 배정 시스템 정비로 라우팅 지연 제거<br><br>
+                    <strong>중장기 개선 방향</strong><br>
+                    ① CS 팀 인력 재검토: 문의량 대비 처리 역량 부족 여부 분석 후 채용 또는 재교육<br>
+                    ② 고객 셀프서비스 포털 구축: 매뉴얼·동영상 가이드 충실화로 문의 자체를 줄이는 방향
+                </div>
+
+                <div class="tip-box">
+                    AI 인사이트가 직관과 다를 때 "이 결론에 반대되는 시각도 알려줘"라고 물어보세요.
+                    다양한 관점에서 데이터를 바라보면 더 균형 잡힌 의사결정을 할 수 있습니다.
+                </div>
+            </section>
+
+            <section class="section" id="visual">
+                <h2>3. 시각화 기획</h2>
+                <p>어떤 차트를 쓸지 결정하는 것도 AI가 도와줍니다. 데이터 특성에 맞는 시각화 방법을 추천받으세요.</p>
+
+                <h3>📉 최적 차트 유형 추천</h3>
+                <div class="prompt-box">
+                    <span class="label">🎯 실전 프롬프트:</span>
+                    <pre>**발표 목적:** 경영진에게 연간 매출 추이와 지역별 실적을 보여주기
+
+**보유 데이터:**
+- 월별 매출 (12개월)
+- 지역별 매출 비중 (서울 42%, 경기 28%, 지방 30%)
+- 전년 대비 성장률 (월별)
+
+**요청:**
+각 데이터에 가장 적합한 차트 유형과 이유를 추천해줘.
+PowerPoint로 만들 예정이야.</pre>
+                </div>
+                <div class="example-output">
+                    <strong>📊 데이터별 추천 차트</strong><br><br>
+                    <strong>① 월별 매출 추이 → 꺾은선 그래프(Line Chart)</strong><br>
+                    이유: 시간에 따른 변화 흐름을 한눈에 보여주는 데 최적. 상승/하락 패턴이 명확하게 드러남<br>
+                    TIP: 전년 동월 데이터를 점선으로 겹쳐 그리면 성장률 비교가 직관적<br><br>
+                    <strong>② 지역별 매출 비중 → 도넛 차트(Donut Chart)</strong><br>
+                    이유: 전체 대비 각 지역의 비율을 보여줄 때 파이차트보다 세련되고 가독성 우수<br>
+                    TIP: 중앙에 총 매출액을 표시하면 맥락 전달 효과 극대화<br><br>
+                    <strong>③ 전년 대비 성장률 → 막대 그래프(Bar Chart, 양수/음수 구분)</strong><br>
+                    이유: 월별 성장/역성장을 양수·음수 막대로 표현하면 전환점이 명확하게 보임<br>
+                    TIP: 성장 막대는 파란색, 역성장은 빨간색으로 구분하면 경영진이 즉시 파악 가능<br><br>
+                    <strong>PPT 슬라이드 배치 제안:</strong><br>
+                    1슬라이드: 꺾은선(추이) + 성장률 막대를 좌우 배치<br>
+                    2슬라이드: 도넛 차트 + 지역별 주요 인사이트 텍스트 박스
+                </div>
+
+                <div class="tip-box">
+                    차트 디자인도 AI에게 맡길 수 있습니다. "PowerPoint에서 이 차트를 어떻게 만드는지 단계별로 알려줘"라고 물으면
+                    메뉴 경로까지 친절하게 안내해줍니다.
+                </div>
+            </section>
+
+            <section class="section" id="forecast">
+                <h2>4. 예측·시나리오 분석</h2>
+                <p>과거 데이터를 기반으로 AI에게 미래 시나리오를 시뮬레이션하게 하면 의사결정에 큰 도움이 됩니다.</p>
+
+                <h3>🔮 3가지 시나리오 매출 예측</h3>
+                <div class="prompt-box">
+                    <span class="label">🎯 실전 프롬프트:</span>
+                    <pre>**현재 상황:**
+- 월 매출: 5,000만원
+- 월평균 성장률: 8%
+- 신규 고객 월 유입: 150명
+- 고객 이탈률: 4%
+
+**요청:**
+다음 3가지 시나리오로 6개월 후 매출을 시뮬레이션해줘.
+
+- 낙관 시나리오: 성장률 유지 + 이탈률 2%로 개선
+- 현상 유지 시나리오: 현재 추세 그대로
+- 비관 시나리오: 성장률 4%로 하락 + 이탈률 7%로 악화
+
+표 형식으로, 월별로 보여줘.</pre>
+                </div>
+                <div class="example-output">
+                    <strong>📊 6개월 매출 시나리오 시뮬레이션 (단위: 만원)</strong><br><br>
+                    <table style="width:100%; border-collapse:collapse; font-size:0.9rem;">
+                        <tr style="background:#8b5cf6; color:white;">
+                            <th style="padding:8px; border:1px solid #ddd;">월</th>
+                            <th style="padding:8px; border:1px solid #ddd;">낙관 (성장 8%, 이탈 2%)</th>
+                            <th style="padding:8px; border:1px solid #ddd;">현상 유지 (8%, 4%)</th>
+                            <th style="padding:8px; border:1px solid #ddd;">비관 (4%, 7%)</th>
+                        </tr>
+                        <tr><td style="padding:8px; border:1px solid #ddd;">1개월</td><td style="padding:8px; border:1px solid #ddd;">5,300</td><td style="padding:8px; border:1px solid #ddd;">5,200</td><td style="padding:8px; border:1px solid #ddd;">4,850</td></tr>
+                        <tr style="background:#f9fafb;"><td style="padding:8px; border:1px solid #ddd;">2개월</td><td style="padding:8px; border:1px solid #ddd;">5,620</td><td style="padding:8px; border:1px solid #ddd;">5,410</td><td style="padding:8px; border:1px solid #ddd;">4,710</td></tr>
+                        <tr><td style="padding:8px; border:1px solid #ddd;">3개월</td><td style="padding:8px; border:1px solid #ddd;">5,960</td><td style="padding:8px; border:1px solid #ddd;">5,630</td><td style="padding:8px; border:1px solid #ddd;">4,570</td></tr>
+                        <tr style="background:#f9fafb;"><td style="padding:8px; border:1px solid #ddd;">4개월</td><td style="padding:8px; border:1px solid #ddd;">6,320</td><td style="padding:8px; border:1px solid #ddd;">5,860</td><td style="padding:8px; border:1px solid #ddd;">4,440</td></tr>
+                        <tr><td style="padding:8px; border:1px solid #ddd;">5개월</td><td style="padding:8px; border:1px solid #ddd;">6,700</td><td style="padding:8px; border:1px solid #ddd;">6,090</td><td style="padding:8px; border:1px solid #ddd;">4,310</td></tr>
+                        <tr style="background:#f9fafb;"><td style="padding:8px; border:1px solid #ddd;"><strong>6개월</strong></td><td style="padding:8px; border:1px solid #ddd;"><strong>7,110</strong></td><td style="padding:8px; border:1px solid #ddd;"><strong>6,330</strong></td><td style="padding:8px; border:1px solid #ddd;"><strong>4,180</strong></td></tr>
+                    </table><br>
+                    <strong>시사점:</strong> 이탈률 개선(4%→2%)만으로도 6개월 후 낙관 시나리오와 현상 유지 간 격차는 780만원.
+                    이탈률 관리가 최우선 과제임을 수치로 확인할 수 있습니다.
+                </div>
+
+                <div class="tip-box">
+                    AI 예측은 가정(assumption)에 민감합니다. "성장률 가정이 틀렸을 때 결과가 얼마나 달라지는지 민감도 분석도 해줘"라고
+                    추가 요청하면 더 견고한 의사결정 자료를 만들 수 있습니다.
+                </div>
+            </section>
+
+            <div style="text-align: center; margin-top: 60px; padding: 40px; background: linear-gradient(135deg, #8b5cf615 0%, #6d28d915 100%); border-radius: 15px;">
+                <h3 style="font-size: 1.5rem; margin-bottom: 20px;">📊 데이터를 AI로 빠르게 이해하세요!</h3>
+                <p style="margin-bottom: 30px;">코딩 없이도 데이터에서 인사이트를 즉시 도출할 수 있습니다.</p>
+                <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                    <a href="manual-proposal.html" class="btn btn-outline">기획서 작성 실전</a>
+                    <a href="manual-ppt.html" class="btn btn-outline">프레젠테이션 실전</a>
+                    <a href="manuals.html" class="btn btn-primary">전체 목록</a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <button class="pdf-button" onclick="downloadPDF()">
+        <i class="fas fa-file-pdf"></i> PDF 다운로드
+    </button>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo-section">
+                        <img src="assets/images/common/footer_tg.jpg" alt="TG 건물" class="footer-building-image">
+                        <div class="footer-text-content">
+                            <h4>TG AI 캠퍼스</h4>
+                            <p>AI 기술 교육 전문 플랫폼</p>
+                        </div>
+                    </div>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>AI 교육 과정</h4>
+                    <ul>
+                        <li><a href="manuals.html#tab-basics-link">기초편</a></li>
+                        <li><a href="manuals.html#tab-advanced-link">실전편</a></li>
+                        <li><a href="manuals.html#tab-prompt-link">프롬프트</a></li>
+                        <li><a href="manuals.html#tab-job-link">직무별 활용</a></li>
+                        <li><a href="manuals.html#tab-advanced-ai-link">AI 고도화</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>AI 실전</h4>
+                    <ul>
+                        <li><a href="manual-productivity.html">AI 생산성 극대화</a></li>
+                        <li><a href="manual-proposal.html">기획서·제안서 작성</a></li>
+                        <li><a href="manual-data-work.html">데이터 분석 실전</a></li>
+                        <li><a href="manual-ppt.html">프레젠테이션 제작</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>학습 지원</h4>
+                    <ul>
+                        <li><a href="support.html">나만의 AI 코치</a></li>
+                        <li><a href="notices.html">공지사항</a></li>
+                        <li><a href="dictionary.html">AI 용어 사전</a></li>
+                        <li><a href="dashboard.html">학습 현황</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>TG 라운지</h4>
+                    <ul>
+                        <li><a href="about.html">TG AI 캠퍼스 소개</a></li>
+                        <li><a href="tg-family.html">TG 패밀리</a></li>
+                        <li><a href="news.html">TG Alliance 소식</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 TG AI 캠퍼스. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.querySelectorAll('.manual-sidebar a[href^="#"]').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const headerOffset = 120;
+                    const elementPosition = target.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                    window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+                    document.querySelectorAll('.manual-sidebar a').forEach(a => a.classList.remove('active'));
+                    this.classList.add('active');
+                }
+            });
+        });
+
+        async function downloadPDF() {
+            const button = document.querySelector('.pdf-button');
+            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 생성 중...';
+            button.disabled = true;
+            try {
+                const { jsPDF } = window.jspdf;
+                const content = document.getElementById('manual-content');
+                const canvas = await html2canvas(content, { scale: 2, useCORS: true, logging: false });
+                const imgData = canvas.toDataURL('image/png');
+                const pdf = new jsPDF('p', 'mm', 'a4');
+                const pageWidth = pdf.internal.pageSize.getWidth();
+                const pageHeight = pdf.internal.pageSize.getHeight();
+                const imgWidth = pageWidth - 20;
+                const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                let heightLeft = imgHeight;
+                let position = 10;
+                pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+                heightLeft -= pageHeight;
+                while (heightLeft >= 0) {
+                    position = heightLeft - imgHeight + 10;
+                    pdf.addPage();
+                    pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+                    heightLeft -= pageHeight;
+                }
+                pdf.save('TG_AI_데이터분석_매뉴얼.pdf');
+                button.innerHTML = '<i class="fas fa-check"></i> 다운로드 완료!';
+                setTimeout(() => { button.innerHTML = '<i class="fas fa-file-pdf"></i> PDF 다운로드'; button.disabled = false; }, 2000);
+            } catch (error) {
+                console.error('PDF 생성 오류:', error);
+                button.innerHTML = '<i class="fas fa-file-pdf"></i> PDF 다운로드';
+                button.disabled = false;
+            }
+        }
+        document.querySelector('.mobile-menu-toggle')?.addEventListener('click', function() {
+            document.querySelector('.nav-menu').classList.toggle('active');
+        });
+    </script>
+</body>
+</html>

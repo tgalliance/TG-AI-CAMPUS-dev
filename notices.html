@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>공지사항 - TG AI 캠퍼스</title>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/enhanced-styles.css">
+    <link rel="stylesheet" href="assets/css/samsung-nav.css?v=3">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* 공지사항 페이지 스타일 */
+        .notices-hero {
+            background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+            padding: 80px 0 60px;
+            color: white;
+            text-align: center;
+        }
+        
+        .notices-hero h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        
+        .notices-hero p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+        }
+        
+        .notices-container {
+            max-width: 1200px;
+            margin: 60px auto;
+            padding: 0 20px;
+        }
+        
+        .notices-filters {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .filter-tabs {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-tab {
+            padding: 10px 20px;
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 25px;
+            font-weight: 600;
+            color: #64748b;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-tab:hover {
+            border-color: #3b82f6;
+            color: #3b82f6;
+        }
+        
+        .filter-tab.active {
+            background: #3b82f6;
+            border-color: #3b82f6;
+            color: white;
+        }
+        
+        .search-bar {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .notices-search-input {
+            flex: 1;
+            padding: 12px 20px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .notices-search-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+        
+        .notices-list {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .notice-item {
+            padding: 30px;
+            border-bottom: 1px solid #e5e7eb;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .notice-item:hover {
+            background: #f8fafc;
+        }
+        
+        .notice-item:last-child {
+            border-bottom: none;
+        }
+        
+        .notice-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+            gap: 20px;
+        }
+        
+        .notice-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+        
+        .notice-meta {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+        
+        .notice-date, .notice-author, .notice-views {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+        
+        .notice-category {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        
+        .category-important {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+        
+        .category-update {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+        
+        .category-event {
+            background: #fef3c7;
+            color: #d97706;
+        }
+        
+        .category-info {
+            background: #e0e7ff;
+            color: #6366f1;
+        }
+        
+        .notice-content {
+            color: #475569;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        
+        .notice-tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        
+        .notice-tag {
+            padding: 4px 10px;
+            background: #f1f5f9;
+            color: #64748b;
+            border-radius: 12px;
+            font-size: 0.85rem;
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 30px;
+        }
+        
+        .page-btn {
+            padding: 10px 15px;
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-weight: 600;
+            color: #64748b;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .page-btn:hover {
+            border-color: #3b82f6;
+            color: #3b82f6;
+        }
+        
+        .page-btn.active {
+            background: #3b82f6;
+            border-color: #3b82f6;
+            color: white;
+        }
+        
+        .notice-detail {
+            display: none;
+            padding: 30px;
+            background: #f8fafc;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        .notice-detail.active {
+            display: block;
+        }
+        
+        .detail-content {
+            line-height: 1.8;
+            color: #374151;
+        }
+        
+        .detail-content h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin: 30px 0 15px;
+            color: #1e293b;
+        }
+        
+        .detail-content p {
+            margin-bottom: 20px;
+        }
+        
+        .detail-content ul {
+            margin: 20px 0;
+            padding-left: 25px;
+        }
+        
+        .detail-content li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        
+        .attachment {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            color: #475569;
+            text-decoration: none;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .attachment:hover {
+            background: #3b82f6;
+            color: white;
+            border-color: #3b82f6;
+        }
+        
+        @media (max-width: 768px) {
+            .notices-hero h1 {
+                font-size: 2rem;
+            }
+            
+            .filter-tabs {
+                gap: 10px;
+            }
+            
+            .filter-tab {
+                padding: 8px 16px;
+                font-size: 0.9rem;
+            }
+            
+            .notice-header {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .notice-meta {
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header / Navigation -->
+    <header class="header">
+        <!-- Top Utility Bar -->
+        <div class="utility-bar">
+            <div class="container">
+                <div class="utility-wrapper">
+                    <a href="news.html" class="utility-link">TG 라운지</a>
+                    <a href="notices.html" class="utility-link">공지사항</a>
+                    <a href="tg-family.html" class="utility-link">TG패밀리</a>
+                    <a href="https://tgnco.kr/tg-alliance/" target="_blank" class="external-link tg-alliance">
+                        TG Alliance <i class="fas fa-external-link-alt"></i>
+                    </a>
+                    <span class="external-link" style="color: #ff8c00; cursor: default;">
+                        TG 에듀테크
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Navigation Bar -->
+        <nav class="navbar">
+            <div class="container">
+                <div class="nav-wrapper">
+                    <!-- Left Side: Logo + Menu -->
+                    <div class="nav-left">
+                        <a href="index.html" class="logo">
+                            <i class="fas fa-brain"></i>
+                            <span><span class="logo-tg">TG</span> AI 캠퍼스</span>
+                        </a>
+                        
+                                                <ul class="nav-menu">
+                            <li><a href="about.html">TG AI 캠퍼스소개</a></li>
+                            <li><a href="manuals.html">AI 활용메뉴얼</a></li>
+                            <li><a href="dictionary.html">AI 용어사전</a></li>
+                            <li><a href="recommended.html">AI 활용추천영상</a></li>
+                            <li><a href="curriculum.html">교육과정</a></li>
+                            <li><a href="support.html" style="color: #3b82f6; font-weight: 600;">나만의 AI 코치</a></li>
+                            <li><a href="dashboard.html">학습 현황</a></li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Right Side: Search + Icons -->
+                    <div class="nav-right">
+                        <!-- Search -->
+                        <div class="search-wrapper">
+                            <form class="search-form">
+                                <button type="submit" class="search-btn">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                                <input type="text" class="search-input" placeholder="검색" autocomplete="off">
+                            </form>
+                        </div>
+                        
+                        <!-- Icon Actions -->
+                        <div class="icon-actions">
+                            <a href="mypage.html" class="icon-link" title="마이페이지">
+                                <img src="assets/images/mypage-icon-new.png?v=2" alt="마이페이지" class="icon-img mypage-icon" style="width: auto !important; height: 20px !important; max-height: 20px !important;">
+                            </a>
+                            <a href="login.html" class="icon-link" id="authIcon" title="로그인">
+                                <img src="assets/images/logout-icon.png" alt="로그인" class="icon-img" style="width: 24px !important; height: 24px !important; max-width: 24px !important; max-height: 24px !important;">
+                            </a>
+                        </div>
+                        
+                        <!-- Mobile Toggle -->
+                        <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                            <i class="fas fa-bars"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="notices-hero">
+        <div class="container">
+            <h1><i class="fas fa-bullhorn"></i> 공지사항</h1>
+            <p>TG AI 캠퍼스의 소식과 중요 정보를 빠르게 전달합니다</p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="notices-container">
+        <!-- Filters -->
+        <div class="notices-filters">
+            <div class="filter-tabs">
+                <button class="filter-tab active" data-filter="all">전체</button>
+                <button class="filter-tab" data-filter="important">중요</button>
+                <button class="filter-tab" data-filter="update">업데이트</button>
+                <button class="filter-tab" data-filter="event">이벤트</button>
+                <button class="filter-tab" data-filter="info">정보</button>
+            </div>
+            
+            <div class="search-bar">
+                <input type="text" class="notices-search-input" placeholder="검색어를 입력하세요">
+            </div>
+        </div>
+
+        <!-- Notices List -->
+        <div class="notices-list">
+            <!-- 중요 공지 -->
+            <div class="notice-item" data-category="important">
+                <div class="notice-header">
+                    <div>
+                        <div class="notice-title">
+                            <span class="notice-category category-important">중요</span>
+                            [긴급] AI 교육 플랫폼 시스템 점검 안내
+                        </div>
+                        <div class="notice-meta">
+                            <span class="notice-date"><i class="fas fa-calendar"></i> 2026년 4월 3일</span>
+                            <span class="notice-author"><i class="fas fa-user"></i> TG AI 캠퍼스 운영팀</span>
+                            <span class="notice-views"><i class="fas fa-eye"></i> 1,245</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="notice-content">
+                    안녕하세요. TG AI 캠퍼스 운영팀입니다. 내일 오전 2시부터 4시까지 시스템 정기 점검이 예정되어 있습니다. 점검 시간 동안 서비스 이용이 일시적으로 제한될 수 있습니다...
+                </div>
+                <div class="notice-tags">
+                    <span class="notice-tag">#시스템점검</span>
+                    <span class="notice-tag">#서비스안내</span>
+                    <span class="notice-tag">#중요공지</span>
+                </div>
+                
+                <div class="notice-detail">
+                    <div class="detail-content">
+                        <h3>시스템 점검 상세 정보</h3>
+                        <p>안녕하세요. TG AI 캠퍼스 운영팀입니다.</p>
+                        <p>더 안정적인 서비스 제공을 위해 내일 오전 2시부터 4시까지 시스템 정기 점검이 예정되어 있습니다. 점검 시간 동안 서비스 이용이 일시적으로 제한될 수 있으니 양해 부탁드립니다.</p>
+                        
+                        <h3>점검 시간</h3>
+                        <ul>
+                            <li>일시: 2026년 4월 4일 (토) 오전 2:00 - 4:00</li>
+                            <li>영향 서비스: TG AI 캠퍼스 전체 서비스</li>
+                        </ul>
+                        
+                        <h3>점검 내용</h3>
+                        <ul>
+                            <li>서버 성능 최적화</li>
+                            <li>보안 패치 적용</li>
+                            <li>데이터베이스 정리</li>
+                            <li>새로운 기능 업데이트 준비</li>
+                        </ul>
+                        
+                        <h3>문의사항</h3>
+                        <p>점검 관련 문의사항은 나만의 AI 코치 페이지를 통해 접수해주시기 바랍니다.</p>
+                        <p>불편을 드려 죄송합니다. 더 나은 서비스로 보답하겠습니다.</p>
+                        
+                        <p style="margin-top: 30px; text-align: right; font-weight: 600;">TG AI 캠퍼스 운영팀 드림</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 업데이트 공지 -->
+            <div class="notice-item" data-category="update">
+                <div class="notice-header">
+                    <div>
+                        <div class="notice-title">
+                            <span class="notice-category category-update">업데이트</span>
+                            [신규 기능] 프롬프트 최적화 가이드 업데이트
+                        </div>
+                        <div class="notice-meta">
+                            <span class="notice-date"><i class="fas fa-calendar"></i> 2026년 4월 2일</span>
+                            <span class="notice-author"><i class="fas fa-user"></i> AI 교육 개발팀</span>
+                            <span class="notice-views"><i class="fas fa-eye"></i> 892</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="notice-content">
+                    프롬프트 엔지니어링 학습 가이드가 대폭 업데이트되었습니다. 새로운 실전 예제와 직무별 템플릿 50개가 추가되었으며, AI 응답 품질을 높이는 고급 기법들이 포함되었습니다...
+                </div>
+                <div class="notice-tags">
+                    <span class="notice-tag">#프롬프트</span>
+                    <span class="notice-tag">#업데이트</span>
+                    <span class="notice-tag">#신규기능</span>
+                </div>
+                
+                <div class="notice-detail">
+                    <div class="detail-content">
+                        <h3>프롬프트 최적화 가이드 업데이트 내용</h3>
+                        <p>안녕하세요. AI 교육 개발팀입니다.</p>
+                        <p>여러분의 학습 효율을 높이기 위해 프롬프트 엔지니어링 가이드가 대폭 업데이트되었습니다.</p>
+                        
+                        <h3>주요 업데이트 내용</h3>
+                        <ul>
+                            <li>직무별 프롬프트 템플릿 50개 신규 추가</li>
+                            <li>Chain of Thought 기법 상세 가이드</li>
+                            <li>Few-shot 예제 최적화 방법</li>
+                            <li>AI 응답 품질 측정 기준 추가</li>
+                            <li>실전 성공 사례 20개 수록</li>
+                        </ul>
+                        
+                        <h3>새로 추가된 직무별 템플릿</h3>
+                        <ul>
+                            <li>마케팅: 캠페인 기획, 광고 문구 생성</li>
+                            <li>영업: 고객 제안서, 이메일 초안</li>
+                            <li>인사: 채용 공고, 직무 기술서</li>
+                            <li>재무: 보고서 요약, 예산 분석</li>
+                            <li>개발: 코드 리뷰, 기술 문서</li>
+                        </ul>
+                        
+                        <h3>학습 팁</h3>
+                        <p>업데이트된 가이드를 바탕으로 실제 업무에 적용해보세요. 각 템플릿은 실제 현업에서 검증된 내용으로 구성되어 있습니다.</p>
+                        
+                        <div style="margin-top: 20px;">
+                            <a href="#" class="attachment"><i class="fas fa-file-pdf"></i> 프롬프트 템플릿 모음.pdf</a>
+                            <a href="#" class="attachment"><i class="fas fa-file-excel"></i> 성과 측정표.xlsx</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 이벤트 공지 -->
+            <div class="notice-item" data-category="event">
+                <div class="notice-header">
+                    <div>
+                        <div class="notice-title">
+                            <span class="notice-category category-event">이벤트</span>
+                            [이벤트] AI 학습 성공기 공유 이벤트 (4월 한정)
+                        </div>
+                        <div class="notice-meta">
+                            <span class="notice-date"><i class="fas fa-calendar"></i> 2026년 4월 1일</span>
+                            <span class="notice-author"><i class="fas fa-user"></i> TG 이벤트팀</span>
+                            <span class="notice-views"><i class="fas fa-eye"></i> 2,156</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="notice-content">
+                    4월 한정으로 AI 학습 성공기를 공유하고 풍성한 경품을 받아가세요! 여러분의 AI 활용 성공 사례를 공유하면 다른 학습자들에게 큰 도움이 됩니다. 최우수 성공기는 TG 상품권 10만원...
+                </div>
+                <div class="notice-tags">
+                    <span class="notice-tag">#이벤트</span>
+                    <span class="notice-tag">#성공기</span>
+                    <span class="notice-tag">#경품</span>
+                </div>
+                
+                <div class="notice-detail">
+                    <div class="detail-content">
+                        <h3>AI 학습 성공기 공유 이벤트</h3>
+                        <p>안녕하세요! TG AI 캠퍼스 이벤트팀입니다.</p>
+                        <p>4월 한정으로 AI 학습 성공기를 공유하고 풍성한 경품을 받아가세요!</p>
+                        
+                        <h3>이벤트 기간</h3>
+                        <ul>
+                            <li>접수 기간: 2026년 4월 1일 - 4월 30일</li>
+                            <li>발표 일자: 2026년 5월 5일</li>
+                        </ul>
+                        
+                        <h3>참여 방법</h3>
+                        <ul>
+                            <li>나만의 AI 코치 페이지의 '성공 사례' 카테고리 참고</li>
+                            <li>자신의 AI 활용 성공 사례 작성 (최소 500자 이상)</li>
+                            <li>적용 전/후 비교 데이터 첨부</li>
+                            <li>관련 스크린샷 또는 자료 첨부</li>
+                        </ul>
+                        
+                        <h3>경품</h3>
+                        <ul>
+                            <li>최우수상 (1명): TG 상품권 10만원</li>
+                            <li>우수상 (3명): TG 상품권 5만원</li>
+                            <li>참여상 (10명): TG 굿즈 세트</li>
+                            <li>모든 참여자: AI 학습 자료 패키지</li>
+                        </ul>
+                        
+                        <h3>심사 기준</h3>
+                        <ul>
+                            <li>실제 업무 적용도 (40%)</li>
+                            <li>성과 측정 명확성 (30%)</li>
+                            <li>타 학습자 활용도 (20%)</li>
+                            <li>내용 구성 완성도 (10%)</li>
+                        </ul>
+                        
+                        <p>여러분의 소중한 경험을 공유해주세요!</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 정보 공지 -->
+            <div class="notice-item" data-category="info">
+                <div class="notice-header">
+                    <div>
+                        <div class="notice-title">
+                            <span class="notice-category category-info">정보</span>
+                            [안내] 4월 AI 교육 과정 신규 개설 안내
+                        </div>
+                        <div class="notice-meta">
+                            <span class="notice-date"><i class="fas fa-calendar"></i> 2026년 3월 31일</span>
+                            <span class="notice-author"><i class="fas fa-user"></i> 교육 기획팀</span>
+                            <span class="notice-views"><i class="fas fa-eye"></i> 1,478</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="notice-content">
+                    4월에 새로운 AI 교육 과정이 개설됩니다. 데이터 분석 자동화, AI 기반 마케팅, 생성형 AI 활용 등 실무 중심의 과정들이 준비되어 있습니다. 현재 수강 신청을 받고 있으니...
+                </div>
+                <div class="notice-tags">
+                    <span class="notice-tag">#신규과정</span>
+                    <span class="notice-tag">#4월교육</span>
+                    <span class="notice-tag">#수강신청</span>
+                </div>
+                
+                <div class="notice-detail">
+                    <div class="detail-content">
+                        <h3>4월 신규 AI 교육 과정 안내</h3>
+                        <p>안녕하세요. 교육 기획팀입니다.</p>
+                        <p>4월에 새로운 AI 교육 과정이 개설됩니다. 실무 중심의 과정들을 준비했으니 많은 신청 바랍니다.</p>
+                        
+                        <h3>신규 개설 과정</h3>
+                        
+                        <h4>1. 데이터 분석 자동화 과정</h4>
+                        <ul>
+                            <li>기간: 4월 8일 - 4월 29일 (4주)</li>
+                            <li>시간: 매주 화, 목 19:00-21:00</li>
+                            <li>정원: 30명</li>
+                            <li>내용: Excel/Python 자동화, AI 기반 리포팅</li>
+                        </ul>
+                        
+                        <h4>2. AI 기반 마케팅 과정</h4>
+                        <ul>
+                            <li>기간: 4월 10일 - 5월 1일 (4주)</li>
+                            <li>시간: 매주 수, 금 19:00-21:00</li>
+                            <li>정원: 25명</li>
+                            <li>내용: 콘텐츠 생성, 타겟팅, 성과 분석</li>
+                        </ul>
+                        
+                        <h4>3. 생성형 AI 실전 과정</h4>
+                        <ul>
+                            <li>기간: 4월 15일 - 5월 6일 (4주)</li>
+                            <li>시간: 매주 월, 수 19:00-21:00</li>
+                            <li>정원: 20명</li>
+                            <li>내용: ChatGPT, Midjourney, DALL-E 활용</li>
+                        </ul>
+                        
+                        <h3>수강 신청 방법</h3>
+                        <ul>
+                            <li>마이페이지 > 교육 신청 메뉴 이용</li>
+                            <li>선착순 마감 (정원 초과 시 대기자 접수)</li>
+                            <li>수강료: 전액 무료 (TG 임직원 대상)</li>
+                        </ul>
+                        
+                        <h3>문의사항</h3>
+                        <p>교육 관련 문의는 나만의 AI 코치를 통해 접수해주시기 바랍니다.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 추가 공지들 -->
+            <div class="notice-item" data-category="update">
+                <div class="notice-header">
+                    <div>
+                        <div class="notice-title">
+                            <span class="notice-category category-update">업데이트</span>
+                            [개선] 학습 대시보드 기능 확장
+                        </div>
+                        <div class="notice-meta">
+                            <span class="notice-date"><i class="fas fa-calendar"></i> 2026년 3월 29일</span>
+                            <span class="notice-author"><i class="fas fa-user"></i> 개발팀</span>
+                            <span class="notice-views"><i class="fas fa-eye"></i> 654</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="notice-content">
+                    학습 대시보드에 새로운 기능들이 추가되었습니다. 실시간 학습 현황, 개인별 맞춤 추천, 학습 성과 분석 등 더 강력해진 기능들을 지금 바로 확인해보세요...
+                </div>
+                <div class="notice-tags">
+                    <span class="notice-tag">#대시보드</span>
+                    <span class="notice-tag">#기능개선</span>
+                    <span class="notice-tag">#업데이트</span>
+                </div>
+            </div>
+
+            <div class="notice-item" data-category="info">
+                <div class="notice-header">
+                    <div>
+                        <div class="notice-title">
+                            <span class="notice-category category-info">정보</span>
+                            [안내] AI 용어 사전 500개 용어 추가
+                        </div>
+                        <div class="notice-meta">
+                            <span class="notice-date"><i class="fas fa-calendar"></i> 2026년 3월 28일</span>
+                            <span class="notice-author"><i class="fas fa-user"></i> 콘텐츠팀</span>
+                            <span class="notice-views"><i class="fas fa-eye"></i> 423</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="notice-content">
+                    AI 용어 사전에 최신 AI 용어 500개가 추가되었습니다. LLM, Transformer, Fine-tuning 등 최신 기술 용어부터 실무 활용 용어까지 총 1,500개의 용어를 제공합니다...
+                </div>
+                <div class="notice-tags">
+                    <span class="notice-tag">#용어사전</span>
+                    <span class="notice-tag">#콘텐츠</span>
+                    <span class="notice-tag">#업데이트</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination">
+            <button class="page-btn active">1</button>
+            <button class="page-btn">2</button>
+            <button class="page-btn">3</button>
+            <button class="page-btn">4</button>
+            <button class="page-btn">5</button>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo-section">
+                        <img src="assets/images/common/footer_tg.jpg" alt="TG 건물" class="footer-building-image">
+                        <div class="footer-text-content">
+                            <h4>TG AI 캠퍼스</h4>
+                            <p>AI 기술 교육 전문 플랫폼</p>
+                        </div>
+                    </div>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>AI 교육 과정</h4>
+                    <ul>
+                        <li><a href="manuals.html#tab-basics-link">기초편</a></li>
+                        <li><a href="manuals.html#tab-advanced-link">실전편</a></li>
+                        <li><a href="manuals.html#tab-prompt-link">프롬프트</a></li>
+                        <li><a href="manuals.html#tab-job-link">직무별 활용</a></li>
+                        <li><a href="manuals.html#tab-advanced-ai-link">AI 고도화</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>AI 실전</h4>
+                    <ul>
+                        <li><a href="manual-prompt-basic.html">프롬프트 작성법</a></li>
+                        <li><a href="manual-automation.html">업무 자동화</a></li>
+                        <li><a href="manual-workflow.html">워크플로우 구축</a></li>
+                        <li><a href="manual-collaboration.html">AI 협업 도구</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>학습 지원</h4>
+                    <ul>
+                        <li><a href="support.html">나만의 AI 코치</a></li>
+                        <li><a href="notices.html">공지사항</a></li>
+                        <li><a href="dictionary.html">AI 용어 사전</a></li>
+                        <li><a href="dashboard.html">학습 현황</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>TG 라운지</h4>
+                    <ul>
+                        <li><a href="about.html">TG AI 캠퍼스 소개</a></li>
+                        <li><a href="tg-family.html">TG 패밀리</a></li>
+                        <li><a href="news.html">TG Alliance 소식</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 TG AI 캠퍼스. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <script src="assets/js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 필터 탭 기능
+            const filterTabs = document.querySelectorAll('.filter-tab');
+            const noticeItems = document.querySelectorAll('.notice-item');
+            
+            filterTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const filter = this.dataset.filter;
+                    
+                    // 활성 탭 변경
+                    filterTabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // 공지사항 필터링
+                    noticeItems.forEach(item => {
+                        if (filter === 'all' || item.dataset.category === filter) {
+                            item.style.display = 'block';
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+                });
+            });
+
+            // 공지사항 상세보기 토글
+            // noticeItems는 위에서 이미 선언됨
+            
+            noticeItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    // 태그나 버튼 클릭 시 토글 방지
+                    if (e.target.closest('.notice-tag') || e.target.closest('.attachment')) {
+                        return;
+                    }
+                    
+                    const detail = this.querySelector('.notice-detail');
+                    const isActive = detail.classList.contains('active');
+                    
+                    // 모든 상세보기 닫기
+                    document.querySelectorAll('.notice-detail').forEach(d => {
+                        d.classList.remove('active');
+                    });
+                    
+                    // 현재 상세보기 토글
+                    if (!isActive) {
+                        detail.classList.add('active');
+                    }
+                });
+            });
+
+            // 검색 기능
+            const searchInput = document.querySelector('.notices-search-input');
+            const searchBtn = document.querySelector('.search-btn');
+            
+            function performSearch() {
+                const searchTerm = searchInput.value.toLowerCase();
+                noticeItems.forEach(item => {
+                    const title = item.querySelector('.notice-title').textContent.toLowerCase();
+                    const content = item.querySelector('.notice-content').textContent.toLowerCase();
+                    
+                    if (title.includes(searchTerm) || content.includes(searchTerm)) {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            }
+            
+            searchBtn.addEventListener('click', performSearch);
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    performSearch();
+                }
+            });
+
+            // 페이지네이션
+            const pageButtons = document.querySelectorAll('.page-btn');
+            
+            pageButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    pageButtons.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    // 실제 페이지네이션 로직은 추후 구현
+                });
+            });
+        });
+    </script>
+</body>
+</html>

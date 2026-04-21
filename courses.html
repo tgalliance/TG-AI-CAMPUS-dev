@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 활용 추천영상 - TG AI 캠퍼스</title>
+    <link rel="stylesheet" href="assets/css/style.css?v=4">
+    <link rel="stylesheet" href="assets/css/samsung-nav.css?v=4">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* 히어로 섹션 */
+        .courses-hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 100px 0 60px;
+            text-align: center;
+            color: white;
+        }
+        .courses-hero h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        .courses-hero p {
+            font-size: 1.2rem;
+            opacity: 0.95;
+        }
+
+        /* 탭 스타일 */
+        .tabs-container {
+            background: white;
+            border-bottom: 2px solid #e5e7eb;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .tabs-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            gap: 10px;
+            padding: 0 20px;
+            overflow-x: auto;
+        }
+        .tab-button {
+            padding: 20px 30px;
+            background: none;
+            border: none;
+            border-bottom: 3px solid transparent;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #6b7280;
+            cursor: pointer;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+        .tab-button:hover {
+            color: #667eea;
+            background: rgba(102, 126, 234, 0.05);
+        }
+        .tab-button.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+
+        /* 탭 콘텐츠 */
+        .tab-content {
+            display: none;
+            padding: 60px 0;
+        }
+        .tab-content.active {
+            display: block;
+        }
+
+        /* 강좌 그리드 */
+        .courses-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        /* 강좌 카드 */
+        .course-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        .course-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+        }
+
+        /* 썸네일 */
+        .course-thumbnail {
+            position: relative;
+            width: 100%;
+            height: 200px;
+            overflow: hidden;
+            background: #f3f4f6;
+        }
+        .course-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .course-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255, 255, 255, 0.95);
+            color: #667eea;
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        .play-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: #667eea;
+            transition: all 0.3s;
+        }
+        .course-card:hover .play-overlay {
+            transform: translate(-50%, -50%) scale(1.1);
+            background: white;
+        }
+
+        /* 강좌 정보 */
+        .course-info {
+            padding: 25px;
+        }
+        .course-info h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #1a202c;
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+        .course-info p {
+            font-size: 1rem;
+            color: #6b7280;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        .course-meta {
+            display: flex;
+            gap: 15px;
+            font-size: 0.9rem;
+            color: #9ca3af;
+            flex-wrap: wrap;
+        }
+        .course-meta span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* 반응형 */
+        @media (max-width: 768px) {
+            .courses-grid {
+                grid-template-columns: 1fr;
+            }
+            .courses-hero h1 {
+                font-size: 2rem;
+            }
+            .tab-button {
+                padding: 15px 20px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="utility-bar">
+            <div class="container">
+                <div class="utility-wrapper">
+                    <a href="news.html" class="utility-link">TG 라운지</a>
+                    <a href="notices.html" class="utility-link">공지사항</a>
+                    <a href="tg-family.html" class="utility-link">TG패밀리</a>
+                    <a href="https://tgnco.kr/tg-alliance/" target="_blank" class="external-link tg-alliance">
+                        TG Alliance <i class="fas fa-external-link-alt"></i>
+                    </a>
+                    <span class="external-link" style="color: #ff8c00; cursor: default;">
+                        TG 에듀테크
+                    </span>
+                </div>
+            </div>
+        </div>
+        
+        <nav class="navbar">
+            <div class="container">
+                <div class="nav-wrapper">
+                    <div class="nav-left">
+                        <a href="index.html" class="logo">
+                            <i class="fas fa-brain"></i>
+                            <span><span class="logo-tg">TG</span> AI 캠퍼스</span>
+                        </a>
+                        
+                                                <ul class="nav-menu">
+                            <li><a href="about.html">TG AI 캠퍼스소개</a></li>
+                            <li><a href="manuals.html">AI 활용메뉴얼</a></li>
+                            <li><a href="dictionary.html">AI 용어사전</a></li>
+                            <li><a href="recommended.html">AI 활용추천영상</a></li>
+                            <li><a href="curriculum.html">교육과정</a></li>
+                            <li><a href="support.html" style="color: #3b82f6; font-weight: 600;">나만의 AI 코치</a></li>
+                            <li><a href="dashboard.html">학습 현황</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="nav-right">
+                        <!-- Search -->
+                        <div class="search-wrapper">
+                            <form class="search-form">
+                                <button type="submit" class="search-btn">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                                <input type="text" class="search-input" placeholder="검색" autocomplete="off">
+                            </form>
+                        </div>
+                        
+                        <!-- Icon Actions -->
+                        <div class="icon-actions">
+                            <a href="mypage.html" class="icon-link" title="마이페이지">
+                                <img src="assets/images/mypage-icon-new.png?v=2" alt="마이페이지" class="icon-img mypage-icon" style="width: auto !important; height: 20px !important; max-height: 20px !important;">
+                            </a>
+                            <a href="login.html" class="icon-link" id="authIcon" title="로그인">
+                                <img src="assets/images/logout-icon.png" alt="로그인" class="icon-img" style="width: 24px !important; height: 24px !important; max-width: 24px !important; max-height: 24px !important;">
+                            </a>
+                        </div>
+                        
+                        <!-- Mobile Toggle -->
+                        <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                            <i class="fas fa-bars"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- 히어로 섹션 -->
+    <section class="courses-hero">
+        <div class="container">
+            <h1>AI 교육 강좌</h1>
+            <p>유튜브 영상으로 배우는 실전 AI 활용법</p>
+        </div>
+    </section>
+
+    <!-- 탭 메뉴 -->
+    <div class="tabs-container">
+        <div class="tabs-wrapper">
+            <button class="tab-button active" onclick="showTab('all')">
+                <i class="fas fa-th"></i> 전체보기
+            </button>
+            <button class="tab-button" onclick="showTab('business')">
+                <i class="fas fa-briefcase"></i> AI 업무활용
+            </button>
+            <button class="tab-button" onclick="showTab('prompt')">
+                <i class="fas fa-terminal"></i> 프롬프트 엔지니어링
+            </button>
+            <button class="tab-button" onclick="showTab('job')">
+                <i class="fas fa-users"></i> 직무별 AI 활용
+            </button>
+            <button class="tab-button" onclick="showTab('trend')">
+                <i class="fas fa-rocket"></i> 최신 트렌드
+            </button>
+        </div>
+    </div>
+
+    <!-- 전체보기 탭 -->
+    <div id="tab-all" class="tab-content active">
+        <div class="courses-grid">
+            <!-- 기초편 영상들 -->
+            <div class="course-card" onclick="location.href='course-player.html?id=1&video=kDGca4w8i6Q'">
+                <div class="course-thumbnail">
+                    <img src="https://img.youtube.com/vi/kDGca4w8i6Q/maxresdefault.jpg" alt="AI 기본 개념">
+                    <span class="course-badge">기초</span>
+                    <div class="play-overlay"><i class="fas fa-play"></i></div>
+                </div>
+                <div class="course-info">
+                    <h3>AI 기초 완전 정복</h3>
+                    <p>인공지능의 기본 개념부터 머신러닝, 딥러닝까지 쉽게 이해하기</p>
+                    <div class="course-meta">
+                        <span><i class="fas fa-clock"></i> 25분</span>
+                        <span><i class="fas fa-signal"></i> 초급</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="course-card" onclick="location.href='course-player.html?id=2&video=JMUxmLyrhSk'">
+                <div class="course-thumbnail">
+                    <img src="https://img.youtube.com/vi/JMUxmLyrhSk/maxresdefault.jpg" alt="ChatGPT 활용">
+                    <span class="course-badge">인기</span>
+                    <div class="play-overlay"><i class="fas fa-play"></i></div>
+                </div>
+                <div class="course-info">
+                    <h3>ChatGPT 200% 활용법</h3>
+                    <p>실무에서 바로 써먹는 ChatGPT 완벽 가이드</p>
+                    <div class="course-meta">
+                        <span><i class="fas fa-clock"></i> 35분</span>
+                        <span><i class="fas fa-signal"></i> 초급</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="course-card" onclick="location.href='course-player.html?id=3&video=BLkWR4VrqzI'">
+                <div class="course-thumbnail">
+                    <img src="https://img.youtube.com/vi/BLkWR4VrqzI/maxresdefault.jpg" alt="AI 트렌드">
+                    <span class="course-badge">최신</span>
+                    <div class="play-overlay"><i class="fas fa-play"></i></div>
+                </div>
+                <div class="course-info">
+                    <h3>2024 AI 최신 트렌드</h3>
+                    <p>GPT-4, Claude, Gemini 등 최신 AI 기술 동향</p>
+                    <div class="course-meta">
+                        <span><i class="fas fa-clock"></i> 20분</span>
+                        <span><i class="fas fa-signal"></i> 전체</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 실전편 영상들 -->
+            <div class="course-card" onclick="location.href='course-player.html?id=4&video=Cn-vCT-Ht4Q'">
+                <div class="course-thumbnail">
+                    <img src="https://img.youtube.com/vi/Cn-vCT-Ht4Q/maxresdefault.jpg" alt="프롬프트 엔지니어링">
+                    <span class="course-badge">필수</span>
+                    <div class="play-overlay"><i class="fas fa-play"></i></div>
+                </div>
+                <div class="course-info">
+                    <h3>프롬프트 엔지니어링 마스터</h3>
+                    <p>효과적인 프롬프트 작성 기법과 실전 예제</p>
+                    <div class="course-meta">
+                        <span><i class="fas fa-clock"></i> 45분</span>
+                        <span><i class="fas fa-signal"></i> 중급</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="course-card" onclick="location.href='course-player.html?id=5&video=1OaMKEWvwCs'">
+                <div class="course-thumbnail">
+                    <img src="https://img.youtube.com/vi/1OaMKEWvwCs/maxresdefault.jpg" alt="업무 자동화">
+                    <span class="course-badge">실전</span>
+                    <div class="play-overlay"><i class="fas fa-play"></i></div>
+                </div>
+                <div class="course-info">
+                    <h3>AI 업무 자동화 실전</h3>
+                    <p>이메일, 보고서, 회의록 자동화하기</p>
+                    <div class="course-meta">
+                        <span><i class="fas fa-clock"></i> 40분</span>
+                        <span><i class="fas fa-signal"></i> 중급</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="course-card" onclick="location.href='course-player.html?id=6&video=klNLewDIr6M'">
+                <div class="course-thumbnail">
+                    <img src="https://img.youtube.com/vi/klNLewDIr6M/maxresdefault.jpg" alt="생성형 AI">
+                    <span class="course-badge">인기</span>
+                    <div class="play-overlay"><i class="fas fa-play"></i></div>
+                </div>
+                <div class="course-info">
+                    <h3>생성형 AI 완전 정복</h3>
+                    <p>이미지, 영상, 음악 생성 AI 활용법</p>
+                    <div class="course-meta">
+                        <span><i class="fas fa-clock"></i> 30분</span>
+                        <span><i class="fas fa-signal"></i> 중급</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 직무별 영상들 -->
+            <div class="course-card" onclick="location.href='course-player.html?id=7&video=7yGALz5P4tY'">
+                <div class="course-thumbnail">
+                    <img src="https://img.youtube.com/vi/7yGALz5P4tY/maxresdefault.jpg" alt="마케팅 AI">
+                    <span class="course-badge">마케팅</span>
+                    <div class="play-overlay"><i class="fas fa-play"></i></div>
+                </div>
+                <div class="course-info">
+                    <h3>마케팅 실무 AI 활용</h3>
+                    <p>콘텐츠 제작, 광고 카피, SNS 운영 자동화</p>
+                    <div class="course-meta">
+                        <span><i class="fas fa-clock"></i> 35분</span>
+                        <span><i class="fas fa-signal"></i> 초급</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="course-card" onclick="location.href='course-player.html?id=8&video=mBjPyte2ZZo'">
+                <div class="course-thumbnail">
+                    <img src="https://img.youtube.com/vi/mBjPyte2ZZo/maxresdefault.jpg" alt="개발자 AI">
+                    <span class="course-badge">개발</span>
+                    <div class="play-overlay"><i class="fas fa-play"></i></div>
+                </div>
+                <div class="course-info">
+                    <h3>개발자를 위한 AI 코딩</h3>
+                    <p>GitHub Copilot, ChatGPT로 코딩 생산성 10배 높이기</p>
+                    <div class="course-meta">
+                        <span><i class="fas fa-clock"></i> 50분</span>
+                        <span><i class="fas fa-signal"></i> 중급</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="course-card" onclick="location.href='course-player.html?id=9&video=PjE-z5_QZxc'">
+                <div class="course-thumbnail">
+                    <img src="https://img.youtube.com/vi/PjE-z5_QZxc/maxresdefault.jpg" alt="HR AI">
+                    <span class="course-badge">HR</span>
+                    <div class="play-overlay"><i class="fas fa-play"></i></div>
+                </div>
+                <div class="course-info">
+                    <h3>HR 업무 AI 혁신</h3>
+                    <p>채용, 면접, 교육 계획에 AI 활용하기</p>
+                    <div class="course-meta">
+                        <span><i class="fas fa-clock"></i> 30분</span>
+                        <span><i class="fas fa-signal"></i> 초급</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="course-card" onclick="location.href='course-player.html?id=10&video=YVWXgvbMeys'">
+                <div class="course-thumbnail">
+                    <img src="https://img.youtube.com/vi/YVWXgvbMeys/maxresdefault.jpg" alt="재무 AI">
+                    <span class="course-badge">재무</span>
+                    <div class="play-overlay"><i class="fas fa-play"></i></div>
+                </div>
+                <div class="course-info">
+                    <h3>재무·회계 AI 실무</h3>
+                    <p>재무제표 분석, 예산 계획, 보고서 자동화</p>
+                    <div class="course-meta">
+                        <span><i class="fas fa-clock"></i> 40분</span>
+                        <span><i class="fas fa-signal"></i> 중급</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="course-card" onclick="location.href='course-player.html?id=11&video=sTeoEFzVNSc'">
+                <div class="course-thumbnail">
+                    <img src="https://img.youtube.com/vi/sTeoEFzVNSc/maxresdefault.jpg" alt="기획 AI">
+                    <span class="course-badge">기획</span>
+                    <div class="play-overlay"><i class="fas fa-play"></i></div>
+                </div>
+                <div class="course-info">
+                    <h3>기획·전략 AI 활용</h3>
+                    <p>시장 분석, 경쟁사 조사, 사업 계획서 작성</p>
+                    <div class="course-meta">
+                        <span><i class="fas fa-clock"></i> 35분</span>
+                        <span><i class="fas fa-signal"></i> 중급</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI 고도화 영상들 -->
+            <div class="course-card" onclick="location.href='course-player.html?id=12&video=jacBgJIso_0'">
+                <div class="course-thumbnail">
+                    <img src="https://img.youtube.com/vi/jacBgJIso_0/maxresdefault.jpg" alt="워크플로우">
+                    <span class="course-badge">고급</span>
+                    <div class="play-overlay"><i class="fas fa-play"></i></div>
+                </div>
+                <div class="course-info">
+                    <h3>AI 워크플로우 구축</h3>
+                    <p>입력-처리-출력 자동화 시스템 만들기</p>
+                    <div class="course-meta">
+                        <span><i class="fas fa-clock"></i> 55분</span>
+                        <span><i class="fas fa-signal"></i> 고급</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="course-card" onclick="location.href='course-player.html?id=13&video=MLBaYdIb7SY'">
+                <div class="course-thumbnail">
+                    <img src="https://img.youtube.com/vi/MLBaYdIb7SY/maxresdefault.jpg" alt="AI 에이전트">
+                    <span class="course-badge">최신</span>
+                    <div class="play-overlay"><i class="fas fa-play"></i></div>
+                </div>
+                <div class="course-info">
+                    <h3>AI 에이전트 활용법</h3>
+                    <p>업무를 자동으로 처리하는 AI 에이전트 구축</p>
+                    <div class="course-meta">
+                        <span><i class="fas fa-clock"></i> 45분</span>
+                        <span><i class="fas fa-signal"></i> 고급</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="course-card" onclick="location.href='course-player.html?id=14&video=KjJa6Y-3nFs'">
+                <div class="course-thumbnail">
+                    <img src="https://img.youtube.com/vi/KjJa6Y-3nFs/maxresdefault.jpg" alt="팀 협업">
+                    <span class="course-badge">협업</span>
+                    <div class="play-overlay"><i class="fas fa-play"></i></div>
+                </div>
+                <div class="course-info">
+                    <h3>팀 AI 협업 전략</h3>
+                    <p>프롬프트 라이브러리 구축과 팀 표준화</p>
+                    <div class="course-meta">
+                        <span><i class="fas fa-clock"></i> 30분</span>
+                        <span><i class="fas fa-signal"></i> 중급</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 기초편 탭 -->
+    <div id="tab-basics" class="tab-content">
+        <div class="courses-grid">
+            <div class="course-card" onclick="location.href='course-player.html?id=1&video=kDGca4w8i6Q'">
+                <div class="course-thumbnail">
+                    <img src="https://img.youtube.com/vi/kDGca4w8i6Q/maxresdefault.jpg" alt="AI 기본 개념">
+                    <span class="course-badge">기초</span>
+                    <div class="play-overlay"><i class="fas fa-play"></i></div>
+                </div>
+                <div class="course-info">
+                    <h3>AI 기초 완전 정복</h3>
+                    <p>인공지능의 기본 개념부터 머신러닝, 딥러닝까지 쉽게 이해하기</p>
+                    <div class="course-meta">
+                        <span><i class="fas fa-clock"></i> 25분</span>
+                        <span><i class="fas fa-signal"></i> 초급</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="course-card" onclick="location.href='course-player.html?id=2&video=JMUxmLyrhSk'">
+                <div class="course-thumbnail">
+                    <img src="https://img.youtube.com/vi/JMUxmLyrhSk/maxresdefault.jpg" alt="ChatGPT 활용">
+                    <span class="course-badge">인기</span>
+                    <div class="play-overlay"><i class="fas fa-play"></i></div>
+                </div>
+                <div class="course-info">
+                    <h3>ChatGPT 200% 활용법</h3>
+                    <p>실무에서 바로 써먹는 ChatGPT 완벽 가이드</p>
+                    <div class="course-meta">
+                        <span><i class="fas fa-clock"></i> 35분</span>
+                        <span><i class="fas fa-signal"></i> 초급</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="course-card" onclick="location.href='course-player.html?id=3&video=BLkWR4VrqzI'">
+                <div class="course-thumbnail">
+                    <img src="https://img.youtube.com/vi/BLkWR4VrqzI/maxresdefault.jpg" alt="AI 트렌드">
+                    <span class="course-badge">최신</span>
+                    <div class="play-overlay"><i class="fas fa-play"></i></div>
+                </div>
+                <div class="course-info">
+                    <h3>2024 AI 최신 트렌드</h3>
+                    <p>GPT-4, Claude, Gemini 등 최신 AI 기술 동향</p>
+                    <div class="course-meta">
+                        <span><i class="fas fa-clock"></i> 20분</span>
+                        <span><i class="fas fa-signal"></i> 전체</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 실전편 탭 -->
+    <div id="tab-practical" class="tab-content">
+        <div class="courses-grid">
+            <div class="course-card" onclick="location.href='course-player.html?id=4&video=Cn-vCT-Ht4Q'">
+                <div class="course-thumbnail">
+                    <img src="https://img.youtube.com/vi/Cn-vCT-Ht4Q/maxresdefault.jpg" alt="프롬프트 엔지니어링">
+                    <span class="course-badge">필수</span>
+                    <div class="play-overlay"><i class="fas fa-play"></i></div>
+                </div>
+                <div class="course-info">
+                    <h3>프롬프트 엔지니어링 마스터</h3>
+                    <p>효과적인 프롬프트 작성 기법과 실전 예제</p>
+                    <div class="course-meta">
+                        <span><i class="fas fa-clock"></i> 45분</span>
+                        <span><i class="fas fa-signal"></i> 중급</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="course-card" onclick="location.href='course-player.html?id=5&video=1OaMKEWvwCs'">
+                <div class="course-thumbnail">
+                    <img src="https://img.youtube.com/vi/1OaMKEWvwCs/maxresdefault.jpg" alt="업무 자동화">
+                    <span class="course-badge">실전</span>
+                    <div class="play-overlay"><i class="fas fa-play"></i></div>
+                </div>
+                <div class="course-info">
+                    <h3>AI 업무 자동화 실전</h3>
+                    <p>이메일, 보고서, 회의록 자동화하기</p>
+                    <div class="course-meta">
+                        <span><i class="fas fa-clock"></i> 40분</span>
+                        <span><i class="fas fa-signal"></i> 중급</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="course-card" onclick="location.href='course-player.html?id=6&video=klNLewDIr6M'">
+                <div class="course-thumbnail">
+                    <img src="https://img.youtube.com/vi/klNLewDIr6M/maxresdefault.jpg" alt="생성형 AI">
+                    <span class="course-badge">인기</span>
+                    <div class="play-overlay"><i class="fas fa-play"></i></div>
+                </div>
+                <div class="course-info">
+                    <h3>생성형 AI 완전 정복</h3>
+                    <p>이미지, 영상, 음악 생성 AI 활용법</p>
+                    <div class="course-meta">
+                        <span><i class="fas fa-clock"></i> 30분</span>
+                        <span><i class="fas fa-signal"></i> 중급</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 직무별 활용 탭 -->
+    <div id="tab-job" class="tab-content">
+        <div class="courses-grid">
+            <div class="course-card" onclick="location.href='course-player.html?id=7&video=7yGALz5P4tY'">
+                <div class="course-thumbnail">
+                    <img src="https://img.youtube.com/vi/7yGALz5P4tY/maxresdefault.jpg" alt="마케팅 AI">
+                    <span class="course-badge">마케팅</span>
+                    <div class="play-overlay"><i class="fas fa-play"></i></div>
+                </div>
+                <div class="course-info">
+                    <h3>마케팅 실무 AI 활용</h3>
+                    <p>콘텐츠 제작, 광고 카피, SNS 운영 자동화</p>
+                    <div class="course-meta">
+                        <span><i class="fas fa-clock"></i> 35분</span>
+                        <span><i class="fas fa-signal"></i> 초급</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="course-card" onclick="location.href='course-player.html?id=8&video=mBjPyte2ZZo'">
+                <div class="course-thumbnail">
+                    <img src="https://img.youtube.com/vi/mBjPyte2ZZo/maxresdefault.jpg" alt="개발자 AI">
+                    <span class="course-badge">개발</span>
+                    <div class="play-overlay"><i class="fas fa-play"></i></div>
+                </div>
+                <div class="course-info">
+                    <h3>개발자를 위한 AI 코딩</h3>
+                    <p>GitHub Copilot, ChatGPT로 코딩 생산성 10배 높이기</p>
+                    <div class="course-meta">
+                        <span><i class="fas fa-clock"></i> 50분</span>
+                        <span><i class="fas fa-signal"></i> 중급</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="course-card" onclick="location.href='course-player.html?id=9&video=PjE-z5_QZxc'">
+                <div class="course-thumbnail">
+                    <img src="https://img.youtube.com/vi/PjE-z5_QZxc/maxresdefault.jpg" alt="HR AI">
+                    <span class="course-badge">HR</span>
+                    <div class="play-overlay"><i class="fas fa-play"></i></div>
+                </div>
+                <div class="course-info">
+                    <h3>HR 업무 AI 혁신</h3>
+                    <p>채용, 면접, 교육 계획에 AI 활용하기</p>
+                    <div class="course-meta">
+                        <span><i class="fas fa-clock"></i> 30분</span>
+                        <span><i class="fas fa-signal"></i> 초급</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="course-card" onclick="location.href='course-player.html?id=10&video=YVWXgvbMeys'">
+                <div class="course-thumbnail">
+                    <img src="https://img.youtube.com/vi/YVWXgvbMeys/maxresdefault.jpg" alt="재무 AI">
+                    <span class="course-badge">재무</span>
+                    <div class="play-overlay"><i class="fas fa-play"></i></div>
+                </div>
+                <div class="course-info">
+                    <h3>재무·회계 AI 실무</h3>
+                    <p>재무제표 분석, 예산 계획, 보고서 자동화</p>
+                    <div class="course-meta">
+                        <span><i class="fas fa-clock"></i> 40분</span>
+                        <span><i class="fas fa-signal"></i> 중급</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="course-card" onclick="location.href='course-player.html?id=11&video=sTeoEFzVNSc'">
+                <div class="course-thumbnail">
+                    <img src="https://img.youtube.com/vi/sTeoEFzVNSc/maxresdefault.jpg" alt="기획 AI">
+                    <span class="course-badge">기획</span>
+                    <div class="play-overlay"><i class="fas fa-play"></i></div>
+                </div>
+                <div class="course-info">
+                    <h3>기획·전략 AI 활용</h3>
+                    <p>시장 분석, 경쟁사 조사, 사업 계획서 작성</p>
+                    <div class="course-meta">
+                        <span><i class="fas fa-clock"></i> 35분</span>
+                        <span><i class="fas fa-signal"></i> 중급</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI 고도화 탭 -->
+    <div id="tab-advanced" class="tab-content">
+        <div class="courses-grid">
+            <div class="course-card" onclick="location.href='course-player.html?id=12&video=jacBgJIso_0'">
+                <div class="course-thumbnail">
+                    <img src="https://img.youtube.com/vi/jacBgJIso_0/maxresdefault.jpg" alt="워크플로우">
+                    <span class="course-badge">고급</span>
+                    <div class="play-overlay"><i class="fas fa-play"></i></div>
+                </div>
+                <div class="course-info">
+                    <h3>AI 워크플로우 구축</h3>
+                    <p>입력-처리-출력 자동화 시스템 만들기</p>
+                    <div class="course-meta">
+                        <span><i class="fas fa-clock"></i> 55분</span>
+                        <span><i class="fas fa-signal"></i> 고급</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="course-card" onclick="location.href='course-player.html?id=13&video=MLBaYdIb7SY'">
+                <div class="course-thumbnail">
+                    <img src="https://img.youtube.com/vi/MLBaYdIb7SY/maxresdefault.jpg" alt="AI 에이전트">
+                    <span class="course-badge">최신</span>
+                    <div class="play-overlay"><i class="fas fa-play"></i></div>
+                </div>
+                <div class="course-info">
+                    <h3>AI 에이전트 활용법</h3>
+                    <p>업무를 자동으로 처리하는 AI 에이전트 구축</p>
+                    <div class="course-meta">
+                        <span><i class="fas fa-clock"></i> 45분</span>
+                        <span><i class="fas fa-signal"></i> 고급</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="course-card" onclick="location.href='course-player.html?id=14&video=KjJa6Y-3nFs'">
+                <div class="course-thumbnail">
+                    <img src="https://img.youtube.com/vi/KjJa6Y-3nFs/maxresdefault.jpg" alt="팀 협업">
+                    <span class="course-badge">협업</span>
+                    <div class="play-overlay"><i class="fas fa-play"></i></div>
+                </div>
+                <div class="course-info">
+                    <h3>팀 AI 협업 전략</h3>
+                    <p>프롬프트 라이브러리 구축과 팀 표준화</p>
+                    <div class="course-meta">
+                        <span><i class="fas fa-clock"></i> 30분</span>
+                        <span><i class="fas fa-signal"></i> 중급</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo-section">
+                        <img src="assets/images/common/footer_tg.jpg" alt="TG 건물" class="footer-building-image">
+                        <div class="footer-text-content">
+                            <h4>TG AI 캠퍼스</h4>
+                            <p>AI 기술 교육 전문 플랫폼</p>
+                        </div>
+                    </div>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>AI 교육 과정</h4>
+                    <ul>
+                        <li><a href="manuals.html#tab-basics-link">기초편</a></li>
+                        <li><a href="manuals.html#tab-advanced-link">실전편</a></li>
+                        <li><a href="manuals.html#tab-prompt-link">프롬프트</a></li>
+                        <li><a href="manuals.html#tab-job-link">직무별 활용</a></li>
+                        <li><a href="manuals.html#tab-advanced-ai-link">AI 고도화</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>AI 실전</h4>
+                    <ul>
+                        <li><a href="manual-prompt-basic.html">프롬프트 작성법</a></li>
+                        <li><a href="manual-automation.html">업무 자동화</a></li>
+                        <li><a href="manual-workflow.html">워크플로우 구축</a></li>
+                        <li><a href="manual-collaboration.html">AI 협업 도구</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>학습 지원</h4>
+                    <ul>
+                        <li><a href="support.html">나만의 AI 코치</a></li>
+                        <li><a href="notices.html">공지사항</a></li>
+                        <li><a href="dictionary.html">AI 용어 사전</a></li>
+                        <li><a href="dashboard.html">학습 현황</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>TG 라운지</h4>
+                    <ul>
+                        <li><a href="about.html">TG AI 캠퍼스 소개</a></li>
+                        <li><a href="tg-family.html">TG 패밀리</a></li>
+                        <li><a href="news.html">TG Alliance 소식</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 TG AI 캠퍼스. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="assets/js/main.js"></script>
+    <script>
+        // 탭 전환 함수
+        function showTab(tabName) {
+            // 모든 탭 콘텐츠 숨기기
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // 모든 탭 버튼 비활성화
+            const tabButtons = document.querySelectorAll('.tab-button');
+            tabButtons.forEach(button => {
+                button.classList.remove('active');
+            });
+            
+            // 선택된 탭 표시
+            const selectedTab = document.getElementById('tab-' + tabName);
+            if (selectedTab) {
+                selectedTab.classList.add('active');
+            }
+            
+            // 선택된 버튼 활성화
+            event.target.closest('.tab-button').classList.add('active');
+        }
+
+        // 강좌 페이지로 이동 (삭제된 함수 - 더 이상 사용 안 함)
+    </script>
+</body>
+</html>

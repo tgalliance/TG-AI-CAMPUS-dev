@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>뉴스 상세 - TG AI 캠퍼스</title>
+    <link rel="stylesheet" href="assets/css/style.css?v=8">
+    <link rel="stylesheet" href="assets/css/samsung-nav.css?v=6">
+    <link rel="stylesheet" href="assets/css/tg-news-style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* News Detail Styles */
+        .news-detail-hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 140px 0 60px;
+            color: white;
+        }
+
+        .news-detail-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .breadcrumb a {
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .breadcrumb a:hover {
+            color: white;
+        }
+
+        .news-detail-meta {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .news-detail-category {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .news-detail-date {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .news-detail-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            line-height: 1.3;
+            margin-bottom: 20px;
+        }
+
+        .news-detail-summary {
+            font-size: 1.15rem;
+            line-height: 1.7;
+            color: rgba(255, 255, 255, 0.95);
+        }
+
+        .news-detail-content {
+            background: white;
+            margin-top: -40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            padding: 60px;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 80px;
+        }
+
+        .news-detail-content h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            color: #1f2937;
+        }
+
+        .news-detail-content h3 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #374151;
+        }
+
+        .news-detail-content p {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            color: #4b5563;
+            margin-bottom: 20px;
+        }
+
+        .news-detail-content ul, .news-detail-content ol {
+            margin-bottom: 20px;
+            padding-left: 30px;
+        }
+
+        .news-detail-content li {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            color: #4b5563;
+            margin-bottom: 10px;
+        }
+
+        .news-detail-content blockquote {
+            border-left: 4px solid #667eea;
+            padding-left: 20px;
+            margin: 30px 0;
+            font-style: italic;
+            color: #6b7280;
+        }
+
+        .news-detail-content img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 12px;
+            margin: 30px 0;
+        }
+
+        .highlight-box {
+            background: #f0f4ff;
+            border-left: 4px solid #667eea;
+            padding: 20px 25px;
+            border-radius: 8px;
+            margin: 30px 0;
+        }
+
+        .highlight-box h4 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .highlight-box p {
+            margin-bottom: 0;
+        }
+
+        .share-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e5e7eb;
+        }
+
+        .share-btn {
+            flex: 1;
+            padding: 12px 20px;
+            border: 2px solid #e5e7eb;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            color: #666;
+        }
+
+        .share-btn:hover {
+            border-color: #667eea;
+            color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .back-to-list {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            background: #667eea;
+            color: white;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin-bottom: 40px;
+        }
+
+        .back-to-list:hover {
+            background: #5568d3;
+            transform: translateX(-5px);
+        }
+
+        .related-news {
+            max-width: 1200px;
+            margin: 0 auto 80px;
+            padding: 0 20px;
+        }
+
+        .related-news h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .related-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .related-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .related-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        }
+
+        .related-card-content {
+            padding: 20px;
+        }
+
+        .related-category {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .related-category.협약체결 {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .related-category.보도자료 {
+            background: #fce7f3;
+            color: #be185d;
+        }
+
+        .related-category.수상 {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .related-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #1f2937;
+            line-height: 1.4;
+        }
+
+        .related-date {
+            font-size: 0.85rem;
+            color: #9ca3af;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .news-detail-title {
+                font-size: 1.8rem;
+            }
+
+            .news-detail-content {
+                padding: 30px 20px;
+                margin-top: -20px;
+            }
+
+            .news-detail-content h2 {
+                font-size: 1.5rem;
+            }
+
+            .share-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <!-- Top Bar -->
+        <div class="top-bar" style="background: #f8f9fa; border-bottom: 1px solid #e5e7eb; padding: 8px 0;">
+            <div class="container">
+                <div style="display: flex; justify-content: flex-end; align-items: center; gap: 20px; font-size: 0.85rem;">
+                    <a href="https://www.trigem.co.kr" target="_blank" style="color: #666; text-decoration: none; display: flex; align-items: center; gap: 5px;">
+                        <i class="fas fa-globe"></i> TG 그룹 홈페이지
+                    </a>
+                    <span class="external-link" style="color: #ff8c00; cursor: default;">
+                        TG 에듀테크
+                    </span>
+                </div>
+            </div>
+        </div>
+        
+        <nav class="navbar">
+            <div class="container">
+                <div class="nav-wrapper">
+                    <div class="nav-left">
+                        <a href="index.html" class="logo">
+                            <i class="fas fa-brain"></i>
+                            <span><span class="logo-tg">TG</span> AI 캠퍼스</span>
+                        </a>
+                        
+                                                <ul class="nav-menu">
+                            <li><a href="about.html">TG AI 캠퍼스소개</a></li>
+                            <li><a href="manuals.html">AI 활용메뉴얼</a></li>
+                            <li><a href="dictionary.html">AI 용어사전</a></li>
+                            <li><a href="recommended.html">AI 활용추천영상</a></li>
+                            <li><a href="curriculum.html">교육과정</a></li>
+                            <li><a href="support.html" style="color: #3b82f6; font-weight: 600;">나만의 AI 코치</a></li>
+                            <li><a href="dashboard.html">학습 현황</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="nav-right">
+                        <div class="icon-actions">
+                            <a href="mypage.html" class="icon-link"><img src="assets/images/mypage-icon-new.png?v=2" alt="마이페이지" style="height: 20px;"></a>
+                            <a href="login.html" class="icon-link"><img src="assets/images/logout-icon.png" alt="로그인" style="height: 24px;"></a>
+                        </div>
+                        <button class="mobile-menu-toggle"><i class="fas fa-bars"></i></button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section with News Title -->
+    <section class="news-detail-hero">
+        <div class="news-detail-container">
+            <div class="breadcrumb">
+                <a href="index.html">홈</a>
+                <i class="fas fa-chevron-right"></i>
+                <a href="news.html" style="color: #3b82f6; font-weight: 600;">TG 소식</a>
+                <i class="fas fa-chevron-right"></i>
+                <span id="breadcrumbCategory">뉴스 상세</span>
+            </div>
+
+            <div class="news-detail-meta">
+                <span class="news-detail-category" id="detailCategory"></span>
+                <span class="news-detail-date">
+                    <i class="far fa-calendar"></i>
+                    <span id="detailDate"></span>
+                </span>
+            </div>
+
+            <h1 class="news-detail-title" id="detailTitle"></h1>
+            <p class="news-detail-summary" id="detailSummary"></p>
+        </div>
+    </section>
+
+    <!-- News Content -->
+    <div class="news-detail-content" id="newsContent">
+        <!-- Content will be loaded here by JavaScript -->
+    </div>
+
+    <!-- Share Buttons -->
+    <div class="news-detail-container">
+        <div class="share-buttons">
+            <button class="share-btn" onclick="shareOnFacebook()">
+                <i class="fab fa-facebook"></i> Facebook
+            </button>
+            <button class="share-btn" onclick="shareOnTwitter()">
+                <i class="fab fa-twitter"></i> Twitter
+            </button>
+            <button class="share-btn" onclick="shareOnKakao()">
+                <i class="fas fa-comment"></i> KakaoTalk
+            </button>
+            <button class="share-btn" onclick="copyLink()">
+                <i class="fas fa-link"></i> 링크 복사
+            </button>
+        </div>
+    </div>
+
+    <!-- Related News -->
+    <section class="related-news">
+        <h2>관련 뉴스</h2>
+        <div class="related-grid" id="relatedNews">
+            <!-- Related news will be loaded here -->
+        </div>
+    </section>
+
+    <!-- Back to List Button -->
+    <div style="text-align: center; margin-bottom: 80px;">
+        <a href="news.html" class="back-to-list">
+            <i class="fas fa-arrow-left"></i>
+            목록으로 돌아가기
+        </a>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo-section">
+                        <img src="assets/images/common/footer_tg.jpg" alt="TG 건물" class="footer-building-image">
+                        <div class="footer-text-content">
+                            <h4>TG AI 캠퍼스</h4>
+                            <p>AI 기술 교육 전문 플랫폼</p>
+                        </div>
+                    </div>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>AI 교육 과정</h4>
+                    <ul>
+                        <li><a href="manuals.html#tab-basics-link">기초편</a></li>
+                        <li><a href="manuals.html#tab-advanced-link">실전편</a></li>
+                        <li><a href="manuals.html#tab-prompt-link">프롬프트</a></li>
+                        <li><a href="manuals.html#tab-job-link">직무별 활용</a></li>
+                        <li><a href="manuals.html#tab-advanced-ai-link">AI 고도화</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>AI 실전</h4>
+                    <ul>
+                        <li><a href="manual-prompt-basic.html">프롬프트 작성법</a></li>
+                        <li><a href="manual-automation.html">업무 자동화</a></li>
+                        <li><a href="manual-workflow.html">워크플로우 구축</a></li>
+                        <li><a href="manual-collaboration.html">AI 협업 도구</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>학습 지원</h4>
+                    <ul>
+                        <li><a href="support.html">나만의 AI 코치</a></li>
+                        <li><a href="notices.html">공지사항</a></li>
+                        <li><a href="dictionary.html">AI 용어 사전</a></li>
+                        <li><a href="dashboard.html">학습 현황</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>TG 라운지</h4>
+                    <ul>
+                        <li><a href="about.html">TG AI 캠퍼스 소개</a></li>
+                        <li><a href="tg-family.html">TG 패밀리</a></li>
+                        <li><a href="news.html">TG Alliance 소식</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 TG AI 캠퍼스. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/news-data.js"></script>
+    <script>
+        // Get news ID from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const newsId = parseInt(urlParams.get('id'));
+
+        // Load news detail
+        document.addEventListener('DOMContentLoaded', function() {
+            loadNewsDetail(newsId);
+            loadRelatedNews(newsId);
+        });
+
+        function loadNewsDetail(id) {
+            const news = newsData.find(n => n.id === id);
+            
+            if (!news) {
+                document.getElementById('newsContent').innerHTML = `
+                    <div style="text-align: center; padding: 80px 20px;">
+                        <i class="fas fa-exclamation-circle" style="font-size: 4rem; color: #d1d5db; margin-bottom: 20px;"></i>
+                        <h2 style="font-size: 1.5rem; color: #6b7280; margin-bottom: 10px;">뉴스를 찾을 수 없습니다</h2>
+                        <p style="color: #9ca3af; margin-bottom: 30px;">요청하신 뉴스가 존재하지 않거나 삭제되었습니다.</p>
+                        <a href="news.html" class="back-to-list">목록으로 돌아가기</a>
+                    </div>
+                `;
+                return;
+            }
+
+            // Set meta information
+            document.getElementById('breadcrumbCategory').textContent = news.category;
+            document.getElementById('detailCategory').textContent = news.category;
+            document.getElementById('detailDate').textContent = news.date;
+            document.getElementById('detailTitle').textContent = news.title;
+            document.getElementById('detailSummary').textContent = news.summary;
+
+            // Set detailed content
+            document.getElementById('newsContent').innerHTML = news.content;
+
+            // Update page title
+            document.title = `${news.title} - TG AI 캠퍼스`;
+        }
+
+        function loadRelatedNews(currentId) {
+            const currentNews = newsData.find(n => n.id === currentId);
+            if (!currentNews) return;
+
+            // Get related news (same category, excluding current)
+            const related = newsData
+                .filter(n => n.category === currentNews.category && n.id !== currentId)
+                .slice(0, 3);
+
+            // If not enough, add from other categories
+            if (related.length < 3) {
+                const moreNews = newsData
+                    .filter(n => n.id !== currentId && !related.includes(n))
+                    .slice(0, 3 - related.length);
+                related.push(...moreNews);
+            }
+
+            const relatedContainer = document.getElementById('relatedNews');
+            relatedContainer.innerHTML = related.map(news => `
+                <div class="related-card" onclick="location.href='news-detail.html?id=${news.id}'">
+                    <div class="related-card-content">
+                        <span class="related-category ${news.category}">${news.category}</span>
+                        <h3 class="related-title">${news.title}</h3>
+                        <p class="related-date"><i class="far fa-calendar"></i> ${news.date}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Share functions
+        function shareOnFacebook() {
+            const url = encodeURIComponent(window.location.href);
+            window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, '_blank');
+        }
+
+        function shareOnTwitter() {
+            const url = encodeURIComponent(window.location.href);
+            const text = encodeURIComponent(document.getElementById('detailTitle').textContent);
+            window.open(`https://twitter.com/intent/tweet?url=${url}&text=${text}`, '_blank');
+        }
+
+        function shareOnKakao() {
+            alert('카카오톡 공유 기능은 Kakao SDK 설정이 필요합니다.');
+        }
+
+        function copyLink() {
+            navigator.clipboard.writeText(window.location.href).then(() => {
+                alert('링크가 클립보드에 복사되었습니다!');
+            });
+        }
+    </script>
+</body>
+</html>

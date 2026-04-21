@@ -1,0 +1,528 @@
+/* =====================================================
+   Samsung Style Navigation - TG에듀테크
+   Two-Tier Layout: Utility Bar + Main Navigation
+   ===================================================== */
+
+/* ==================== Variables ==================== */
+:root {
+    --primary-color: #0099FF;
+    --primary-hover: #0077CC;
+    --text-color: #000;
+    --border-color: #e5e5e5;
+    --bg-gray: #f8f9fa;
+}
+
+/* ==================== Header Container ==================== */
+.header {
+    position: sticky;
+    top: 0;
+    z-index: 9999;
+    background: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+    isolation: isolate;
+}
+
+/* ==================== TOP UTILITY BAR ==================== */
+.utility-bar {
+    background: white;
+    border-bottom: 1px solid var(--border-color);
+    height: 36px;
+    padding: 0;
+}
+
+.utility-bar .container {
+    max-width: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.utility-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    height: 100%;
+    gap: 1rem;
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 3rem;
+}
+
+.utility-link,
+.external-link {
+    color: #000;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 36px;
+    transition: color 0.2s ease;
+}
+
+/* TG Alliance 파란색 */
+.external-link.tg-alliance {
+    color: var(--primary-color);
+    font-weight: 500;
+}
+
+.utility-link:hover,
+.external-link:hover {
+    color: var(--primary-color);
+}
+
+.external-link {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.external-link:last-child {
+    padding-right: 0;
+}
+
+.external-link i {
+    font-size: 0.65rem;
+}
+
+/* ==================== MAIN NAVIGATION BAR ==================== */
+.navbar {
+    background: white;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    padding: 0;
+}
+
+.navbar .container {
+    max-width: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.nav-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 3rem;
+}
+
+/* ==================== LEFT SIDE: Logo + Menu ==================== */
+.nav-left {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    flex: 0 0 auto;
+    margin-right: auto;
+    padding-left: 2rem;
+}
+
+/* Logo */
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #000;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+/* TG만 파란색 + 간격 + 크기 */
+.logo-tg {
+    color: var(--primary-color);
+    margin-right: 0.15rem;
+    font-size: 21px;
+}
+
+.logo i {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+}
+
+.logo:hover {
+    color: #000;
+}
+
+/* Navigation Menu */
+.nav-menu {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 1.2rem;
+}
+
+.nav-menu li {
+    position: relative;
+}
+
+.nav-menu a {
+    display: flex;
+    align-items: center;
+    height: 60px;
+    padding: 0;
+    color: #000;
+    text-decoration: none;
+    font-size: 0.938rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    position: relative;
+}
+
+.nav-menu a:hover,
+.nav-menu a.active {
+    color: var(--primary-color);
+}
+
+.nav-menu a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 3px;
+    background: var(--primary-color);
+    transition: width 0.3s ease;
+}
+
+.nav-menu a:hover::after,
+.nav-menu a.active::after {
+    width: 100%;
+}
+
+/* ==================== RIGHT SIDE: Search + Icons ==================== */
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    height: 100%;
+    flex: 0 0 auto;
+}
+
+/* Search Box - Samsung Rounded Style */
+.search-wrapper {
+    position: relative;
+    z-index: 10;
+}
+
+.search-form {
+    position: relative;
+    display: flex;
+    align-items: center;
+    z-index: 10;
+}
+
+.search-input {
+    width: 240px;
+    height: 40px;
+    padding: 0 16px 0 50px;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-family: 'Noto Sans KR', sans-serif;
+    transition: all 0.2s ease;
+    background: var(--bg-gray);
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    background: white;
+}
+
+.search-input::placeholder {
+    color: #999;
+}
+
+.search-btn {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 24px;
+    height: 24px;
+    border: none;
+    background: transparent;
+    color: #666;
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s ease;
+}
+
+.search-btn:hover {
+    color: var(--primary-color);
+}
+
+/* Icon Actions */
+.icon-actions {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    padding-right: 0;
+}
+
+.icon-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    color: #000 !important;
+    text-decoration: none;
+    font-size: 1.3rem;
+    transition: all 0.2s ease;
+    background: transparent;
+    flex-shrink: 0;
+}
+
+.icon-link:last-child {
+    margin-right: 0;
+    padding-right: 0;
+}
+
+/* 로그아웃 아이콘 - 24px (먼저 정의) */
+.icon-link .icon-img {
+    width: 24px !important;
+    height: 24px !important;
+    max-width: 24px !important;
+    max-height: 24px !important;
+    object-fit: contain !important;
+    transition: all 0.2s ease;
+}
+
+/* 마이페이지 아이콘 - 20px (나중에 덮어쓰기) */
+.icon-link .icon-img.mypage-icon {
+    width: auto !important;
+    height: 20px !important;
+    max-height: 20px !important;
+    min-height: 20px !important;
+    object-fit: contain !important;
+}
+
+.icon-link:hover .icon-img {
+    opacity: 0.7;
+}
+
+.icon-link.logged-in .icon-img {
+    opacity: 1;
+}
+
+.icon-link i {
+    font-weight: 300;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    transform: scale(0.95);
+    color: #000 !important;
+}
+
+.icon-link:hover {
+    background: var(--bg-gray);
+    color: var(--primary-color) !important;
+}
+
+.icon-link:hover i {
+    color: var(--primary-color) !important;
+}
+
+/* Logged-in state - simple outline style */
+.icon-link.logged-in {
+    background: transparent;
+    color: var(--primary-color) !important;
+}
+
+.icon-link.logged-in i {
+    color: var(--primary-color) !important;
+}
+
+.icon-link.logged-in:hover {
+    background: var(--bg-gray);
+    color: var(--primary-hover) !important;
+}
+
+.icon-link.logged-in:hover i {
+    color: var(--primary-hover) !important;
+}
+
+/* Mobile Menu Toggle */
+.mobile-menu-toggle {
+    display: none;
+    width: 36px;
+    height: 36px;
+    border: none;
+    background: transparent;
+    color: #000;
+    font-size: 1.25rem;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.mobile-menu-toggle:hover {
+    color: var(--primary-color);
+}
+
+/* ==================== RESPONSIVE ==================== */
+@media (max-width: 1400px) {
+    .navbar .container {
+        max-width: 1140px;
+    }
+    
+    .nav-menu {
+        gap: 1.1rem;
+    }
+    
+    .search-input {
+        width: 220px;
+    }
+}
+
+@media (max-width: 1200px) {
+    .navbar .container {
+        max-width: 960px;
+    }
+    
+    .nav-left {
+        gap: 2rem;
+    }
+    
+    .nav-menu {
+        gap: 0.9rem;
+    }
+    
+    .nav-menu a {
+        font-size: 0.875rem;
+    }
+    
+    .search-input {
+        width: 200px;
+    }
+}
+
+@media (max-width: 992px) {
+    /* Hide utility bar on mobile */
+    .utility-bar {
+        display: none;
+    }
+    
+    /* Mobile menu toggle */
+    .mobile-menu-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    /* Hide search and menu on mobile */
+    .search-wrapper,
+    .nav-menu {
+        display: none;
+    }
+    
+    /* Show menu when active */
+    .nav-menu.active {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        right: 0;
+        background: white;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 1rem 2rem;
+        gap: 0;
+    }
+    
+    .nav-menu.active li {
+        width: 100%;
+    }
+    
+    .nav-menu.active a {
+        padding: 1rem 0;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .nav-left {
+        gap: 1rem;
+    }
+    
+    .icon-actions {
+        gap: 0.5rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .navbar .container {
+        padding: 0 1rem;
+    }
+    
+    .logo span {
+        font-size: 1rem;
+    }
+    
+    .icon-link {
+        width: 32px;
+        height: 32px;
+        font-size: 1.1rem;
+    }
+}
+
+/* ==================== Search Suggestions ==================== */
+.search-suggestions {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    max-height: 300px;
+    overflow-y: auto;
+    z-index: 1000;
+}
+
+.search-suggestion-item {
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.search-suggestion-item:last-child {
+    border-bottom: none;
+}
+
+.search-suggestion-item:hover {
+    background: var(--bg-gray);
+}
+
+.search-suggestion-item .item-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    background: var(--primary-color);
+    color: white;
+    font-size: 0.7rem;
+    border-radius: 4px;
+    margin-right: 8px;
+}
+
+.search-suggestion-item .item-text {
+    font-size: 0.875rem;
+    color: #333;
+}

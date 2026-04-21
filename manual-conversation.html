@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 대화 기술 - TG AI 캠퍼스</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/samsung-nav.css?v=3">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        .manual-container { display: flex; max-width: 1400px; margin: 50px auto; gap: 30px; padding: 0 20px; }
+        .manual-sidebar { width: 280px; background: white; border-radius: 15px; padding: 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); position: sticky; top: 100px; height: fit-content; }
+        .manual-sidebar h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 20px; color: #1a202c; }
+        .manual-sidebar ul { list-style: none; padding: 0; }
+        .manual-sidebar li { margin-bottom: 12px; }
+        .manual-sidebar a { color: #666; text-decoration: none; display: block; padding: 8px 12px; border-radius: 8px; transition: all 0.3s; }
+        .manual-sidebar a:hover, .manual-sidebar a.active { background: #667eea; color: white; }
+        .manual-content { flex: 1; background: white; border-radius: 15px; padding: 50px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+        .manual-header { border-bottom: 3px solid #667eea; padding-bottom: 30px; margin-bottom: 40px; }
+        .manual-header h1 { font-size: 2.5rem; font-weight: 700; color: #1a202c; margin-bottom: 15px; }
+        .manual-meta { display: flex; gap: 20px; color: #666; font-size: 0.95rem; }
+        .manual-meta span { display: flex; align-items: center; gap: 8px; }
+        .pdf-button { position: fixed; bottom: 30px; right: 30px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 15px 30px; border-radius: 50px; font-size: 1rem; font-weight: 600; cursor: pointer; box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4); transition: all 0.3s; z-index: 1000; }
+        .pdf-button:hover { transform: translateY(-3px); box-shadow: 0 6px 30px rgba(102, 126, 234, 0.6); }
+        .section { margin-bottom: 50px; }
+        .section h2 { font-size: 1.8rem; font-weight: 700; color: #1a202c; margin-bottom: 20px; padding-left: 15px; border-left: 5px solid #667eea; }
+        .section h3 { font-size: 1.3rem; font-weight: 600; color: #2d3748; margin: 30px 0 15px; }
+        .section p { font-size: 1.05rem; line-height: 1.8; color: #4a5568; margin-bottom: 15px; }
+        .highlight-box { background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%); border-left: 4px solid #667eea; padding: 20px 25px; border-radius: 10px; margin: 25px 0; }
+        .tip-box { background: #f0fff4; border-left: 4px solid #48bb78; padding: 20px 25px; border-radius: 10px; margin: 25px 0; }
+        .tip-box::before { content: "💡 알아두기"; font-weight: 700; color: #48bb78; display: block; margin-bottom: 10px; }
+        ul, ol { padding-left: 30px; margin: 20px 0; }
+        li { margin-bottom: 12px; line-height: 1.7; color: #4a5568; }
+        @media (max-width: 768px) {
+            .manual-container { flex-direction: column; }
+            .manual-sidebar { width: 100%; position: static; }
+            .manual-content { padding: 30px 20px; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="utility-bar">
+            <div class="container">
+                <div class="utility-wrapper">
+                    <a href="news.html" class="utility-link">TG 라운지</a>
+                    <a href="notices.html" class="utility-link">공지사항</a>
+                    <a href="tg-family.html" class="utility-link">TG패밀리</a>
+                    <a href="https://tgnco.kr/tg-alliance/" target="_blank" class="external-link tg-alliance">TG Alliance <i class="fas fa-external-link-alt"></i></a>
+                    <span class="external-link" style="color: #ff8c00; cursor: default;">
+                        TG 에듀테크
+                    </span>
+                </div>
+            </div>
+        </div>
+        <nav class="navbar">
+            <div class="container">
+                <div class="nav-wrapper">
+                    <div class="nav-left">
+                        <a href="index.html" class="logo"><i class="fas fa-brain"></i><span><span class="logo-tg">TG</span> AI 캠퍼스</span></a>
+                                                <ul class="nav-menu">
+                            <li><a href="about.html">TG AI 캠퍼스소개</a></li>
+                            <li><a href="manuals.html">AI 활용메뉴얼</a></li>
+                            <li><a href="dictionary.html">AI 용어사전</a></li>
+                            <li><a href="recommended.html">AI 활용추천영상</a></li>
+                            <li><a href="curriculum.html">교육과정</a></li>
+                            <li><a href="support.html" style="color: #3b82f6; font-weight: 600;">나만의 AI 코치</a></li>
+                            <li><a href="dashboard.html">학습 현황</a></li>
+                        </ul>
+                    </div>
+                    <div class="nav-right">
+                        <div class="icon-actions">
+                            <a href="mypage.html" class="icon-link"><img src="assets/images/mypage-icon-new.png?v=2" alt="마이페이지" style="height: 20px;"></a>
+                            <a href="login.html" class="icon-link"><img src="assets/images/logout-icon.png" alt="로그인" style="height: 24px;"></a>
+                        </div>
+                        <button class="mobile-menu-toggle"><i class="fas fa-bars"></i></button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="manual-container">
+        <aside class="manual-sidebar">
+            <h3><i class="fas fa-list"></i> 목차</h3>
+            <ul>
+                <li><a href="#principles" class="active">1. 효과적인 소통 원칙</a></li>
+                <li><a href="#question-techniques">2. 질문 기술</a></li>
+                <li><a href="#feedback">3. 피드백과 수정</a></li>
+                <li><a href="#scenarios">4. 업무 시나리오별 팁</a></li>
+                <li><a href="#mistakes">5. 피해야 할 실수</a></li>
+                <li><a href="#quality">6. 대화 품질 측정</a></li>
+            </ul>
+            <hr style="margin: 30px 0; border: none; border-top: 1px solid #e2e8f0;">
+            <a href="manuals.html" class="btn btn-outline" style="width: 100%; text-align: center;">
+                <i class="fas fa-arrow-left"></i> 목록으로
+            </a>
+        </aside>
+
+        <main class="manual-content" id="manual-content">
+            <div class="manual-header">
+                <h1><i class="fas fa-comments"></i> AI 대화 기술</h1>
+                <div class="manual-meta">
+                    <span><i class="fas fa-clock"></i> 읽는 시간: 30분</span>
+                    <span><i class="fas fa-signal"></i> 난이도: 입문</span>
+                    <span><i class="fas fa-comment-dots"></i> 소통</span>
+                </div>
+            </div>
+
+            <section class="section" id="principles">
+                <h2>1. 효과적인 소통 원칙</h2>
+                <p>AI와 대화할 때 명확하고 구체적인 소통이 중요합니다. 원하는 결과를 얻기 위한 기본 원칙을 알아보겠습니다.</p>
+                
+                <div class="highlight-box">
+                    <h3>🎯 명확성</h3>
+                    <p>모호한 표현 대신 구체적이고 명확한 언어 사용</p>
+                    <ul>
+                        <li><strong>나쁜 예시:</strong> "회사에 대한 보고서 써줘"</li>
+                        <li><strong>좋은 예시:</strong> "2024년 4분기 영업실적을 바탕으로 분기별 성장률과 주요 성과 요인을 분석한 보고서를 A4 2장 분량으로 작성해줘"</li>
+                    </ul>
+                </div>
+                
+                <div class="highlight-box">
+                    <h3>📋 구조화</h3>
+                    <p>단계별 절차나 번호를 활용한 논리적 흐름 제시</p>
+                    <ul>
+                        <li><strong>나쁜 예시:</strong> "마케팅 전략 짜줘"</li>
+                        <li><strong>좋은 예시:</strong> "1. 타겟 고객 분석 2. 경쟁사 조사 3. 채널 전략 4. 예산 배분 5. 성과 측정 지표 순서로 마케팅 전략을 제안해줘"</li>
+                    </ul>
+                </div>
+                
+                <div class="highlight-box">
+                    <h3>📝 맥락 제공</h3>
+                    <p>배경 정보와 목표를 충분히 전달하여 AI의 이해도 높이기</p>
+                    <ul>
+                        <li><strong>나쁜 예시:</strong> "이메일 써줘"</li>
+                        <li><strong>좋은 예시:</strong> "신규 고객에게 제품 소개 이메일을 써줘. 우리 회사는 B2B SaaS 기업이고, 고객은 중소기업 마케팅 담당자야. 목표는 데모 신청 유도야"</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section class="section" id="question-techniques">
+                <h2>2. 효과적인 질문 기술</h2>
+                <p>AI에게 더 나은 답변을 얻기 위한 질문 작성 기법과 팁</p>
+                
+                <div class="highlight-box">
+                    <h3>🔍 개방형 질문</h3>
+                    <p>"예/아니오"로 답할 수 없는 질문으로 상세한 정보 얻기</p>
+                    <ul>
+                        <li><strong>개방형:</strong> "신제품 출시 전략에 대해 어떻게 생각하나요?"</li>
+                        <li><strong>폐쇄형:</strong> "신제품 출시가 좋은 생각인가요?"</li>
+                    </ul>
+                </div>
+                
+                <div class="highlight-box">
+                    <h3>📚 다단계 질문</h3>
+                    <p>복잡한 주제를 여러 단계로 나누어 점진적으로 접근</p>
+                    <ul>
+                        <li><strong>1단계:</strong> "우리 산업의 현재 시장 상황을 분석해주세요"</li>
+                        <li><strong>2단계:</strong> "이 분석을 바탕으로 우리 회사의 경쟁 우위는 무엇일까요?"</li>
+                        <li><strong>3단계:</strong> "경쟁 우위를 활용한 구체적인 성장 전략을 제안해주세요"</li>
+                    </ul>
+                </div>
+                
+                <div class="highlight-box">
+                    <h3>👔 역할 부여 질문</h3>
+                    <p>AI에게 특정 전문가 역할을 부여하여 전문성 높은 답변 유도</p>
+                    <ul>
+                        <li><strong>마케팅 전문가로서:</strong> "10년 경력의 마케팅 전문가 입장에서 신규 런칭 제품의 마케팅 믹스를 설계해주세요"</li>
+                        <li><strong>재무 분석가로서:</strong> "베테랑 재무 분석가처럼 3개년 재무제표를 분석하고 개선점을 제시해주세요"</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section class="section" id="feedback">
+                <h2>3. 피드백과 수정 기술</h2>
+                <p>AI의 응답을 원하는 방향으로 수정하고 개선하는 방법</p>
+                
+                <div class="highlight-box">
+                    <h3>✏️ 구체적 수정 요청</h3>
+                    <p>어떤 부분을 어떻게 수정할지 명확하게 지시</p>
+                    <div class="tip-box">
+                        <strong>AI 응답:</strong> "우리 제품은 혁신적인 기술을 바탕으로..."<br>
+                        <strong>사용자 피드백:</strong> "서론을 더 간결하게 줄이고, 핵심 가치 제안을 3가지로 요약해서 다시 작성해주세요"
+                    </div>
+                </div>
+                
+                <div class="highlight-box">
+                    <h3>🎭 톤앤매너 조절</h3>
+                    <p>원하는 말투와 스타일로 응답을 조정</p>
+                    <ul>
+                        <li><strong>전문적인:</strong> "학술적이고 객관적인 어조로 작성해주세요"</li>
+                        <li><strong>친근한:</strong> "20대 직원들이 이해하기 쉽도록 쉬운 말투로 설명해주세요"</li>
+                        <li><strong>설득력 있는:</strong> "임원들을 설득할 수 있도록 강력하고 논리적인 어조로 작성해주세요"</li>
+                    </ul>
+                </div>
+                
+                <div class="highlight-box">
+                    <h3>➕ 추가 정보 요청</h3>
+                    <p>더 깊이 있는 정보를 얻기 위한 후속 질문 기법</p>
+                    <ul>
+                        <li><strong>구체화:</strong> "방금 말한 '혁신적인 기술'이 구체적으로 무엇인가요?"</li>
+                        <li><strong>예시 요청:</strong> "실제 사례를 들어서 설명해주세요"</li>
+                        <li><strong>근거 요청:</strong> "그렇게 생각하는 근거는 무엇인가요?"</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section class="section" id="scenarios">
+                <h2>4. 업무 시나리오별 팁</h2>
+                <p>다양한 업무 상황별 AI 대화 활용 노하우</p>
+                
+                <div class="highlight-box">
+                    <h3>💼 업무 보고서 작성</h3>
+                    <ul>
+                        <li>보고서 목적과 독자를 명확히 전달</li>
+                        <li>필요한 데이터와 통계를 미리 제공</li>
+                        <li>원하는 분량과 형식을 구체적으로 지정</li>
+                    </ul>
+                    <div class="tip-box">
+                        <strong>예시 프롬프트:</strong> "이사회 보고용으로 2024년 실적 보고서를 작성해주세요. 독자는 경영진이고, 분량은 A4 3페이지 내외입니다. 핵심 지표는 매출, 이익률, 시장 점유율이며, 그래프 포함해주세요."
+                    </div>
+                </div>
+                
+                <div class="highlight-box">
+                    <h3>📧 이메일 작성</h3>
+                    <ul>
+                        <li>수신자와의 관계와 이메일 목적 설명</li>
+                        <li>원하는 행동(CTA)을 명확하게 지시</li>
+                        <li>긴급도와 중요도를 표시</li>
+                    </ul>
+                    <div class="tip-box">
+                        <strong>예시 프롬프트:</strong> "신규 고객에게 보낼 첫인사 이메일을 작성해주세요. 제품은 CRM 소프트웨어이고, 목표는 15분 데모 신청입니다. 친근하지만 전문적인 톤으로 작성해주세요."
+                    </div>
+                </div>
+                
+                <div class="highlight-box">
+                    <h3>💡 아이디어 브레인스토밍</h3>
+                    <ul>
+                        <li>제약 조건과 목표를 명확히 설정</li>
+                        <li>다양한 관점에서 접근 요청</li>
+                        <li>양보다 질적으로 좋은 아이디어 요청</li>
+                    </ul>
+                    <div class="tip-box">
+                        <strong>예시 프롬프트:</strong> "20대 대학생을 위한 새로운 스터디 앱 아이디어를 5가지 제안해주세요. 예산은 1억원 이내이고, 6개월 내에 출시 목표입니다. 기존 앱과 차별화될 수 있는 혁신적인 기능을 중심으로 아이디어를 주세요."
+                    </div>
+                </div>
+            </section>
+
+            <section class="section" id="mistakes">
+                <h2>5. 피해야 할 대화 실수</h2>
+                <p>효과적인 AI 대화를 방해하는 일반적인 실수와 해결책</p>
+                
+                <div class="highlight-box">
+                    <h3>❌ 너무 추상적인 질문</h3>
+                    <p>구체성이 부족한 질문은 일반적인 답변만 얻게 됩니다</p>
+                    <div class="tip-box">
+                        <strong>해결책:</strong> 구체적인 맥락, 목표, 제약 조건을 모두 포함하여 질문하기
+                    </div>
+                </div>
+                
+                <div class="highlight-box">
+                    <h3>❌ 한 번에 너무 많은 것 요청</h3>
+                    <p>복잡한 요청은 AI가 혼동하여 부정확한 응답을 할 수 있습니다</p>
+                    <div class="tip-box">
+                        <strong>해결책:</strong> 큰 작업을 여러 개의 작은 단계로 나누어 순차적으로 요청하기
+                    </div>
+                </div>
+                
+                <div class="highlight-box">
+                    <h3>❌ 충분한 피드백 부족</h3>
+                    <p>첫 응답에 만족하고 추가 개선을 요청하지 않는 실수</p>
+                    <div class="tip-box">
+                        <strong>해결책:</strong> 2-3차례 피드백을 통해 원하는 수준의 결과물 얻기
+                    </div>
+                </div>
+                
+                <div class="highlight-box">
+                    <h3>❌ 맥락 없는 연속 질문</h3>
+                    <p>이전 대화의 맥락을 무시하고 새로운 대화처럼 질문하는 경우</p>
+                    <div class="tip-box">
+                        <strong>해결책:</strong> "방금 말한 내용에 대해..." 와 같이 맥락을 연결하여 질문하기
+                    </div>
+                </div>
+            </section>
+
+            <section class="section" id="quality">
+                <h2>6. 대화 품질 측정과 개선</h2>
+                <p>AI와의 대화 품질을 평가하고 지속적으로 개선하는 방법</p>
+                
+                <div class="highlight-box">
+                    <h3>🎯 목표 달성률</h3>
+                    <p>원했던 결과물과 실제 결과물의 일치도 측정</p>
+                    <div class="tip-box">
+                        <strong>개선 팁:</strong> 결과물을 얻은 후 "이것이 내가 원했던 것과 얼마나 유사한가?" 자가 평가
+                    </div>
+                </div>
+                
+                <div class="highlight-box">
+                    <h3>⏱️ 효율성</h3>
+                    <p>원하는 결과를 얻기까지의 대화 횟수와 시간</p>
+                    <div class="tip-box">
+                        <strong>개선 팁:</strong> 처음부터 더 구체적인 프롬프트로 대화 횟수 줄이기
+                    </div>
+                </div>
+                
+                <div class="highlight-box">
+                    <h3>🔄 재사용성</h3>
+                    <p>성공적인 프롬프트 패턴을 저장하고 재활용</p>
+                    <div class="tip-box">
+                        <strong>개선 팁:</strong> 좋은 결과를 얻은 프롬프트는 개인 라이브러리에 보관
+                    </div>
+                </div>
+                
+                <div class="tip-box">
+                    <strong>핵심 원칙:</strong> AI 대화 기술은 연습을 통해 향상됩니다. 
+                    성공적인 대화 패턴을 기록하고, 실패한 경험에서 배우며, 꾸준히 연습하는 것이 중요합니다.
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <button class="pdf-button" onclick="downloadPDF()">
+        <i class="fas fa-file-pdf"></i> PDF 다운로드
+    </button>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo-section">
+                        <img src="assets/images/common/footer_tg.jpg" alt="TG 건물" class="footer-building-image">
+                        <div class="footer-text-content">
+                            <h4>TG AI 캠퍼스</h4>
+                            <p>AI 기술 교육 전문 플랫폼</p>
+                        </div>
+                    </div>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>AI 교육 과정</h4>
+                    <ul>
+                        <li><a href="manuals.html#tab-basics-link">기초편</a></li>
+                        <li><a href="manuals.html#tab-advanced-link">실전편</a></li>
+                        <li><a href="manuals.html#tab-prompt-link">프롬프트</a></li>
+                        <li><a href="manuals.html#tab-job-link">직무별 활용</a></li>
+                        <li><a href="manuals.html#tab-advanced-ai-link">AI 고도화</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>AI 실전</h4>
+                    <ul>
+                        <li><a href="manual-prompt-basic.html">프롬프트 작성법</a></li>
+                        <li><a href="manual-automation.html">업무 자동화</a></li>
+                        <li><a href="manual-workflow.html">워크플로우 구축</a></li>
+                        <li><a href="manual-collaboration.html">AI 협업 도구</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>학습 지원</h4>
+                    <ul>
+                        <li><a href="support.html">나만의 AI 코치</a></li>
+                        <li><a href="notices.html">공지사항</a></li>
+                        <li><a href="dictionary.html">AI 용어 사전</a></li>
+                        <li><a href="dashboard.html">학습 현황</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>TG 라운지</h4>
+                    <ul>
+                        <li><a href="about.html">TG AI 캠퍼스 소개</a></li>
+                        <li><a href="tg-family.html">TG 패밀리</a></li>
+                        <li><a href="news.html">TG Alliance 소식</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 TG AI 캠퍼스. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.querySelectorAll('.manual-sidebar a[href^="#"]').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const headerOffset = 120;
+                    const elementPosition = target.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                    
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+                    
+                    document.querySelectorAll('.manual-sidebar a').forEach(a => a.classList.remove('active'));
+                    this.classList.add('active');
+                }
+            });
+        });
+
+        async function downloadPDF() {
+            const button = document.querySelector('.pdf-button');
+            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 생성 중...';
+            button.disabled = true;
+
+            try {
+                const { jsPDF } = window.jspdf;
+                const content = document.getElementById('manual-content');
+                const canvas = await html2canvas(content, { scale: 2, useCORS: true, logging: false });
+                const imgData = canvas.toDataURL('image/png');
+                const pdf = new jsPDF('p', 'mm', 'a4');
+                const pageWidth = pdf.internal.pageSize.getWidth();
+                const pageHeight = pdf.internal.pageSize.getHeight();
+                const imgWidth = pageWidth - 20;
+                const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                let heightLeft = imgHeight;
+                let position = 10;
+
+                pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+                heightLeft -= pageHeight;
+
+                while (heightLeft >= 0) {
+                    position = heightLeft - imgHeight + 10;
+                    pdf.addPage();
+                    pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+                    heightLeft -= pageHeight;
+                }
+
+                pdf.save('TG_AI_대화기술.pdf');
+                button.innerHTML = '<i class="fas fa-check"></i> 다운로드 완료!';
+                setTimeout(() => {
+                    button.innerHTML = '<i class="fas fa-file-pdf"></i> PDF 다운로드';
+                    button.disabled = false;
+                }, 2000);
+            } catch (error) {
+                console.error('PDF 생성 오류:', error);
+                alert('PDF 생성 중 오류가 발생했습니다.');
+                button.innerHTML = '<i class="fas fa-file-pdf"></i> PDF 다운로드';
+                button.disabled = false;
+            }
+        }
+
+        document.querySelector('.mobile-menu-toggle')?.addEventListener('click', function() {
+            document.querySelector('.nav-menu').classList.toggle('active');
+        });
+    </script>
+</body>
+</html>

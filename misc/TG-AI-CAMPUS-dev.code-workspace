@@ -1,0 +1,18 @@
+{
+    "folders": [
+        {
+            "path": "."
+        }
+    ],
+    "settings": {
+        "files.autoSave": "afterDelay",
+        "files.autoSaveDelay": 1000,
+        "workbench.editor.restoreViewState": true,
+        "workbench.sessions.enabled": true,
+        "window.restoreWindows": "all",
+        "workbench.startupEditor": "none"
+    },
+    "extensions": {
+        "recommendations": []
+    }
+}

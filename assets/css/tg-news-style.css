@@ -1,0 +1,39 @@
+/* =====================================================
+   TG 소식 메뉴 스타일 - 파란색 강조
+   ===================================================== */
+
+/* TG 소식 메뉴 항목을 파란색으로 강조 */
+.nav-menu a[href="news.html"] {
+    color: #3b82f6 !important;
+    font-weight: 600 !important;
+}
+
+/* 호버 시에도 파란색 유지 */
+.nav-menu a[href="news.html"]:hover {
+    color: #2563eb !important;
+}
+
+/* active 상태일 때 더 진한 파란색 */
+.nav-menu a[href="news.html"].active {
+    color: #1d4ed8 !important;
+}
+
+/* 언더라인도 파란색으로 */
+.nav-menu a[href="news.html"]::after {
+    background: #3b82f6 !important;
+}
+
+/* Footer 링크도 파란색 */
+footer a[href="news.html"] {
+    color: #3b82f6 !important;
+    font-weight: 500;
+}
+
+footer a[href="news.html"]:hover {
+    color: #2563eb !important;
+}
+
+/* Breadcrumb 링크도 파란색 */
+.breadcrumb a[href="news.html"] {
+    color: #3b82f6 !important;
+}

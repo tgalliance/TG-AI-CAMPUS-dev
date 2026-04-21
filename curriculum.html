@@ -1,0 +1,1563 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>교육과정 프로그램 - TG AI 캠퍼스</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/enhanced-styles.css">
+    <link rel="stylesheet" href="assets/css/sections.css">
+    <link rel="stylesheet" href="assets/css/samsung-nav.css?v=4">
+    <link rel="stylesheet" href="assets/css/apple-style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary: #667eea;
+            --primary-dark: #5a67d8;
+            --secondary: #764ba2;
+            --accent-green: #10b981;
+            --accent-blue: #3b82f6;
+            --accent-orange: #f59e0b;
+            --accent-pink: #ec4899;
+            --bg-light: #f8fafc;
+            --text-dark: #1e293b;
+            --text-mid: #475569;
+            --text-light: #94a3b8;
+            --border: #e2e8f0;
+            --white: #ffffff;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: var(--bg-light);
+            color: var(--text-dark);
+        }
+
+        /* ===== 히어로 ===== */
+        .curriculum-hero {
+            position: relative;
+            min-height: 480px;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            background: #000;
+            color: white;
+        }
+        .curriculum-hero .hero-image {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            object-fit: cover;
+            opacity: 0.65;
+        }
+        .curriculum-hero .hero-overlay {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.30), rgba(0,30,80,0.60));
+        }
+        .curriculum-hero .container {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            width: 100%;
+            padding: 60px 40px;
+        }
+        .curriculum-hero .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(102,126,234,0.35);
+            border: 1px solid rgba(255,255,255,0.4);
+            color: #c7d2fe;
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+        .curriculum-hero h1 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            line-height: 1.3;
+            margin-bottom: 8px;
+        }
+        .curriculum-hero h1 span { color: #93c5fd; }
+        .curriculum-hero p {
+            font-size: 0.95rem;
+            opacity: 0.85;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+
+        /* ===== 학습 로드맵 ===== */
+        .section {
+            padding: 48px 0;
+        }
+        .section-header {
+            text-align: center;
+            margin-bottom: 36px;
+        }
+        .section-header .tag {
+            display: inline-block;
+            background: rgba(102,126,234,0.1);
+            color: var(--primary);
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+        .section-header h2 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+        }
+        .section-header p {
+            color: var(--text-mid);
+            font-size: 1rem;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        /* ===== 로드맵 타임라인 ===== */
+        .roadmap-wrapper {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 0 40px;
+        }
+        .roadmap-stage {
+            display: flex;
+            gap: 24px;
+            margin-bottom: 40px;
+            position: relative;
+        }
+        .roadmap-stage::after {
+            content: '';
+            position: absolute;
+            left: 39px;
+            top: 70px;
+            width: 2px;
+            height: calc(100% - 30px);
+            background: linear-gradient(to bottom, #667eea, transparent);
+        }
+        .roadmap-stage:last-child::after { display: none; }
+        .stage-number {
+            flex-shrink: 0;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 0.7rem;
+            color: white;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+        .stage-number .n { font-size: 1.4rem; line-height: 1; }
+        .stage-body {
+            flex: 1;
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            border: 1px solid var(--border);
+        }
+        .stage-body h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+        .stage-body .duration {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            margin-bottom: 16px;
+        }
+        .stage-body .duration i { margin-right: 4px; }
+        .stage-modules {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px;
+        }
+        .module-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 14px;
+            border-radius: 10px;
+            background: var(--bg-light);
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-mid);
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+        }
+        .module-item:hover {
+            background: #f0f4ff;
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+        .module-item i { font-size: 0.9rem; flex-shrink: 0; }
+        .module-item .mod-tag {
+            margin-left: auto;
+            font-size: 0.7rem;
+            padding: 2px 6px;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+
+        /* ===== 과정별 카드 그리드 ===== */
+        .program-grid {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 0 40px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 28px;
+        }
+        .program-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+            border: 1px solid var(--border);
+            transition: all 0.3s;
+        }
+        .program-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+        }
+        .program-card-top {
+            padding: 28px 28px 20px;
+            position: relative;
+        }
+        .program-level {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-bottom: 14px;
+        }
+        .program-card-top h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+        }
+        .program-card-top p {
+            font-size: 0.88rem;
+            color: var(--text-mid);
+            line-height: 1.6;
+        }
+        .program-icon {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            color: white;
+        }
+        .program-info {
+            padding: 16px 28px;
+            background: var(--bg-light);
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .program-info-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.82rem;
+            color: var(--text-mid);
+        }
+        .program-info-item i { color: var(--primary); }
+        .program-modules {
+            padding: 20px 28px;
+        }
+        .program-modules h4 {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+        .module-list {
+            list-style: none;
+        }
+        .module-list li {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 0;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 0.88rem;
+            color: var(--text-mid);
+        }
+        .module-list li:last-child { border-bottom: none; }
+        .module-list li i { color: var(--accent-green); font-size: 0.8rem; flex-shrink: 0; }
+        .program-footer {
+            padding: 16px 28px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .progress-mini {
+            flex: 1;
+            margin-right: 16px;
+        }
+        .progress-mini .pct {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 4px;
+        }
+        .progress-mini .bar {
+            height: 6px;
+            background: #e2e8f0;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        .progress-mini .fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 3px;
+        }
+        .btn-enroll {
+            padding: 8px 20px;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        .btn-enroll.enrolled {
+            background: #f0f4ff;
+            color: var(--primary);
+        }
+        .btn-enroll.start {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+        .btn-enroll:hover { opacity: 0.85; transform: scale(1.02); }
+
+        /* ===== 커리큘럼 탭 ===== */
+        .curriculum-tabs {
+            background: white;
+            border-bottom: 2px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .tabs-inner {
+            max-width: 1440px;
+            margin: 0 auto;
+            display: flex;
+            gap: 0;
+            padding: 0 40px;
+            overflow-x: auto;
+        }
+        .ctab {
+            padding: 18px 28px;
+            background: none;
+            border: none;
+            border-bottom: 3px solid transparent;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        .ctab:hover { color: var(--primary); background: rgba(102,126,234,0.04); }
+        .ctab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+        .ctab i { margin-right: 6px; }
+        .tab-panel { display: none; }
+        .tab-panel.active { display: block; }
+
+        /* ===== 학습 경로 안내 ===== */
+        .path-grid {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 0 40px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 24px;
+        }
+        .path-card {
+            background: white;
+            border-radius: 16px;
+            padding: 28px;
+            border: 1px solid var(--border);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        .path-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+            border-color: var(--primary);
+        }
+        .path-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            color: white;
+            margin-bottom: 18px;
+        }
+        .path-card h3 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--text-dark);
+        }
+        .path-card p {
+            font-size: 0.85rem;
+            color: var(--text-mid);
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+        .path-steps {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        .path-step {
+            background: var(--bg-light);
+            border-radius: 8px;
+            padding: 4px 10px;
+            font-size: 0.75rem;
+            color: var(--text-mid);
+            font-weight: 500;
+        }
+
+        /* ===== 수료증 섹션 ===== */
+        .cert-section {
+            background: linear-gradient(135deg, #1e293b, #1e3a5f);
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+        }
+        .cert-inner {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        .cert-icon-big {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            opacity: 0.9;
+        }
+        .cert-section h2 {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 14px;
+        }
+        .cert-section p {
+            opacity: 0.75;
+            font-size: 1rem;
+            margin-bottom: 36px;
+        }
+        .cert-badges {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 36px;
+        }
+        .cert-badge {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 12px;
+            padding: 14px 22px;
+            text-align: center;
+        }
+        .cert-badge .num { font-size: 1.6rem; font-weight: 800; color: #a5b4fc; }
+        .cert-badge .lbl { font-size: 0.8rem; opacity: 0.7; margin-top: 2px; }
+        .btn-cert {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 14px 36px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        .btn-cert:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(102,126,234,0.4); }
+
+        /* ===== FAQ ===== */
+        .faq-section {
+            padding: 80px 0;
+            background: white;
+        }
+        .faq-list {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        .faq-item {
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            margin-bottom: 12px;
+            overflow: hidden;
+        }
+        .faq-q {
+            padding: 18px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--text-dark);
+            background: white;
+            transition: background 0.2s;
+            gap: 12px;
+        }
+        .faq-q:hover { background: var(--bg-light); }
+        .faq-q i { color: var(--primary); flex-shrink: 0; transition: transform 0.3s; }
+        .faq-q.open i { transform: rotate(180deg); }
+        .faq-a {
+            padding: 0 24px;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s;
+            color: var(--text-mid);
+            font-size: 0.9rem;
+            line-height: 1.7;
+        }
+        .faq-a.open { max-height: 200px; padding: 0 24px 18px; }
+
+        .container { max-width: 1440px; margin: 0 auto; padding: 0; }
+
+        @media (max-width: 768px) {
+            .curriculum-hero { min-height: 250px; }
+            .curriculum-hero .container { padding: 0 24px; }
+            .curriculum-hero h1 { font-size: 1.8rem; }
+            .hero-stats { gap: 0; }
+            .roadmap-stage { flex-direction: column; }
+            .roadmap-stage::after { display: none; }
+            .stage-number { width: 60px; height: 60px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== HEADER / GNB ===== -->
+    <header class="header">
+        <div class="utility-bar">
+            <div class="container">
+                <div class="utility-wrapper">
+                    <a href="news.html" class="utility-link">TG 라운지</a>
+                    <a href="notices.html" class="utility-link">공지사항</a>
+                    <a href="tg-family.html" class="utility-link">TG패밀리</a>
+                    <a href="https://tgnco.kr/tg-alliance/" target="_blank" class="external-link tg-alliance">
+                        TG Alliance <i class="fas fa-external-link-alt"></i>
+                    </a>
+                    <span class="external-link" style="color: #ff8c00; cursor: default;">
+                        TG 에듀테크
+                    </span>
+                </div>
+            </div>
+        </div>
+        <nav class="navbar">
+            <div class="container">
+                <div class="nav-wrapper">
+                    <div class="nav-left">
+                        <a href="index.html" class="logo">
+                            <i class="fas fa-brain"></i>
+                            <span><span class="logo-tg">TG</span> AI 캠퍼스</span>
+                        </a>
+                                                <ul class="nav-menu">
+                            <li><a href="about.html">TG AI 캠퍼스소개</a></li>
+                            <li><a href="manuals.html">AI 활용메뉴얼</a></li>
+                            <li><a href="dictionary.html">AI 용어사전</a></li>
+                            <li><a href="recommended.html">AI 활용추천영상</a></li>
+                            <li><a href="curriculum.html">교육과정</a></li>
+                            <li><a href="support.html" style="color: #3b82f6; font-weight: 600;">나만의 AI 코치</a></li>
+                            <li><a href="dashboard.html">학습 현황</a></li>
+                        </ul>
+                    </div>
+                    <div class="nav-right">
+                        <div class="search-wrapper">
+                            <form class="search-form">
+                                <button type="submit" class="search-btn"><i class="fas fa-search"></i></button>
+                                <input type="text" class="search-input" placeholder="검색" autocomplete="off">
+                            </form>
+                        </div>
+                        <div class="icon-actions">
+                            <a href="mypage.html" class="icon-link">
+                                <img src="assets/images/mypage-icon-new.png?v=2" alt="마이페이지" style="height: 20px;">
+                            </a>
+                            <a href="login.html" class="icon-link">
+                                <img src="assets/images/logout-icon.png" alt="로그인" style="height: 24px;">
+                            </a>
+                        </div>
+                        <button class="mobile-menu-toggle"><i class="fas fa-bars"></i></button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- ===== 히어로 ===== -->
+    <section class="curriculum-hero">
+        <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=1920&h=600&fit=crop&q=80" alt="교육과정" class="hero-image">
+        <div class="hero-overlay"></div>
+        <div class="container">
+            <div class="badge"><i class="fas fa-graduation-cap"></i> TG AI 캠퍼스 공식 커리큘럼</div>
+            <h1>교육과정 프로그램</h1>
+            <p>기초부터 고급까지, 직무별 맞춤 AI 교육과정</p>
+        </div>
+    </section>
+
+    <!-- ===== 커리큘럼 탭 네비게이션 ===== -->
+    <div class="curriculum-tabs">
+        <div class="tabs-inner">
+            <button class="ctab active" onclick="switchTab('roadmap')">
+                <i class="fas fa-map-signs"></i> 학습 로드맵
+            </button>
+            <button class="ctab" onclick="switchTab('programs')">
+                <i class="fas fa-layer-group"></i> 교육 프로그램
+            </button>
+            <button class="ctab" onclick="switchTab('paths')">
+                <i class="fas fa-route"></i> 직무별 학습경로
+            </button>
+            <button class="ctab" onclick="switchTab('assessment')">
+                <i class="fas fa-clipboard-check"></i> AI 역량 평가
+            </button>
+            <button class="ctab" onclick="switchTab('cert')">
+                <i class="fas fa-award"></i> 수료 및 인증
+            </button>
+            <button class="ctab" onclick="switchTab('community')">
+                <i class="fas fa-users"></i> 학습 커뮤니티
+            </button>
+        </div>
+    </div>
+
+    <!-- ===== TAB: 학습 로드맵 ===== -->
+    <div id="tab-roadmap" class="tab-panel active">
+        <section class="section" style="background: var(--bg-light);">
+            <div class="section-header">
+                <div class="tag">LEARNING ROADMAP</div>
+                <h2>5단계 AI 역량 개발 로드맵</h2>
+                <p>단계별 체계적인 학습으로 AI 전문가로 성장하세요</p>
+            </div>
+            <div class="roadmap-wrapper">
+
+                <!-- STAGE 1 -->
+                <div class="roadmap-stage">
+                    <div class="stage-number" style="background: linear-gradient(135deg, #10b981, #059669);">
+                        <div class="n">1</div>
+                        <div>입문</div>
+                    </div>
+                    <div class="stage-body">
+                        <h3>🌱 AI 기초 이해</h3>
+                        <div class="duration"><i class="fas fa-clock"></i> 예상 학습 시간: 15~20시간 · <i class="fas fa-layer-group"></i> 4개 모듈</div>
+                        <div class="stage-modules">
+                            <div class="module-item" onclick="location.href='manual-basic.html'">
+                                <i class="fas fa-brain" style="color:#10b981"></i>
+                                AI 기본 개념
+                                <span class="mod-tag" style="background:#d1fae5;color:#065f46;">필수</span>
+                            </div>
+                            <div class="module-item" onclick="location.href='manual-trends.html'">
+                                <i class="fas fa-chart-line" style="color:#10b981"></i>
+                                AI 최신 동향
+                                <span class="mod-tag" style="background:#d1fae5;color:#065f46;">필수</span>
+                            </div>
+                            <div class="module-item" onclick="location.href='dictionary.html'">
+                                <i class="fas fa-book" style="color:#10b981"></i>
+                                AI 용어사전
+                                <span class="mod-tag" style="background:#ecfdf5;color:#065f46;">참고</span>
+                            </div>
+                            <div class="module-item" onclick="location.href='manual-ethics.html'">
+                                <i class="fas fa-shield-alt" style="color:#10b981"></i>
+                                AI 보안과 윤리
+                                <span class="mod-tag" style="background:#d1fae5;color:#065f46;">필수</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STAGE 2 -->
+                <div class="roadmap-stage">
+                    <div class="stage-number" style="background: linear-gradient(135deg, #3b82f6, #2563eb);">
+                        <div class="n">2</div>
+                        <div>기초</div>
+                    </div>
+                    <div class="stage-body">
+                        <h3>📘 AI 도구 활용</h3>
+                        <div class="duration"><i class="fas fa-clock"></i> 예상 학습 시간: 25~30시간 · <i class="fas fa-layer-group"></i> 5개 모듈</div>
+                        <div class="stage-modules">
+                            <div class="module-item" onclick="location.href='manual-conversation.html'">
+                                <i class="fas fa-comment-dots" style="color:#3b82f6"></i>
+                                AI와의 효과적 소통
+                                <span class="mod-tag" style="background:#dbeafe;color:#1e40af;">기초</span>
+                            </div>
+                            <div class="module-item" onclick="location.href='manual-prompt-basic.html'">
+                                <i class="fas fa-terminal" style="color:#3b82f6"></i>
+                                프롬프트 엔지니어링 기초
+                                <span class="mod-tag" style="background:#dbeafe;color:#1e40af;">기초</span>
+                            </div>
+                            <div class="module-item" onclick="location.href='manual-models.html'">
+                                <i class="fas fa-robot" style="color:#3b82f6"></i>
+                                AI 모델 이해
+                                <span class="mod-tag" style="background:#dbeafe;color:#1e40af;">기초</span>
+                            </div>
+                            <div class="module-item" onclick="location.href='manual-tools.html'">
+                                <i class="fas fa-tools" style="color:#3b82f6"></i>
+                                AI 도구 선택 가이드
+                                <span class="mod-tag" style="background:#eff6ff;color:#1e40af;">선택</span>
+                            </div>
+                            <div class="module-item" onclick="location.href='manual-start-guide.html'">
+                                <i class="fas fa-play-circle" style="color:#3b82f6"></i>
+                                AI 활용 시작 가이드
+                                <span class="mod-tag" style="background:#dbeafe;color:#1e40af;">기초</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STAGE 3 -->
+                <div class="roadmap-stage">
+                    <div class="stage-number" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed);">
+                        <div class="n">3</div>
+                        <div>실전</div>
+                    </div>
+                    <div class="stage-body">
+                        <h3>🚀 프롬프트 실전 마스터</h3>
+                        <div class="duration"><i class="fas fa-clock"></i> 예상 학습 시간: 40~50시간 · <i class="fas fa-layer-group"></i> 8개 모듈</div>
+                        <div class="stage-modules">
+                            <div class="module-item" onclick="location.href='manual-prompt-advanced.html'">
+                                <i class="fas fa-magic" style="color:#8b5cf6"></i>
+                                프롬프트 실전 활용법
+                                <span class="mod-tag" style="background:#ede9fe;color:#5b21b6;">인기</span>
+                            </div>
+                            <div class="module-item" onclick="location.href='manual-scenarios.html'">
+                                <i class="fas fa-briefcase" style="color:#8b5cf6"></i>
+                                업무 시나리오 실전 활용
+                                <span class="mod-tag" style="background:#ede9fe;color:#5b21b6;">실전</span>
+                            </div>
+                            <div class="module-item" onclick="location.href='manual-advanced-prompts.html'">
+                                <i class="fas fa-layer-group" style="color:#8b5cf6"></i>
+                                고급 프롬프트 작성 기법
+                                <span class="mod-tag" style="background:#ede9fe;color:#5b21b6;">고급</span>
+                            </div>
+                            <div class="module-item" onclick="location.href='manual-prompt-optimization.html'">
+                                <i class="fas fa-sliders-h" style="color:#8b5cf6"></i>
+                                프롬프트 최적화와 튜닝
+                                <span class="mod-tag" style="background:#ede9fe;color:#5b21b6;">실전</span>
+                            </div>
+                            <div class="module-item" onclick="location.href='manual-prompt-templates.html'">
+                                <i class="fas fa-file-alt" style="color:#8b5cf6"></i>
+                                프롬프트 템플릿 라이브러리
+                                <span class="mod-tag" style="background:#f5f3ff;color:#5b21b6;">Best</span>
+                            </div>
+                            <div class="module-item" onclick="location.href='manual-creative-prompts.html'">
+                                <i class="fas fa-lightbulb" style="color:#8b5cf6"></i>
+                                창의적 프롬프트 작성
+                                <span class="mod-tag" style="background:#ede9fe;color:#5b21b6;">창의</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STAGE 4 -->
+                <div class="roadmap-stage">
+                    <div class="stage-number" style="background: linear-gradient(135deg, #f59e0b, #d97706);">
+                        <div class="n">4</div>
+                        <div>직무</div>
+                    </div>
+                    <div class="stage-body">
+                        <h3>💼 직무별 AI 활용</h3>
+                        <div class="duration"><i class="fas fa-clock"></i> 예상 학습 시간: 30~40시간 · <i class="fas fa-layer-group"></i> 8개 모듈</div>
+                        <div class="stage-modules">
+                            <div class="module-item" onclick="location.href='manual-hr.html'">
+                                <i class="fas fa-users" style="color:#f59e0b"></i>
+                                HR·인사팀
+                                <span class="mod-tag" style="background:#fef3c7;color:#92400e;">직무</span>
+                            </div>
+                            <div class="module-item" onclick="location.href='manual-finance.html'">
+                                <i class="fas fa-chart-bar" style="color:#f59e0b"></i>
+                                재무·회계팀
+                                <span class="mod-tag" style="background:#fef3c7;color:#92400e;">직무</span>
+                            </div>
+                            <div class="module-item" onclick="location.href='manual-planning.html'">
+                                <i class="fas fa-chess" style="color:#f59e0b"></i>
+                                기획·전략팀
+                                <span class="mod-tag" style="background:#fef3c7;color:#92400e;">직무</span>
+                            </div>
+                            <div class="module-item" onclick="location.href='manual-marketing.html'">
+                                <i class="fas fa-bullhorn" style="color:#f59e0b"></i>
+                                마케팅팀
+                                <span class="mod-tag" style="background:#fef3c7;color:#92400e;">직무</span>
+                            </div>
+                            <div class="module-item" onclick="location.href='manual-cs.html'">
+                                <i class="fas fa-headset" style="color:#f59e0b"></i>
+                                고객센터·영업팀
+                                <span class="mod-tag" style="background:#fef3c7;color:#92400e;">직무</span>
+                            </div>
+                            <div class="module-item" onclick="location.href='manual-dev.html'">
+                                <i class="fas fa-code" style="color:#f59e0b"></i>
+                                IT·개발팀
+                                <span class="mod-tag" style="background:#fef3c7;color:#92400e;">직무</span>
+                            </div>
+                            <div class="module-item" onclick="location.href='manual-common.html'">
+                                <i class="fas fa-sync-alt" style="color:#f59e0b"></i>
+                                공통 업무 자동화
+                                <span class="mod-tag" style="background:#fef3c7;color:#92400e;">공통</span>
+                            </div>
+                            <div class="module-item" onclick="location.href='manual-sales.html'">
+                                <i class="fas fa-handshake" style="color:#f59e0b"></i>
+                                영업·구매팀
+                                <span class="mod-tag" style="background:#fef3c7;color:#92400e;">직무</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STAGE 5 -->
+                <div class="roadmap-stage">
+                    <div class="stage-number" style="background: linear-gradient(135deg, #ec4899, #be185d);">
+                        <div class="n">5</div>
+                        <div>고급</div>
+                    </div>
+                    <div class="stage-body">
+                        <h3>⚡ AI 고도화 & 자동화</h3>
+                        <div class="duration"><i class="fas fa-clock"></i> 예상 학습 시간: 40~50시간 · <i class="fas fa-layer-group"></i> 4개 모듈</div>
+                        <div class="stage-modules">
+                            <div class="module-item" onclick="location.href='manual-automation.html'">
+                                <i class="fas fa-cogs" style="color:#ec4899"></i>
+                                업무 자동화 설계
+                                <span class="mod-tag" style="background:#fce7f3;color:#9d174d;">고급</span>
+                            </div>
+                            <div class="module-item" onclick="location.href='manual-workflow.html'">
+                                <i class="fas fa-project-diagram" style="color:#ec4899"></i>
+                                AI 워크플로우 구축
+                                <span class="mod-tag" style="background:#fce7f3;color:#9d174d;">고급</span>
+                            </div>
+                            <div class="module-item" onclick="location.href='manual-collaboration.html'">
+                                <i class="fas fa-people-arrows" style="color:#ec4899"></i>
+                                협업 및 표준화
+                                <span class="mod-tag" style="background:#fce7f3;color:#9d174d;">팀</span>
+                            </div>
+                            <div class="module-item" onclick="location.href='manual-api.html'">
+                                <i class="fas fa-plug" style="color:#ec4899"></i>
+                                AI 에이전트 활용
+                                <span class="mod-tag" style="background:#fce7f3;color:#9d174d;">최신</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </div>
+
+    <!-- ===== TAB: 교육 프로그램 ===== -->
+    <div id="tab-programs" class="tab-panel">
+        <section class="section" style="background: var(--bg-light);">
+            <div class="section-header">
+                <div class="tag">PROGRAMS</div>
+                <h2>공식 교육 프로그램</h2>
+                <p>목적에 맞는 프로그램을 선택하여 체계적으로 학습하세요</p>
+            </div>
+            <div class="program-grid">
+
+                <!-- 프로그램 1: AI 기초 입문 -->
+                <div class="program-card">
+                    <div class="program-card-top">
+                        <div class="program-level" style="background:#d1fae5;color:#065f46;">🌱 입문</div>
+                        <div class="program-icon" style="background: linear-gradient(135deg,#10b981,#059669);">
+                            <i class="fas fa-seedling"></i>
+                        </div>
+                        <h3>AI 기초 입문 과정</h3>
+                        <p>AI를 처음 접하는 임직원을 위한 기초 이해 과정. AI의 개념부터 실제 활용 사례까지 쉽게 배웁니다.</p>
+                    </div>
+                    <div class="program-info">
+                        <div class="program-info-item"><i class="fas fa-clock"></i> 15~20시간</div>
+                        <div class="program-info-item"><i class="fas fa-layer-group"></i> 4개 모듈</div>
+                        <div class="program-info-item"><i class="fas fa-certificate"></i> 수료증 발급</div>
+                    </div>
+                    <div class="program-modules">
+                        <h4>포함 모듈</h4>
+                        <ul class="module-list">
+                            <li><i class="fas fa-check-circle"></i> AI 기본 개념 및 원리</li>
+                            <li><i class="fas fa-check-circle"></i> AI 최신 동향 (2026)</li>
+                            <li><i class="fas fa-check-circle"></i> AI 보안과 윤리</li>
+                            <li><i class="fas fa-check-circle"></i> AI 활용 시작 가이드</li>
+                        </ul>
+                    </div>
+                    <div class="program-footer">
+                        <div class="progress-mini">
+                            <div class="pct">수강 중 · 85%</div>
+                            <div class="bar"><div class="fill" style="width:85%"></div></div>
+                        </div>
+                        <button class="btn-enroll enrolled">수강 중</button>
+                    </div>
+                </div>
+
+                <!-- 프로그램 2: 프롬프트 마스터 -->
+                <div class="program-card">
+                    <div class="program-card-top">
+                        <div class="program-level" style="background:#ede9fe;color:#5b21b6;">🚀 중급</div>
+                        <div class="program-icon" style="background: linear-gradient(135deg,#8b5cf6,#7c3aed);">
+                            <i class="fas fa-magic"></i>
+                        </div>
+                        <h3>프롬프트 마스터 과정</h3>
+                        <p>업무에 즉시 활용 가능한 프롬프트 작성 기법을 체계적으로 배우는 핵심 과정입니다.</p>
+                    </div>
+                    <div class="program-info">
+                        <div class="program-info-item"><i class="fas fa-clock"></i> 40~50시간</div>
+                        <div class="program-info-item"><i class="fas fa-layer-group"></i> 8개 모듈</div>
+                        <div class="program-info-item"><i class="fas fa-certificate"></i> 수료증 발급</div>
+                    </div>
+                    <div class="program-modules">
+                        <h4>포함 모듈</h4>
+                        <ul class="module-list">
+                            <li><i class="fas fa-check-circle"></i> 프롬프트 엔지니어링 기초</li>
+                            <li><i class="fas fa-check-circle"></i> 프롬프트 실전 활용법</li>
+                            <li><i class="fas fa-check-circle"></i> 고급 프롬프트 작성 기법</li>
+                            <li><i class="fas fa-check-circle"></i> 프롬프트 최적화와 튜닝</li>
+                        </ul>
+                    </div>
+                    <div class="program-footer">
+                        <div class="progress-mini">
+                            <div class="pct">수강 중 · 62%</div>
+                            <div class="bar"><div class="fill" style="width:62%"></div></div>
+                        </div>
+                        <button class="btn-enroll enrolled">수강 중</button>
+                    </div>
+                </div>
+
+                <!-- 프로그램 3: 직무별 AI 활용 -->
+                <div class="program-card">
+                    <div class="program-card-top">
+                        <div class="program-level" style="background:#fef3c7;color:#92400e;">💼 직무별</div>
+                        <div class="program-icon" style="background: linear-gradient(135deg,#f59e0b,#d97706);">
+                            <i class="fas fa-briefcase"></i>
+                        </div>
+                        <h3>직무별 AI 활용 과정</h3>
+                        <p>HR, 재무, 마케팅, IT 등 각 부서 직무에 특화된 AI 활용 스킬을 키우는 맞춤 과정입니다.</p>
+                    </div>
+                    <div class="program-info">
+                        <div class="program-info-item"><i class="fas fa-clock"></i> 30~40시간</div>
+                        <div class="program-info-item"><i class="fas fa-layer-group"></i> 8개 모듈</div>
+                        <div class="program-info-item"><i class="fas fa-certificate"></i> 수료증 발급</div>
+                    </div>
+                    <div class="program-modules">
+                        <h4>포함 모듈</h4>
+                        <ul class="module-list">
+                            <li><i class="fas fa-check-circle"></i> HR·인사팀 AI 활용</li>
+                            <li><i class="fas fa-check-circle"></i> 재무·회계팀 AI 활용</li>
+                            <li><i class="fas fa-check-circle"></i> 마케팅팀 AI 활용</li>
+                            <li><i class="fas fa-check-circle"></i> IT·개발팀 AI 활용</li>
+                        </ul>
+                    </div>
+                    <div class="program-footer">
+                        <div class="progress-mini">
+                            <div class="pct">시작 전</div>
+                            <div class="bar"><div class="fill" style="width:0%"></div></div>
+                        </div>
+                        <button class="btn-enroll start">수강 신청</button>
+                    </div>
+                </div>
+
+                <!-- 프로그램 4: AI 고도화 전문가 -->
+                <div class="program-card">
+                    <div class="program-card-top">
+                        <div class="program-level" style="background:#fce7f3;color:#9d174d;">⚡ 고급</div>
+                        <div class="program-icon" style="background: linear-gradient(135deg,#ec4899,#be185d);">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <h3>AI 고도화 전문가 과정</h3>
+                        <p>업무 자동화와 AI 워크플로우를 설계하는 고급 전문가를 위한 집중 과정입니다.</p>
+                    </div>
+                    <div class="program-info">
+                        <div class="program-info-item"><i class="fas fa-clock"></i> 40~50시간</div>
+                        <div class="program-info-item"><i class="fas fa-layer-group"></i> 4개 모듈</div>
+                        <div class="program-info-item"><i class="fas fa-certificate"></i> 수료증 발급</div>
+                    </div>
+                    <div class="program-modules">
+                        <h4>포함 모듈</h4>
+                        <ul class="module-list">
+                            <li><i class="fas fa-check-circle"></i> 업무 자동화 설계</li>
+                            <li><i class="fas fa-check-circle"></i> AI 워크플로우 구축</li>
+                            <li><i class="fas fa-check-circle"></i> AI 에이전트 활용</li>
+                            <li><i class="fas fa-check-circle"></i> 협업 및 표준화</li>
+                        </ul>
+                    </div>
+                    <div class="program-footer">
+                        <div class="progress-mini">
+                            <div class="pct">시작 전</div>
+                            <div class="bar"><div class="fill" style="width:0%"></div></div>
+                        </div>
+                        <button class="btn-enroll start">수강 신청</button>
+                    </div>
+                </div>
+
+                <!-- 프로그램 5: 전사 필수 교육 -->
+                <div class="program-card">
+                    <div class="program-card-top">
+                        <div class="program-level" style="background:#dbeafe;color:#1e40af;">🏢 전사필수</div>
+                        <div class="program-icon" style="background: linear-gradient(135deg,#3b82f6,#2563eb);">
+                            <i class="fas fa-building"></i>
+                        </div>
+                        <h3>전사 필수 AI 교육</h3>
+                        <p>모든 TG 그룹 임직원이 반드시 이수해야 하는 AI 필수 기초 교육 과정입니다.</p>
+                    </div>
+                    <div class="program-info">
+                        <div class="program-info-item"><i class="fas fa-clock"></i> 10시간</div>
+                        <div class="program-info-item"><i class="fas fa-layer-group"></i> 3개 모듈</div>
+                        <div class="program-info-item"><i class="fas fa-exclamation-circle" style="color:#ef4444;"></i> 필수 이수</div>
+                    </div>
+                    <div class="program-modules">
+                        <h4>포함 모듈</h4>
+                        <ul class="module-list">
+                            <li><i class="fas fa-check-circle"></i> AI 기본 개념</li>
+                            <li><i class="fas fa-check-circle"></i> AI 보안과 윤리</li>
+                            <li><i class="fas fa-check-circle"></i> 공통 업무 자동화</li>
+                        </ul>
+                    </div>
+                    <div class="program-footer">
+                        <div class="progress-mini">
+                            <div class="pct">완료 · 100%</div>
+                            <div class="bar"><div class="fill" style="width:100%;background:linear-gradient(90deg,#10b981,#059669)"></div></div>
+                        </div>
+                        <button class="btn-enroll enrolled" style="background:#d1fae5;color:#065f46;">수료 완료</button>
+                    </div>
+                </div>
+
+                <!-- 프로그램 6: AI 리더십 과정 -->
+                <div class="program-card">
+                    <div class="program-card-top">
+                        <div class="program-level" style="background:#fee2e2;color:#991b1b;">👑 리더십</div>
+                        <div class="program-icon" style="background: linear-gradient(135deg,#ef4444,#dc2626);">
+                            <i class="fas fa-crown"></i>
+                        </div>
+                        <h3>AI 리더십 과정</h3>
+                        <p>팀장·부서장을 위한 AI 전략 수립 및 조직 내 AI 전환 리더십 역량 개발 과정입니다.</p>
+                    </div>
+                    <div class="program-info">
+                        <div class="program-info-item"><i class="fas fa-clock"></i> 20시간</div>
+                        <div class="program-info-item"><i class="fas fa-layer-group"></i> 5개 모듈</div>
+                        <div class="program-info-item"><i class="fas fa-certificate"></i> 수료증 발급</div>
+                    </div>
+                    <div class="program-modules">
+                        <h4>포함 모듈</h4>
+                        <ul class="module-list">
+                            <li><i class="fas fa-check-circle"></i> AI 전략과 조직 변화관리</li>
+                            <li><i class="fas fa-check-circle"></i> 부서 AI 도입 로드맵 수립</li>
+                            <li><i class="fas fa-check-circle"></i> AI KPI 설정 및 측정</li>
+                            <li><i class="fas fa-check-circle"></i> AI 팀 빌딩과 역량 강화</li>
+                        </ul>
+                    </div>
+                    <div class="program-footer">
+                        <div class="progress-mini">
+                            <div class="pct">시작 전</div>
+                            <div class="bar"><div class="fill" style="width:0%"></div></div>
+                        </div>
+                        <button class="btn-enroll start">수강 신청</button>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </div>
+
+    <!-- ===== TAB: 직무별 학습경로 ===== -->
+    <div id="tab-paths" class="tab-panel">
+        <section class="section" style="background: var(--bg-light);">
+            <div class="section-header">
+                <div class="tag">LEARNING PATH</div>
+                <h2>직무별 맞춤 학습 경로</h2>
+                <p>내 직무에 맞는 최적의 학습 경로를 선택하세요</p>
+            </div>
+            <div class="path-grid">
+                <div class="path-card">
+                    <div class="path-icon" style="background:linear-gradient(135deg,#10b981,#059669)">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>HR·인사 담당자</h3>
+                    <p>채용공고 작성, 면접 질문 설계, 온보딩 자료 자동화 등 HR 업무에 AI를 적용합니다.</p>
+                    <div class="path-steps">
+                        <span class="path-step">AI 기초</span>
+                        <span class="path-step">→</span>
+                        <span class="path-step">프롬프트 기초</span>
+                        <span class="path-step">→</span>
+                        <span class="path-step">HR 직무 활용</span>
+                    </div>
+                </div>
+                <div class="path-card">
+                    <div class="path-icon" style="background:linear-gradient(135deg,#3b82f6,#2563eb)">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <h3>재무·회계 담당자</h3>
+                    <p>재무제표 분석, 예산 수립 지원, 보고서 자동 생성 등 데이터 기반 업무를 자동화합니다.</p>
+                    <div class="path-steps">
+                        <span class="path-step">AI 기초</span>
+                        <span class="path-step">→</span>
+                        <span class="path-step">데이터 분석</span>
+                        <span class="path-step">→</span>
+                        <span class="path-step">재무 직무 활용</span>
+                    </div>
+                </div>
+                <div class="path-card">
+                    <div class="path-icon" style="background:linear-gradient(135deg,#8b5cf6,#7c3aed)">
+                        <i class="fas fa-bullhorn"></i>
+                    </div>
+                    <h3>마케팅 담당자</h3>
+                    <p>콘텐츠 기획, 카피라이팅, SNS 포스팅 자동화 등 마케팅 창작 업무에 AI를 활용합니다.</p>
+                    <div class="path-steps">
+                        <span class="path-step">AI 기초</span>
+                        <span class="path-step">→</span>
+                        <span class="path-step">창의적 프롬프트</span>
+                        <span class="path-step">→</span>
+                        <span class="path-step">마케팅 직무 활용</span>
+                    </div>
+                </div>
+                <div class="path-card">
+                    <div class="path-icon" style="background:linear-gradient(135deg,#f59e0b,#d97706)">
+                        <i class="fas fa-chess"></i>
+                    </div>
+                    <h3>기획·전략 담당자</h3>
+                    <p>시장 조사, 경쟁사 분석, 사업계획서 작성에 AI를 활용하여 전략 수립 역량을 강화합니다.</p>
+                    <div class="path-steps">
+                        <span class="path-step">AI 기초</span>
+                        <span class="path-step">→</span>
+                        <span class="path-step">고급 프롬프트</span>
+                        <span class="path-step">→</span>
+                        <span class="path-step">기획 직무 활용</span>
+                    </div>
+                </div>
+                <div class="path-card">
+                    <div class="path-icon" style="background:linear-gradient(135deg,#ec4899,#be185d)">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <h3>IT·개발 담당자</h3>
+                    <p>코드 리뷰, 디버깅 지원, API 문서 작성 등 개발 생산성을 AI로 극대화합니다.</p>
+                    <div class="path-steps">
+                        <span class="path-step">AI 기초</span>
+                        <span class="path-step">→</span>
+                        <span class="path-step">AI 에이전트</span>
+                        <span class="path-step">→</span>
+                        <span class="path-step">IT 직무 활용</span>
+                    </div>
+                </div>
+                <div class="path-card">
+                    <div class="path-icon" style="background:linear-gradient(135deg,#14b8a6,#0d9488)">
+                        <i class="fas fa-headset"></i>
+                    </div>
+                    <h3>고객센터·영업 담당자</h3>
+                    <p>고객 응대 스크립트, FAQ 자동 생성, 영업 제안서 작성에 AI를 활용합니다.</p>
+                    <div class="path-steps">
+                        <span class="path-step">AI 기초</span>
+                        <span class="path-step">→</span>
+                        <span class="path-step">대화형 AI</span>
+                        <span class="path-step">→</span>
+                        <span class="path-step">CS·영업 직무 활용</span>
+                    </div>
+                </div>
+                <div class="path-card">
+                    <div class="path-icon" style="background:linear-gradient(135deg,#6366f1,#4f46e5)">
+                        <i class="fas fa-cogs"></i>
+                    </div>
+                    <h3>업무 자동화 전문가</h3>
+                    <p>반복 업무를 AI로 자동화하고 워크플로우를 구축하여 업무 효율을 혁신합니다.</p>
+                    <div class="path-steps">
+                        <span class="path-step">전체 기초</span>
+                        <span class="path-step">→</span>
+                        <span class="path-step">자동화 설계</span>
+                        <span class="path-step">→</span>
+                        <span class="path-step">워크플로우 구축</span>
+                    </div>
+                </div>
+                <div class="path-card">
+                    <div class="path-icon" style="background:linear-gradient(135deg,#ef4444,#dc2626)">
+                        <i class="fas fa-crown"></i>
+                    </div>
+                    <h3>팀장·부서장 (리더십)</h3>
+                    <p>AI 전환 전략, 조직 변화관리, 팀 AI 역량 강화 리더십을 개발합니다.</p>
+                    <div class="path-steps">
+                        <span class="path-step">전사 필수</span>
+                        <span class="path-step">→</span>
+                        <span class="path-step">AI 전략</span>
+                        <span class="path-step">→</span>
+                        <span class="path-step">AI 리더십</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- ===== TAB: 교육 일정 ===== -->
+    <!-- ===== TAB: AI 역량 평가 ===== -->
+    <div id="tab-assessment" class="tab-panel">
+        <section class="section" style="background: var(--bg-light);">
+            <div class="section-header">
+                <div class="tag">ASSESSMENT</div>
+                <h2>AI 역량 평가</h2>
+                <p>나의 AI 활용 수준을 진단하고 맞춤 학습 방향을 확인하세요</p>
+            </div>
+            <div style="max-width:600px;margin:60px auto;text-align:center;padding:60px 20px;background:white;border-radius:20px;box-shadow:0 4px 20px rgba(0,0,0,0.07);">
+                <i class="fas fa-clipboard-check" style="font-size:3rem;color:#667eea;margin-bottom:16px;display:block;"></i>
+                <p style="color:var(--text-mid);font-size:1rem;">콘텐츠 준비 중입니다.</p>
+            </div>
+        </section>
+    </div>
+
+    <!-- ===== TAB: 수료 및 인증 ===== -->
+    <div id="tab-cert" class="tab-panel">
+        <section class="section" style="background: var(--bg-light);">
+            <div class="section-header">
+                <div class="tag">CERTIFICATION</div>
+                <h2>수료 및 인증</h2>
+                <p>과정 이수 후 발급되는 수료증과 인증 정보를 확인하세요</p>
+            </div>
+            <div style="max-width:600px;margin:60px auto;text-align:center;padding:60px 20px;background:white;border-radius:20px;box-shadow:0 4px 20px rgba(0,0,0,0.07);">
+                <i class="fas fa-award" style="font-size:3rem;color:#f59e0b;margin-bottom:16px;display:block;"></i>
+                <p style="color:var(--text-mid);font-size:1rem;">콘텐츠 준비 중입니다.</p>
+            </div>
+        </section>
+    </div>
+
+    <!-- ===== TAB: 학습 커뮤니티 ===== -->
+    <div id="tab-community" class="tab-panel">
+        <section class="section" style="background: var(--bg-light);">
+            <div class="section-header">
+                <div class="tag">COMMUNITY</div>
+                <h2>학습 커뮤니티</h2>
+                <p>함께 배우고 성장하는 TG AI 학습 커뮤니티에 참여하세요</p>
+            </div>
+            <div style="max-width:600px;margin:60px auto;text-align:center;padding:60px 20px;background:white;border-radius:20px;box-shadow:0 4px 20px rgba(0,0,0,0.07);">
+                <i class="fas fa-users" style="font-size:3rem;color:#10b981;margin-bottom:16px;display:block;"></i>
+                <p style="color:var(--text-mid);font-size:1rem;">콘텐츠 준비 중입니다.</p>
+            </div>
+        </section>
+    </div>
+
+    <!-- ===== (구) 교육 일정 패널 - 숨김 처리 ===== -->
+    <!-- <div id="tab-schedule" class="tab-panel">
+        <section class="section" style="background: var(--bg-light);">
+            <div class="section-header">
+                <div class="tag">SCHEDULE</div>
+                <h2>2026년 교육 일정</h2>
+                <p>분기별 집합 교육 및 온라인 자기 주도 학습 일정입니다</p>
+            </div>
+            <div style="max-width:900px;margin:0 auto;padding:0 20px;">
+                <div style="display:grid;gap:16px;">
+
+                    <!-- Q1 -->
+                    <div style="background:white;border-radius:16px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,0.06);border:1px solid var(--border);">
+                        <div style="background:linear-gradient(135deg,#10b981,#059669);padding:16px 24px;color:white;display:flex;align-items:center;gap:12px;">
+                            <i class="fas fa-calendar-check" style="font-size:1.2rem;"></i>
+                            <div>
+                                <div style="font-weight:700;font-size:1rem;">1분기 (1월~3월)</div>
+                                <div style="font-size:0.8rem;opacity:0.85;">전사 필수 교육 및 AI 기초 과정</div>
+                            </div>
+                        </div>
+                        <div style="padding:20px 24px;">
+                            <table style="width:100%;border-collapse:collapse;font-size:0.88rem;">
+                                <thead>
+                                    <tr style="border-bottom:2px solid var(--border);">
+                                        <th style="text-align:left;padding:8px 12px;color:var(--text-light);font-weight:600;">기간</th>
+                                        <th style="text-align:left;padding:8px 12px;color:var(--text-light);font-weight:600;">과정명</th>
+                                        <th style="text-align:left;padding:8px 12px;color:var(--text-light);font-weight:600;">형태</th>
+                                        <th style="text-align:left;padding:8px 12px;color:var(--text-light);font-weight:600;">대상</th>
+                                        <th style="text-align:left;padding:8px 12px;color:var(--text-light);font-weight:600;">상태</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr style="border-bottom:1px solid var(--border);">
+                                        <td style="padding:10px 12px;">1월 2주</td>
+                                        <td style="padding:10px 12px;font-weight:600;">전사 필수 AI 교육</td>
+                                        <td style="padding:10px 12px;"><span style="background:#dbeafe;color:#1e40af;padding:2px 8px;border-radius:8px;font-size:0.78rem;">온라인</span></td>
+                                        <td style="padding:10px 12px;">전 직원</td>
+                                        <td style="padding:10px 12px;"><span style="background:#d1fae5;color:#065f46;padding:2px 8px;border-radius:8px;font-size:0.78rem;">완료</span></td>
+                                    </tr>
+                                    <tr style="border-bottom:1px solid var(--border);">
+                                        <td style="padding:10px 12px;">2월 1~3주</td>
+                                        <td style="padding:10px 12px;font-weight:600;">AI 기초 입문 과정</td>
+                                        <td style="padding:10px 12px;"><span style="background:#dbeafe;color:#1e40af;padding:2px 8px;border-radius:8px;font-size:0.78rem;">온라인</span></td>
+                                        <td style="padding:10px 12px;">전 직원</td>
+                                        <td style="padding:10px 12px;"><span style="background:#fef3c7;color:#92400e;padding:2px 8px;border-radius:8px;font-size:0.78rem;">진행 중</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding:10px 12px;">3월 2~4주</td>
+                                        <td style="padding:10px 12px;font-weight:600;">프롬프트 기초 집합 교육</td>
+                                        <td style="padding:10px 12px;"><span style="background:#ede9fe;color:#5b21b6;padding:2px 8px;border-radius:8px;font-size:0.78rem;">집합</span></td>
+                                        <td style="padding:10px 12px;">선발 50명</td>
+                                        <td style="padding:10px 12px;"><span style="background:#f1f5f9;color:#475569;padding:2px 8px;border-radius:8px;font-size:0.78rem;">예정</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Q2 -->
+                    <div style="background:white;border-radius:16px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,0.06);border:1px solid var(--border);">
+                        <div style="background:linear-gradient(135deg,#3b82f6,#2563eb);padding:16px 24px;color:white;display:flex;align-items:center;gap:12px;">
+                            <i class="fas fa-calendar-check" style="font-size:1.2rem;"></i>
+                            <div>
+                                <div style="font-weight:700;font-size:1rem;">2분기 (4월~6월)</div>
+                                <div style="font-size:0.8rem;opacity:0.85;">프롬프트 실전 및 직무별 교육</div>
+                            </div>
+                        </div>
+                        <div style="padding:20px 24px;">
+                            <table style="width:100%;border-collapse:collapse;font-size:0.88rem;">
+                                <thead>
+                                    <tr style="border-bottom:2px solid var(--border);">
+                                        <th style="text-align:left;padding:8px 12px;color:var(--text-light);font-weight:600;">기간</th>
+                                        <th style="text-align:left;padding:8px 12px;color:var(--text-light);font-weight:600;">과정명</th>
+                                        <th style="text-align:left;padding:8px 12px;color:var(--text-light);font-weight:600;">형태</th>
+                                        <th style="text-align:left;padding:8px 12px;color:var(--text-light);font-weight:600;">대상</th>
+                                        <th style="text-align:left;padding:8px 12px;color:var(--text-light);font-weight:600;">상태</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr style="border-bottom:1px solid var(--border);">
+                                        <td style="padding:10px 12px;">4월 전체</td>
+                                        <td style="padding:10px 12px;font-weight:600;">프롬프트 마스터 과정</td>
+                                        <td style="padding:10px 12px;"><span style="background:#dbeafe;color:#1e40af;padding:2px 8px;border-radius:8px;font-size:0.78rem;">온라인</span></td>
+                                        <td style="padding:10px 12px;">전 직원</td>
+                                        <td style="padding:10px 12px;"><span style="background:#f1f5f9;color:#475569;padding:2px 8px;border-radius:8px;font-size:0.78rem;">예정</span></td>
+                                    </tr>
+                                    <tr style="border-bottom:1px solid var(--border);">
+                                        <td style="padding:10px 12px;">5월 1~2주</td>
+                                        <td style="padding:10px 12px;font-weight:600;">HR·재무 직무별 교육</td>
+                                        <td style="padding:10px 12px;"><span style="background:#ede9fe;color:#5b21b6;padding:2px 8px;border-radius:8px;font-size:0.78rem;">집합</span></td>
+                                        <td style="padding:10px 12px;">HR·재무팀</td>
+                                        <td style="padding:10px 12px;"><span style="background:#f1f5f9;color:#475569;padding:2px 8px;border-radius:8px;font-size:0.78rem;">예정</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding:10px 12px;">6월 전체</td>
+                                        <td style="padding:10px 12px;font-weight:600;">마케팅·기획 직무별 교육</td>
+                                        <td style="padding:10px 12px;"><span style="background:#ede9fe;color:#5b21b6;padding:2px 8px;border-radius:8px;font-size:0.78rem;">집합</span></td>
+                                        <td style="padding:10px 12px;">마케팅·기획팀</td>
+                                        <td style="padding:10px 12px;"><span style="background:#f1f5f9;color:#475569;padding:2px 8px;border-radius:8px;font-size:0.78rem;">예정</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Q3/Q4 요약 -->
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+                        <div style="background:white;border-radius:16px;padding:20px 24px;box-shadow:0 2px 10px rgba(0,0,0,0.06);border:1px solid var(--border);">
+                            <div style="font-weight:700;color:var(--text-dark);margin-bottom:12px;display:flex;align-items:center;gap:8px;">
+                                <i class="fas fa-calendar" style="color:#8b5cf6;"></i> 3분기 (7~9월)
+                            </div>
+                            <ul style="list-style:none;font-size:0.85rem;color:var(--text-mid);line-height:2;">
+                                <li>• AI 고도화 전문가 과정</li>
+                                <li>• IT·개발팀 직무별 교육</li>
+                                <li>• 업무 자동화 워크숍</li>
+                            </ul>
+                        </div>
+                        <div style="background:white;border-radius:16px;padding:20px 24px;box-shadow:0 2px 10px rgba(0,0,0,0.06);border:1px solid var(--border);">
+                            <div style="font-weight:700;color:var(--text-dark);margin-bottom:12px;display:flex;align-items:center;gap:8px;">
+                                <i class="fas fa-calendar" style="color:#ec4899;"></i> 4분기 (10~12월)
+                            </div>
+                            <ul style="list-style:none;font-size:0.85rem;color:var(--text-mid);line-height:2;">
+                                <li>• AI 리더십 과정</li>
+                                <li>• 연간 AI 성과 발표회</li>
+                                <li>• 수료증 일괄 발급</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </div> --> <!-- // 교육 일정 패널 끝 -->
+
+    <!-- ===== 수료증 섹션 ===== -->
+    <div class="cert-section">
+        <div class="cert-inner">
+            <div class="cert-icon-big">🏆</div>
+            <h2>과정 수료 시 공식 수료증 발급</h2>
+            <p>각 교육 과정 이수 후 TG AI 캠퍼스 공식 수료증이 발급됩니다.<br>수료증은 마이페이지에서 언제든 확인·다운로드 가능합니다.</p>
+            <div class="cert-badges">
+                <div class="cert-badge">
+                    <div class="num">7종</div>
+                    <div class="lbl">수료증 종류</div>
+                </div>
+                <div class="cert-badge">
+                    <div class="num">즉시</div>
+                    <div class="lbl">이수 완료 후 발급</div>
+                </div>
+                <div class="cert-badge">
+                    <div class="num">PDF</div>
+                    <div class="lbl">다운로드 가능</div>
+                </div>
+            </div>
+            <button class="btn-cert" onclick="location.href='dashboard.html'">
+                <i class="fas fa-medal"></i> 내 수료증 확인하기
+            </button>
+        </div>
+    </div>
+
+    <!-- ===== FAQ ===== -->
+    <div class="faq-section">
+        <div class="section-header">
+            <div class="tag">FAQ</div>
+            <h2>자주 묻는 질문</h2>
+            <p>교육 과정에 대해 궁금한 점을 확인하세요</p>
+        </div>
+        <div class="faq-list">
+            <div class="faq-item">
+                <div class="faq-q" onclick="toggleFaq(this)">
+                    교육 과정은 어떤 순서로 수강하면 좋을까요?
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-a">
+                    처음 시작하시는 분은 <strong>전사 필수 AI 교육 → AI 기초 입문 → 프롬프트 마스터</strong> 순으로 수강하시길 권장합니다. 이후 본인 직무에 맞는 직무별 AI 활용 과정을 수강하시면 가장 효율적입니다.
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-q" onclick="toggleFaq(this)">
+                    수료증은 언제 발급되나요?
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-a">
+                    각 과정의 모든 모듈을 80% 이상 완료하면 수료증이 자동 발급됩니다. 마이페이지 → 수료증 탭에서 확인 및 PDF 다운로드가 가능합니다.
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-q" onclick="toggleFaq(this)">
+                    집합 교육 신청은 어떻게 하나요?
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-a">
+                    집합 교육은 인사팀에서 대상자를 지정하거나, 신청을 통해 선발합니다. 공지사항 게시판에서 신청 안내를 확인하실 수 있습니다.
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-q" onclick="toggleFaq(this)">
+                    온라인 과정은 언제 어디서나 수강 가능한가요?
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-a">
+                    네, 온라인 과정은 PC·모바일 모두 지원하며 24시간 언제든지 수강 가능합니다. 인터넷이 연결된 곳이라면 어디서나 학습할 수 있습니다.
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-q" onclick="toggleFaq(this)">
+                    수강 기간 내에 완료하지 못하면 어떻게 되나요?
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-a">
+                    자기 주도 온라인 과정은 기간 제한 없이 수강 가능합니다. 단, 분기별 집합 교육의 경우 지정된 기간이 있으며 이수 기록은 계속 유지됩니다.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo-section">
+                        <img src="assets/images/common/footer_tg.jpg" alt="TG 건물" class="footer-building-image">
+                        <div class="footer-text-content">
+                            <h4>TG AI 캠퍼스</h4>
+                            <p>AI 기술 교육 전문 플랫폼</p>
+                        </div>
+                    </div>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>AI 교육 과정</h4>
+                    <ul>
+                        <li><a href="manuals.html#tab-basics-link">기초편</a></li>
+                        <li><a href="manuals.html#tab-advanced-link">실전편</a></li>
+                        <li><a href="manuals.html#tab-prompt-link">프롬프트</a></li>
+                        <li><a href="manuals.html#tab-job-link">직무별 활용</a></li>
+                        <li><a href="manuals.html#tab-advanced-ai-link">AI 고도화</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>AI 실전</h4>
+                    <ul>
+                        <li><a href="manual-prompt-basic.html">프롬프트 작성법</a></li>
+                        <li><a href="manual-automation.html">업무 자동화</a></li>
+                        <li><a href="manual-workflow.html">워크플로우 구축</a></li>
+                        <li><a href="manual-collaboration.html">AI 협업 도구</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>학습 지원</h4>
+                    <ul>
+                        <li><a href="support.html">나만의 AI 코치</a></li>
+                        <li><a href="notices.html">공지사항</a></li>
+                        <li><a href="dictionary.html">AI 용어 사전</a></li>
+                        <li><a href="dashboard.html">학습 현황</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>TG 라운지</h4>
+                    <ul>
+                        <li><a href="about.html">TG AI 캠퍼스 소개</a></li>
+                        <li><a href="tg-family.html">TG 패밀리</a></li>
+                        <li><a href="news.html">TG Alliance 소식</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 TG AI 캠퍼스. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="assets/js/main.js"></script>
+    <script>
+        // 탭 전환
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.ctab').forEach(b => b.classList.remove('active'));
+            document.getElementById('tab-' + tabName).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        // FAQ 토글
+        function toggleFaq(el) {
+            el.classList.toggle('open');
+            el.nextElementSibling.classList.toggle('open');
+        }
+    </script>
+</body>
+</html>

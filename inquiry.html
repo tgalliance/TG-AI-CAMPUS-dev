@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>강의문의 - TG AI 캠퍼스</title>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/enhanced-styles.css">
+    <link rel="stylesheet" href="assets/css/samsung-nav.css?v=3">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* 강의문의 페이지 스타일 */
+        .inquiry-hero {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            padding: 80px 0 60px;
+            color: white;
+            text-align: center;
+        }
+        
+        .inquiry-hero h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        
+        .inquiry-hero p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+        }
+        
+        .inquiry-container {
+            max-width: 800px;
+            margin: 60px auto;
+            padding: 0 20px;
+        }
+        
+        .inquiry-form-wrapper {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .form-section {
+            margin-bottom: 30px;
+        }
+        
+        .form-section:last-child {
+            margin-bottom: 0;
+        }
+        
+        .form-label {
+            display: block;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 8px;
+        }
+        
+        .form-label .required {
+            color: #ef4444;
+            margin-left: 4px;
+        }
+        
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: 'Noto Sans KR', sans-serif;
+            transition: all 0.3s ease;
+        }
+        
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: #f59e0b;
+        }
+        
+        .form-textarea {
+            min-height: 180px;
+            resize: vertical;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .form-hint {
+            font-size: 0.85rem;
+            color: #6b7280;
+            margin-top: 6px;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 15px;
+        }
+        
+        .checkbox-input {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+        
+        .checkbox-label {
+            font-size: 0.95rem;
+            color: #374151;
+            cursor: pointer;
+        }
+        
+        .submit-button {
+            width: 100%;
+            padding: 16px;
+            background: #f59e0b;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 30px;
+        }
+        
+        .submit-button:hover {
+            background: #d97706;
+        }
+        
+        .submit-button:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+        }
+        
+        .info-box {
+            background: #fffbeb;
+            border-left: 4px solid #f59e0b;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        
+        .info-box h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #92400e;
+            margin-bottom: 10px;
+        }
+        
+        .info-box p {
+            font-size: 0.95rem;
+            color: #78350f;
+            line-height: 1.6;
+            margin-bottom: 8px;
+        }
+        
+        .info-box p:last-child {
+            margin-bottom: 0;
+        }
+        
+        .contact-info {
+            background: #f9fafb;
+            padding: 25px;
+            border-radius: 8px;
+            margin-top: 30px;
+        }
+        
+        .contact-info h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 15px;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .contact-item:last-child {
+            border-bottom: none;
+        }
+        
+        .contact-icon {
+            width: 40px;
+            height: 40px;
+            background: #f59e0b;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .contact-text {
+            flex: 1;
+        }
+        
+        .contact-label {
+            font-size: 0.85rem;
+            color: #6b7280;
+            margin-bottom: 3px;
+        }
+        
+        .contact-value {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #111827;
+        }
+        
+        /* 성공 메시지 모달 */
+        .success-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.6);
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .success-modal.active {
+            display: flex;
+        }
+        
+        .success-content {
+            background: white;
+            padding: 50px 40px;
+            border-radius: 16px;
+            text-align: center;
+            max-width: 400px;
+            animation: scaleIn 0.3s ease;
+        }
+        
+        @keyframes scaleIn {
+            from {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            background: #d1fae5;
+            color: #10b981;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            margin: 0 auto 25px;
+        }
+        
+        .success-content h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 15px;
+        }
+        
+        .success-content p {
+            color: #6b7280;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+        
+        .success-button {
+            padding: 12px 30px;
+            background: #10b981;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        /* 반응형 */
+        @media (max-width: 768px) {
+            .inquiry-hero h1 {
+                font-size: 2rem;
+            }
+            
+            .inquiry-form-wrapper {
+                padding: 25px 20px;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .success-content {
+                margin: 20px;
+                padding: 40px 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header / Navigation -->
+    <header class="header">
+        <!-- Top Utility Bar -->
+        <div class="utility-bar">
+            <div class="container">
+                <div class="utility-wrapper">
+                    <a href="news.html" class="utility-link">TG 라운지</a>
+                    <a href="notices.html" class="utility-link">공지사항</a>
+                    <a href="tg-family.html" class="utility-link">TG패밀리</a>
+                    <a href="https://tgnco.kr/tg-alliance/" target="_blank" class="external-link tg-alliance">
+                        TG Alliance <i class="fas fa-external-link-alt"></i>
+                    </a>
+                    <span class="external-link" style="color: #ff8c00; cursor: default;">
+                        TG 에듀테크
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Navigation Bar -->
+        <nav class="navbar">
+            <div class="container">
+                <div class="nav-wrapper">
+                    <!-- Left Side: Logo + Menu -->
+                    <div class="nav-left">
+                        <a href="index.html" class="logo">
+                            <i class="fas fa-brain"></i>
+                            <span><span class="logo-tg">TG</span> AI 캠퍼스</span>
+                        </a>
+                        
+                                                <ul class="nav-menu">
+                            <li><a href="about.html">TG AI 캠퍼스소개</a></li>
+                            <li><a href="manuals.html">AI 활용메뉴얼</a></li>
+                            <li><a href="dictionary.html">AI 용어사전</a></li>
+                            <li><a href="recommended.html">AI 활용추천영상</a></li>
+                            <li><a href="curriculum.html">교육과정</a></li>
+                            <li><a href="support.html" style="color: #3b82f6; font-weight: 600;">나만의 AI 코치</a></li>
+                            <li><a href="dashboard.html">학습 현황</a></li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Right Side: Search + Icons -->
+                    <div class="nav-right">
+                        <!-- Search -->
+                        <div class="search-wrapper">
+                            <form class="search-form">
+                                <button type="submit" class="search-btn">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                                <input type="text" class="search-input" placeholder="검색" autocomplete="off">
+                            </form>
+                        </div>
+                        
+                        <!-- Icon Actions -->
+                        <div class="icon-actions">
+                            <a href="mypage.html" class="icon-link" title="마이페이지">
+                                <img src="assets/images/mypage-icon-new.png?v=2" alt="마이페이지" class="icon-img mypage-icon" style="width: auto !important; height: 20px !important; max-height: 20px !important;">
+                            </a>
+                            <a href="login.html" class="icon-link" id="authIcon" title="로그인">
+                                <img src="assets/images/logout-icon.png" alt="로그인" class="icon-img" style="width: 24px !important; height: 24px !important; max-width: 24px !important; max-height: 24px !important;">
+                            </a>
+                        </div>
+                        
+                        <!-- Mobile Toggle -->
+                        <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                            <i class="fas fa-bars"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="inquiry-hero">
+        <h1><i class="fas fa-envelope"></i> 강의문의</h1>
+        <p>교육 과정에 대해 궁금하신 점을 문의해주세요</p>
+    </section>
+
+    <!-- Main Content -->
+    <main class="inquiry-container">
+        <!-- Info Box -->
+        <div class="info-box">
+            <h3><i class="fas fa-info-circle"></i> 문의 전 확인해주세요</h3>
+            <p>• 영업일 기준 1~2일 이내 답변 드립니다.</p>
+            <p>• 급한 문의는 고객센터(1588-0000)로 연락주세요.</p>
+            <p>• 기술적인 문제는 <a href="support.html" style="color: #f59e0b; font-weight: 600;">고객지원</a>을 먼저 확인해주세요.</p>
+        </div>
+
+        <!-- Inquiry Form -->
+        <div class="inquiry-form-wrapper">
+            <form id="inquiryForm">
+                <div class="form-row">
+                    <div class="form-section">
+                        <label class="form-label">
+                            이름 <span class="required">*</span>
+                        </label>
+                        <input type="text" class="form-input" id="name" required placeholder="홍길동">
+                    </div>
+
+                    <div class="form-section">
+                        <label class="form-label">
+                            연락처 <span class="required">*</span>
+                        </label>
+                        <input type="tel" class="form-input" id="phone" required placeholder="010-1234-5678">
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <label class="form-label">
+                        이메일 <span class="required">*</span>
+                    </label>
+                    <input type="email" class="form-input" id="email" required placeholder="example@email.com">
+                    <p class="form-hint">답변을 받으실 이메일 주소를 입력해주세요</p>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-section">
+                        <label class="form-label">
+                            문의 유형 <span class="required">*</span>
+                        </label>
+                        <select class="form-select" id="type" required>
+                            <option value="">선택해주세요</option>
+                            <option value="교육과정">교육과정 문의</option>
+                            <option value="기업교육">기업교육 문의</option>
+                            <option value="수강신청">수강신청 문의</option>
+                            <option value="결제">결제 관련</option>
+                            <option value="기술지원">기술지원</option>
+                            <option value="제휴">제휴 문의</option>
+                            <option value="기타">기타</option>
+                        </select>
+                    </div>
+
+                    <div class="form-section">
+                        <label class="form-label">
+                            회사명 <span style="color: #9ca3af;">(선택)</span>
+                        </label>
+                        <input type="text" class="form-input" id="company" placeholder="회사명">
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <label class="form-label">
+                        제목 <span class="required">*</span>
+                    </label>
+                    <input type="text" class="form-input" id="subject" required placeholder="문의 제목을 입력해주세요">
+                </div>
+
+                <div class="form-section">
+                    <label class="form-label">
+                        문의 내용 <span class="required">*</span>
+                    </label>
+                    <textarea class="form-textarea" id="message" required placeholder="문의하실 내용을 자세히 작성해주세요"></textarea>
+                    <p class="form-hint">최소 10자 이상 작성해주세요</p>
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" class="checkbox-input" id="privacy" required>
+                    <label class="checkbox-label" for="privacy">
+                        개인정보 수집 및 이용에 동의합니다 <span class="required">*</span>
+                    </label>
+                </div>
+
+                <button type="submit" class="submit-button">
+                    <i class="fas fa-paper-plane"></i> 문의하기
+                </button>
+            </form>
+        </div>
+
+        <!-- Contact Info -->
+        <div class="contact-info">
+            <h3><i class="fas fa-phone-alt"></i> 다른 문의 방법</h3>
+            
+            <div class="contact-item">
+                <div class="contact-icon">
+                    <i class="fas fa-phone"></i>
+                </div>
+                <div class="contact-text">
+                    <div class="contact-label">전화 문의</div>
+                    <div class="contact-value">1588-0000</div>
+                </div>
+            </div>
+
+            <div class="contact-item">
+                <div class="contact-icon">
+                    <i class="fas fa-envelope"></i>
+                </div>
+                <div class="contact-text">
+                    <div class="contact-label">이메일 문의</div>
+                    <div class="contact-value">contact@tgedutech.com</div>
+                </div>
+            </div>
+
+            <div class="contact-item">
+                <div class="contact-icon">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="contact-text">
+                    <div class="contact-label">운영 시간</div>
+                    <div class="contact-value">평일 09:00 - 18:00 (주말·공휴일 휴무)</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="success-modal">
+        <div class="success-content">
+            <div class="success-icon">
+                <i class="fas fa-check"></i>
+            </div>
+            <h2>문의가 접수되었습니다</h2>
+            <p>빠른 시일 내에 답변드리겠습니다.<br>감사합니다!</p>
+            <button class="success-button" onclick="closeSuccessModal()">확인</button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        // 페이지 로드 시 실행
+        document.addEventListener('DOMContentLoaded', () => {
+            setupForm();
+            setupMobileMenu();
+        });
+
+        // 폼 설정
+        function setupForm() {
+            const form = document.getElementById('inquiryForm');
+            
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                // 폼 데이터 수집
+                const formData = {
+                    name: document.getElementById('name').value,
+                    phone: document.getElementById('phone').value,
+                    email: document.getElementById('email').value,
+                    type: document.getElementById('type').value,
+                    company: document.getElementById('company').value,
+                    subject: document.getElementById('subject').value,
+                    message: document.getElementById('message').value,
+                    status: 'pending',
+                    reply: ''
+                };
+
+                // 유효성 검사
+                if (formData.message.length < 10) {
+                    alert('문의 내용을 최소 10자 이상 작성해주세요.');
+                    return;
+                }
+
+                if (!document.getElementById('privacy').checked) {
+                    alert('개인정보 수집 및 이용에 동의해주세요.');
+                    return;
+                }
+
+                // 제출 버튼 비활성화
+                const submitBtn = form.querySelector('button[type="submit"]');
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 전송 중...';
+
+                try {
+                    // DB에 저장
+                    const response = await fetch('tables/inquiries', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(formData)
+                    });
+
+                    if (response.ok) {
+                        // 성공 모달 표시
+                        showSuccessModal();
+                        // 폼 초기화
+                        form.reset();
+                    } else {
+                        alert('문의 전송에 실패했습니다. 다시 시도해주세요.');
+                    }
+                    
+                } catch (error) {
+                    console.error('문의 전송 실패:', error);
+                    alert('문의 전송 중 오류가 발생했습니다.');
+                } finally {
+                    // 버튼 다시 활성화
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> 문의하기';
+                }
+            });
+        }
+
+        // 성공 모달 표시
+        function showSuccessModal() {
+            document.getElementById('successModal').classList.add('active');
+        }
+
+        // 성공 모달 닫기
+        function closeSuccessModal() {
+            document.getElementById('successModal').classList.remove('active');
+        }
+
+        // 모바일 메뉴
+        function setupMobileMenu() {
+            const toggle = document.getElementById('mobileMenuToggle');
+            const navMenu = document.querySelector('.nav-menu');
+            
+            if (toggle) {
+                toggle.addEventListener('click', () => {
+                    navMenu.classList.toggle('active');
+                });
+            }
+        }
+
+        // 검색 기능
+        document.getElementById('searchForm')?.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const query = document.getElementById('searchInput').value;
+            if (query.trim()) {
+                window.location.href = `courses.html?search=${encodeURIComponent(query)}`;
+            }
+        });
+    </script>
+</body>
+</html>

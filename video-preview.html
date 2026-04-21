@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>배너 영상 미리보기 - TG AI 캠퍼스</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Noto Sans KR', sans-serif; background: #0f1117; color: white; }
+        .header {
+            background: #1a1d27;
+            padding: 20px 40px;
+            border-bottom: 1px solid #2d3148;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .header h1 { font-size: 1.2rem; font-weight: 700; }
+        .header span { font-size: 0.85rem; color: #888; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(500px, 1fr)); gap: 32px; }
+        .video-card {
+            background: #1a1d27;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid #2d3148;
+            transition: border-color 0.3s;
+        }
+        .video-card:hover { border-color: #4a6cf7; }
+        .video-card video {
+            width: 100%;
+            display: block;
+            aspect-ratio: 16/7;
+            background: #000;
+        }
+        .video-info { padding: 16px 20px; }
+        .video-info .badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.72rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        .badge-1 { background: rgba(100,160,255,0.2); color: #64a0ff; }
+        .badge-2 { background: rgba(100,160,255,0.2); color: #64a0ff; }
+        .badge-3 { background: rgba(100,220,180,0.2); color: #64dcb4; }
+        .badge-4 { background: rgba(200,150,255,0.2); color: #c896ff; }
+        .badge-5 { background: rgba(255,200,50,0.2); color: #ffc832; }
+        .video-info h3 { font-size: 1rem; font-weight: 700; margin-bottom: 4px; }
+        .video-info p { font-size: 0.82rem; color: #888; }
+        .btn-apply {
+            display: inline-block;
+            margin-top: 12px;
+            padding: 8px 18px;
+            background: #4a6cf7;
+            color: white;
+            border-radius: 8px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: background 0.2s;
+        }
+        .btn-apply:hover { background: #3a5ce7; }
+        .notice {
+            background: #1a1d27;
+            border: 1px solid #2d3148;
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 32px;
+            font-size: 0.85rem;
+            color: #aaa;
+            line-height: 1.7;
+        }
+        .notice strong { color: #fff; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🎬 TG AI 캠퍼스 배너 영상 미리보기</h1>
+        <span>총 5개 제작 완료</span>
+    </div>
+    <div class="container">
+        <div class="notice">
+            <strong>📌 사용 안내</strong><br>
+            아래 5개 영상을 확인하고 메인 배너에 적용할 영상을 선택해 주세요.<br>
+            영상1은 강의실 이미지 배경, 영상2~5는 SK 스타일 그라데이션 배경입니다.
+        </div>
+        <div class="grid">
+            <div class="video-card">
+                <video controls autoplay muted loop>
+                    <source src="videos/banner1_classroom.mp4" type="video/mp4">
+                </video>
+                <div class="video-info">
+                    <div class="badge badge-1">영상 1 · 강의실 배경</div>
+                    <h3>AI 실무 역량을 키우는 TG Alliance</h3>
+                    <p>강의실 이미지 배경 + 흰색/파란색 자막 페이드인/아웃 · 14초</p>
+                </div>
+            </div>
+            <div class="video-card">
+                <video controls autoplay muted loop>
+                    <source src="videos/banner2_navy.mp4" type="video/mp4">
+                </video>
+                <div class="video-info">
+                    <div class="badge badge-2">영상 2 · 네이비 블루</div>
+                    <h3>단순한 교육이 아닙니다</h3>
+                    <p>네이비→딥블루 그라데이션 · "내 업무에 바로 쓰는 AI" · 13초</p>
+                </div>
+            </div>
+            <div class="video-card">
+                <video controls autoplay muted loop>
+                    <source src="videos/banner3_green.mp4" type="video/mp4">
+                </video>
+                <div class="video-info">
+                    <div class="badge badge-3">영상 3 · 딥그린</div>
+                    <h3>프롬프트 하나가 업무 효율을 10배</h3>
+                    <p>딥그린→틸 그라데이션 · "AI가 바꾸는 일하는 방식" · 13초</p>
+                </div>
+            </div>
+            <div class="video-card">
+                <video controls autoplay muted loop>
+                    <source src="videos/banner4_purple.mp4" type="video/mp4">
+                </video>
+                <div class="video-info">
+                    <div class="badge badge-4">영상 4 · 퍼플</div>
+                    <h3>직무가 달라도 AI 활용은 모두의 역량</h3>
+                    <p>다크퍼플→인디고 그라데이션 · 전사 직원 교육 · 13초</p>
+                </div>
+            </div>
+            <div class="video-card">
+                <video controls autoplay muted loop>
+                    <source src="videos/banner5_dark.mp4" type="video/mp4">
+                </video>
+                <div class="video-info">
+                    <div class="badge badge-5">영상 5 · 다크 CTA</div>
+                    <h3>지금, AI를 시작할 때</h3>
+                    <p>다크그레이→블랙 · SK스타일 CTA · "지금 바로 시작하세요" · 13초</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,676 @@
+<!-- UPDATED: 2026-03-30 08:00:02 - 마케팅팀 매뉴얼 최종본 -->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>마케팅·홍보팀 AI 활용 매뉴얼 - TG AI 캠퍼스</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/samsung-nav.css?v=3">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        .manual-container { display: flex; max-width: 1400px; margin: 50px auto; gap: 30px; padding: 0 20px; }
+        .manual-sidebar { width: 280px; background: white; border-radius: 15px; padding: 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); position: sticky; top: 100px; height: fit-content; }
+        .manual-sidebar h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 20px; color: #1a202c; }
+        .manual-sidebar ul { list-style: none; padding: 0; }
+        .manual-sidebar li { margin-bottom: 12px; }
+        .manual-sidebar a { color: #666; text-decoration: none; display: block; padding: 8px 12px; border-radius: 8px; transition: all 0.3s; }
+        .manual-sidebar a:hover, .manual-sidebar a.active { background: #fa709a; color: white; }
+        .manual-content { flex: 1; background: white; border-radius: 15px; padding: 50px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+        .manual-header { border-bottom: 3px solid #fa709a; padding-bottom: 30px; margin-bottom: 40px; }
+        .manual-header h1 { font-size: 2.5rem; font-weight: 700; color: #1a202c; margin-bottom: 15px; }
+        .manual-meta { display: flex; gap: 20px; color: #666; font-size: 0.95rem; flex-wrap: wrap; }
+        .manual-meta span { display: flex; align-items: center; gap: 8px; }
+        .pdf-button { position: fixed; bottom: 30px; right: 30px; background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); color: white; border: none; padding: 15px 30px; border-radius: 50px; font-size: 1rem; font-weight: 600; cursor: pointer; box-shadow: 0 4px 20px rgba(250, 112, 154, 0.4); transition: all 0.3s; z-index: 1000; }
+        .pdf-button:hover { transform: translateY(-3px); box-shadow: 0 6px 30px rgba(250, 112, 154, 0.6); }
+        .section { margin-bottom: 50px; }
+        .section h2 { font-size: 1.8rem; font-weight: 700; color: #1a202c; margin-bottom: 20px; padding-left: 15px; border-left: 5px solid #fa709a; }
+        .section h3 { font-size: 1.3rem; font-weight: 600; color: #2d3748; margin: 30px 0 15px; }
+        .section p { font-size: 1.05rem; line-height: 1.8; color: #4a5568; margin-bottom: 15px; }
+        .prompt-box { background: #fffaf0; border: 2px solid #fa709a; border-radius: 10px; padding: 25px; margin: 25px 0; }
+        .prompt-box .label { font-weight: 700; color: #fa709a; margin-bottom: 15px; display: block; font-size: 1.1rem; }
+        .prompt-box pre { background: white; padding: 20px; border-radius: 8px; border: 1px solid #fee140; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word; line-height: 1.6; }
+        .example-output { background: #f0fff4; border-left: 4px solid #48bb78; padding: 20px 25px; border-radius: 10px; margin: 25px 0; }
+        .example-output::before { content: "✅ AI 생성 예시"; font-weight: 700; color: #48bb78; display: block; margin-bottom: 10px; }
+        .tip-box { background: #fff5f5; border-left: 4px solid #fa709a; padding: 20px 25px; border-radius: 10px; margin: 25px 0; }
+        .tip-box::before { content: "💡 마케터 팁"; font-weight: 700; color: #fa709a; display: block; margin-bottom: 10px; }
+        ul, ol { padding-left: 30px; margin: 20px 0; }
+        li { margin-bottom: 12px; line-height: 1.7; color: #4a5568; }
+        @media (max-width: 768px) {
+            .manual-container { flex-direction: column; }
+            .manual-sidebar { width: 100%; position: static; }
+            .manual-content { padding: 30px 20px; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="utility-bar">
+            <div class="container">
+                <div class="utility-wrapper">
+                    <a href="news.html" class="utility-link">TG 라운지</a>
+                    <a href="notices.html" class="utility-link">공지사항</a>
+                    <a href="tg-family.html" class="utility-link">TG패밀리</a>
+                    <a href="https://tgnco.kr/tg-alliance/" target="_blank" class="external-link tg-alliance">TG Alliance <i class="fas fa-external-link-alt"></i></a>
+                    <span class="external-link" style="color: #ff8c00; cursor: default;">
+                        TG 에듀테크
+                    </span>
+                </div>
+            </div>
+        </div>
+        <nav class="navbar">
+            <div class="container">
+                <div class="nav-wrapper">
+                    <div class="nav-left">
+                        <a href="index.html" class="logo"><i class="fas fa-brain"></i><span><span class="logo-tg">TG</span> AI 캠퍼스</span></a>
+                                                <ul class="nav-menu">
+                            <li><a href="about.html">TG AI 캠퍼스소개</a></li>
+                            <li><a href="manuals.html">AI 활용메뉴얼</a></li>
+                            <li><a href="dictionary.html">AI 용어사전</a></li>
+                            <li><a href="recommended.html">AI 활용추천영상</a></li>
+                            <li><a href="curriculum.html">교육과정</a></li>
+                            <li><a href="support.html" style="color: #3b82f6; font-weight: 600;">나만의 AI 코치</a></li>
+                            <li><a href="dashboard.html">학습 현황</a></li>
+                        </ul>
+                    </div>
+                    <div class="nav-right">
+                        <div class="icon-actions">
+                            <a href="mypage.html" class="icon-link"><img src="assets/images/mypage-icon-new.png?v=2" alt="마이페이지" style="height: 20px;"></a>
+                            <a href="login.html" class="icon-link"><img src="assets/images/logout-icon.png" alt="로그인" style="height: 24px;"></a>
+                        </div>
+                        <button class="mobile-menu-toggle"><i class="fas fa-bars"></i></button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="manual-container">
+        <aside class="manual-sidebar">
+            <h3><i class="fas fa-list"></i> 목차</h3>
+            <ul>
+                <li><a href="#copywriting" class="active">1. 카피라이팅</a></li>
+                <li><a href="#sns">2. SNS 마케팅</a></li>
+                <li><a href="#content">3. 콘텐츠 제작</a></li>
+                <li><a href="#email">4. 이메일 마케팅</a></li>
+                <li><a href="#seo">5. SEO 최적화</a></li>
+                <li><a href="#campaign">6. 캠페인 기획</a></li>
+            </ul>
+            <hr style="margin: 30px 0; border: none; border-top: 1px solid #e2e8f0;">
+            <a href="manuals.html" class="btn btn-outline" style="width: 100%; text-align: center;">
+                <i class="fas fa-arrow-left"></i> 목록으로
+            </a>
+        </aside>
+
+        <main class="manual-content" id="manual-content">
+            <div class="manual-header">
+                <h1><i class="fas fa-bullhorn"></i> 마케팅·홍보팀 AI 활용 매뉴얼</h1>
+                <div class="manual-meta">
+                    <span><i class="fas fa-clock"></i> 읽는 시간: 40분</span>
+                    <span><i class="fas fa-briefcase"></i> 대상: 마케터/홍보 담당자</span>
+                    <span><i class="fas fa-lightbulb"></i> 실전 프롬프트 25+</span>
+                </div>
+            </div>
+
+            <section class="section" id="copywriting">
+                <h2>1. 카피라이팅 AI 활용법</h2>
+
+                <h3>✍️ 제품 소개 카피 작성</h3>
+                <div class="prompt-box">
+                    <span class="label">🎯 실전 프롬프트:</span>
+                    <pre>당신은 10년 경력의 카피라이터입니다.
+
+**제품 정보:**
+- 제품명: 스마트 워치 S7
+- 타겟: 30~40대 직장인
+- USP: 7일 배터리, AI 건강 분석, 50m 방수
+- 가격: 299,000원
+
+**요청:**
+제품 상세페이지 카피 작성
+
+**구성:**
+1. 메인 헤드라인 (10자 이내, 임팩트 있게)
+2. 서브 헤드라인 (20자 이내, 핵심 기능)
+3. 바디 카피 (200자, 감성+논리)
+4. CTA 문구 (클릭 유도, 5가지 버전)
+
+**톤:** 프로페셔널하면서 친근함</pre>
+                </div>
+
+                <div class="example-output">
+                    <strong>메인 헤드라인:</strong> "일주일, 한 번만 충전하세요"<br>
+                    <strong>서브 헤드라인:</strong> "AI가 당신의 건강을 24시간 지킵니다"<br>
+                    <strong>바디 카피:</strong> 아침 조깅부터 밤 수면까지, S7이 함께합니다. 7일 배터리로 주말 여행에도 충전기 걱정 없고, AI 건강 분석은 스트레스, 수면, 심박수를 실시간 모니터링해 당신만의 건강 코치가 되어드립니다...<br>
+                    <strong>CTA 예시:</strong>
+                    <ul style="margin-top:10px;">
+                        <li>"지금 바로 시작하기 →"</li>
+                        <li>"한정 수량 확인하기"</li>
+                        <li>"무료 배송받고 구매하기"</li>
+                    </ul>
+                </div>
+
+                <h3>📣 광고 문구 대량 생성</h3>
+                <div class="prompt-box">
+                    <span class="label">🎯 실전 프롬프트 (A/B 테스트용):</span>
+                    <pre>**캠페인:** 봄맞이 신학기 프로모션
+
+**제품:** 온라인 강의 플랫폼 구독권
+
+**할인:** 30% 할인 (3월 한정)
+
+**타겟:** 
+- 대학생
+- 직장인 재교육
+
+**요청:**
+네이버 검색광고 제목 20개 생성
+- 각 15자 이내
+- 긴급성 강조
+- 숫자 포함
+- 5개는 할인 강조
+- 5개는 혜택 강조
+- 5개는 후기 강조
+- 5개는 호기심 유발</pre>
+                </div>
+
+                <div class="tip-box">
+                    AI가 생성한 광고 문구는 CTR(클릭률)을 높이기 위해 A/B 테스트를 진행하세요.
+                    최소 3~5개 버전을 동시에 운영해 데이터를 모으고, 가장 성과 좋은 버전을 확대하세요.
+                </div>
+            </section>
+
+            <section class="section" id="sns">
+                <h2>2. SNS 마케팅 AI 활용법</h2>
+
+                <h3>📸 인스타그램 콘텐츠 기획</h3>
+                <div class="prompt-box">
+                    <span class="label">🎯 실전 프롬프트:</span>
+                    <pre>당신은 인스타그램 마케팅 전문가입니다.
+
+**브랜드:** 친환경 화장품 브랜드
+
+**계정 톤:** 밝고 친근한, 자연 친화적
+
+**목표:** 팔로워 참여율 UP
+
+**요청:**
+이번 주 인스타그램 피드 게시물 5개 기획
+
+**각 게시물마다 포함:**
+1. 메인 메시지 (한 줄)
+2. 캡션 (150자 이내, 이모지 포함)
+3. 해시태그 15개 (인기 + 니치)
+4. 이미지 콘셉트 설명
+5. 최적 게시 시간 추천
+
+**게시물 타입 분배:**
+- 제품 소개: 2개
+- 팁/정보: 2개
+- 참여 유도(질문/투표): 1개</pre>
+                </div>
+
+                <h3>🎬 숏폼 콘텐츠 스크립트</h3>
+                <div class="prompt-box">
+                    <span class="label">🎯 실전 프롬프트 (릴스/틱톡):</span>
+                    <pre>**주제:** "직장인 점심시간 5분 스트레칭"
+
+**길이:** 30초
+
+**타겟:** 20~30대 직장인
+
+**목표:** 바이럴, 저장률 UP
+
+**요청:**
+릴스 영상 스크립트 작성
+
+**구성:**
+- 0~3초: 훅 (시선 끄는 문구)
+- 3~25초: 메인 콘텐츠 (3가지 동작)
+- 25~30초: CTA (팔로우 유도)
+
+**톤:** 빠르고 에너제틱
+**자막:** 큰 글씨로 보이게
+**BGM 추천:** 밝고 경쾌한 음악</pre>
+                </div>
+
+                <div class="example-output">
+                    <strong>[0~3초 훅]</strong><br>
+                    "앉아만 있으면 목이 뻐근하죠? 지금 바로 따라해보세요!"<br><br>
+                    <strong>[3~25초 메인]</strong><br>
+                    1️⃣ 목 돌리기 (좌우 10초)<br>
+                    2️⃣ 어깨 펴기 (뒤로 당기기 10초)<br>
+                    3️⃣ 허리 비틀기 (좌우 10초)<br><br>
+                    <strong>[25~30초 CTA]</strong><br>
+                    "매일 점심 후 5분! 저장하고 따라해보세요 ✨"
+                </div>
+
+                <h3>📊 SNS 콘텐츠 캘린더 작성</h3>
+                <div class="prompt-box">
+                    <span class="label">🎯 실전 프롬프트:</span>
+                    <pre>**채널:** 인스타그램, 페이스북, 링크드인
+
+**기간:** 2026년 4월 (1개월)
+
+**주요 이벤트:**
+- 4월 5일: 신제품 출시
+- 4월 20일: 창립기념일 이벤트
+
+**요청:**
+월간 SNS 콘텐츠 캘린더 작성
+
+**형식:**
+표 형식 (날짜 | 채널 | 콘텐츠 타입 | 주제 | 목표)
+
+**포함 사항:**
+- 주 3회 게시 (월/수/금)
+- 채널별 특성 반영
+- 신제품 론칭 프로모션 일정
+- 이벤트 전후 티저/결과 콘텐츠</pre>
+                </div>
+            </section>
+
+            <section class="section" id="content">
+                <h2>3. 콘텐츠 제작 AI 활용법</h2>
+
+                <h3>📝 블로그 포스트 작성</h3>
+                <div class="prompt-box">
+                    <span class="label">🎯 실전 프롬프트:</span>
+                    <pre>당신은 콘텐츠 마케터입니다.
+
+**주제:** "2026년 디지털 마케팅 트렌드 TOP 7"
+
+**목표:** SEO 상위 노출, 공유율 UP
+
+**타겟 키워드:** "디지털 마케팅 트렌드"
+
+**요청:**
+블로그 포스트 작성 (2,000자)
+
+**구성:**
+1. 서론 (200자): 트렌드 중요성
+2. 본론 (1,500자): 7가지 트렌드 상세 설명
+   - 각 트렌드마다: 정의 + 사례 + 적용 팁
+3. 결론 (300자): 실행 방안 요약
+
+**추가 요청:**
+- 각 섹션에 소제목
+- 인용문 1~2개
+- 통계 데이터 포함
+- 내부 링크 제안 3개</pre>
+                </div>
+
+                <h3>🎥 유튜브 대본 작성</h3>
+                <div class="prompt-box">
+                    <span class="label">🎯 실전 프롬프트:</span>
+                    <pre>**채널:** B2B SaaS 제품 소개
+
+**영상 길이:** 5분
+
+**제목:** "3분 만에 이해하는 우리 서비스"
+
+**타겟:** 중소기업 대표/임원
+
+**요청:**
+유튜브 영상 대본 작성
+
+**구성:**
+- 인트로 (0~30초): 문제 제기
+- 솔루션 소개 (30초~3분): 기능 3가지
+- 고객 후기 (3~4분): 짧은 인터뷰
+- CTA (4~5분): 무료 체험 유도
+
+**톤:** 전문적이지만 이해하기 쉽게
+**주의:** 전문 용어 최소화</pre>
+                </div>
+
+                <div class="tip-box">
+                    유튜브 대본은 AI가 초안을 작성한 후, 실제 녹화하면서 자연스러운 말투로 수정하세요.
+                    "대본 읽기" 티가 나지 않도록 구어체로 다듬는 것이 중요합니다.
+                </div>
+            </section>
+
+            <section class="section" id="email">
+                <h2>4. 이메일 마케팅 AI 활용법</h2>
+
+                <h3>📧 뉴스레터 작성</h3>
+                <div class="prompt-box">
+                    <span class="label">🎯 실전 프롬프트:</span>
+                    <pre>당신은 이메일 마케팅 전문가입니다.
+
+**발송 대상:** 구독자 5,000명 (기존 고객 + 리드)
+
+**주제:** 3월 신제품 출시 + 특별 할인
+
+**목표:** 오픈율 25%, 클릭률 5%
+
+**요청:**
+뉴스레터 이메일 작성
+
+**구성:**
+1. 제목 (50자 이내, 오픈율 높이기)
+2. 프리헤더 텍스트 (30자, 미리보기)
+3. 본문 (400자)
+   - 신제품 소개
+   - 할인 혜택 (30% OFF, 3일 한정)
+   - 고객 후기 1개
+4. CTA 버튼 문구 3가지
+
+**톤:** 친근하고 긴급함 전달
+**주의:** 스팸 필터링 피하기 (과도한 대문자, 느낌표 금지)</pre>
+                </div>
+
+                <h3>🎯 세그먼트별 맞춤 메시지</h3>
+                <div class="prompt-box">
+                    <span class="label">🎯 실전 프롬프트:</span>
+                    <pre>**상황:**
+고객 세그먼트별 이메일 작성
+
+**세그먼트 3가지:**
+1. 신규 가입자 (가입 후 7일 이내)
+2. 활성 고객 (최근 30일 구매 이력)
+3. 휴면 고객 (90일 이상 미구매)
+
+**공통 목표:** 구매 전환
+
+**요청:**
+각 세그먼트별 이메일 작성 (각 300자)
+
+**차별화 포인트:**
+- 신규: 환영 + 첫 구매 할인
+- 활성: 감사 + 추천 제품
+- 휴면: 그리움 + 특별 혜택
+
+**각 이메일마다:**
+- 제목
+- 본문
+- CTA</pre>
+                </div>
+
+                <div class="example-output">
+                    <strong>신규 가입자 이메일:</strong><br>
+                    <strong>제목:</strong> "환영합니다! 첫 구매 20% 할인 쿠폰 🎁"<br>
+                    <strong>본문:</strong> OO님, TG Store에 가입해주셔서 감사합니다! 새로운 여정을 축하하며 특별 선물을 준비했어요. 지금 바로 사용 가능한 20% 할인 쿠폰을 받아보세요...<br><br>
+                    
+                    <strong>휴면 고객 이메일:</strong><br>
+                    <strong>제목:</strong> "OO님이 그리워요... 돌아오시면 30% 드릴게요 💙"<br>
+                    <strong>본문:</strong> 오랜만이에요, OO님! 그동안 잘 지내셨나요? 90일 동안 찾아오지 않으셔서 많이 그리웠어요. 돌아오신 당신을 위해 특별한 혜택을 준비했습니다...
+                </div>
+            </section>
+
+            <section class="section" id="seo">
+                <h2>5. SEO 최적화 AI 활용법</h2>
+
+                <h3>🔍 키워드 리서치</h3>
+                <div class="prompt-box">
+                    <span class="label">🎯 실전 프롬프트:</span>
+                    <pre>**주제:** "홈트레이닝" 관련 콘텐츠
+
+**목표:** 네이버/구글 상위 노출
+
+**요청:**
+SEO 키워드 전략 수립
+
+**분석 항목:**
+1. 메인 키워드 후보 5개
+   - 검색량 추정
+   - 경쟁 강도 예상
+2. 롱테일 키워드 15개
+3. 연관 검색어 10개
+4. 시즌별 키워드 (봄/여름/가을/겨울)
+
+**결과 형식:**
+표 (키워드 | 월간 검색량 예상 | 경쟁도 | 추천도)</pre>
+                </div>
+
+                <h3>📄 메타 태그 작성</h3>
+                <div class="prompt-box">
+                    <span class="label">🎯 실전 프롬프트:</span>
+                    <pre>**페이지:** 제품 상세 페이지
+
+**제품:** 무선 청소기 V10
+
+**주요 키워드:** "무선청소기 추천"
+
+**요청:**
+SEO 최적화된 메타 태그 작성
+
+**필요 항목:**
+1. 메타 제목 (60자 이내)
+   - 키워드 포함
+   - 클릭 유도
+2. 메타 설명 (155자 이내)
+   - USP 포함
+   - CTA 포함
+3. OG 태그 (소셜 미디어용)
+   - og:title
+   - og:description
+   - og:image 추천 사양
+
+**참고:**
+- 검색 결과에서 눈에 띄도록
+- 브랜드명 포함</pre>
+                </div>
+
+                <div class="tip-box">
+                    메타 설명은 검색 결과에서 사용자가 클릭하기 전에 보는 첫 인상입니다.
+                    USP(핵심 차별점)와 숫자를 포함하면 클릭률이 높아집니다.
+                    예: "배터리 90분, 흡입력 200W, 5단계 필터 ✨"
+                </div>
+            </section>
+
+            <section class="section" id="campaign">
+                <h2>6. 캠페인 기획 AI 활용법</h2>
+
+                <h3>🎯 마케팅 캠페인 전략 수립</h3>
+                <div class="prompt-box">
+                    <span class="label">🎯 실전 프롬프트:</span>
+                    <pre>당신은 마케팅 전략 컨설턴트입니다.
+
+**캠페인 목표:**
+신규 고객 1,000명 유치 (3개월)
+
+**제품:** B2B HR 소프트웨어
+
+**타겟:**
+- 50~200인 중소기업
+- 인사팀장/경영진
+
+**예산:** 5,000만원
+
+**요청:**
+마케팅 캠페인 전략서 작성
+
+**포함 사항:**
+1. 캠페인 컨셉 (슬로건 포함)
+2. 채널 전략
+   - 온라인: 구글 광고, 링크드인, SEO
+   - 오프라인: 세미나, 박람회
+3. 예산 배분 (채널별 %)
+4. 콘텐츠 계획 (주제 10개)
+5. KPI 설정 (목표 수치)
+6. 월별 실행 일정
+
+**형식:** A4 3페이지 분량</pre>
+                </div>
+
+                <h3>📊 경쟁사 분석</h3>
+                <div class="prompt-box">
+                    <span class="label">🎯 실전 프롬프트:</span>
+                    <pre>**우리 브랜드:** TG 친환경 화장품
+
+**경쟁사 3개:**
+- A사: 시장 점유율 1위, 대기업
+- B사: 가성비 강조, 온라인 중심
+- C사: 프리미엄 포지셔닝
+
+**요청:**
+경쟁사 마케팅 전략 분석
+
+**분석 항목:**
+1. 각 경쟁사의 강점/약점
+2. 주요 마케팅 채널
+3. 메시징 전략 (어떤 가치 강조?)
+4. 가격 정책
+5. 우리의 차별화 포인트 3가지
+6. 추천 전략 (경쟁사 대비 우위 확보 방안)
+
+**형식:** SWOT 분석 포함</pre>
+                </div>
+
+                <div class="tip-box">
+                    경쟁사 분석은 AI가 공개 정보를 바탕으로 초안을 작성하지만,
+                    실제로는 직접 경쟁사 웹사이트, SNS, 광고를 모니터링하며 업데이트해야 합니다.
+                    AI는 출발점이고, 지속적인 관찰과 업데이트가 핵심입니다.
+                </div>
+            </section>
+
+            <div style="text-align: center; margin-top: 60px; padding: 40px; background: linear-gradient(135deg, #fa709a15 0%, #fee14015 100%); border-radius: 15px;">
+                <h3 style="font-size: 1.5rem; margin-bottom: 20px;">🚀 마케팅 성과를 10배 높이세요!</h3>
+                <p style="margin-bottom: 30px;">AI를 활용하면 콘텐츠 제작 시간이 70% 단축됩니다.</p>
+                <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                    <a href="manual-hr.html" class="btn btn-outline">인사·총무팀</a>
+                    <a href="manual-dev.html" class="btn btn-outline">개발팀</a>
+                    <a href="manuals.html" class="btn btn-primary">전체 목록</a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <button class="pdf-button" onclick="downloadPDF()">
+        <i class="fas fa-file-pdf"></i> PDF 다운로드
+    </button>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo-section">
+                        <img src="assets/images/common/footer_tg.jpg" alt="TG 건물" class="footer-building-image">
+                        <div class="footer-text-content">
+                            <h4>TG AI 캠퍼스</h4>
+                            <p>AI 기술 교육 전문 플랫폼</p>
+                        </div>
+                    </div>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>AI 교육 과정</h4>
+                    <ul>
+                        <li><a href="manuals.html#tab-basics-link">기초편</a></li>
+                        <li><a href="manuals.html#tab-advanced-link">실전편</a></li>
+                        <li><a href="manuals.html#tab-prompt-link">프롬프트</a></li>
+                        <li><a href="manuals.html#tab-job-link">직무별 활용</a></li>
+                        <li><a href="manuals.html#tab-advanced-ai-link">AI 고도화</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>AI 실전</h4>
+                    <ul>
+                        <li><a href="manual-prompt-basic.html">프롬프트 작성법</a></li>
+                        <li><a href="manual-automation.html">업무 자동화</a></li>
+                        <li><a href="manual-workflow.html">워크플로우 구축</a></li>
+                        <li><a href="manual-collaboration.html">AI 협업 도구</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>학습 지원</h4>
+                    <ul>
+                        <li><a href="support.html">나만의 AI 코치</a></li>
+                        <li><a href="notices.html">공지사항</a></li>
+                        <li><a href="dictionary.html">AI 용어 사전</a></li>
+                        <li><a href="dashboard.html">학습 현황</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>TG 라운지</h4>
+                    <ul>
+                        <li><a href="about.html">TG AI 캠퍼스 소개</a></li>
+                        <li><a href="tg-family.html">TG 패밀리</a></li>
+                        <li><a href="news.html">TG Alliance 소식</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 TG AI 캠퍼스. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.querySelectorAll('.manual-sidebar a[href^="#"]').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const headerOffset = 120;
+                    const elementPosition = target.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                    
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+                    
+                    document.querySelectorAll('.manual-sidebar a').forEach(a => a.classList.remove('active'));
+                    this.classList.add('active');
+                }
+            });
+        });
+
+        async function downloadPDF() {
+            const button = document.querySelector('.pdf-button');
+            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 생성 중...';
+            button.disabled = true;
+
+            try {
+                const { jsPDF } = window.jspdf;
+                const content = document.getElementById('manual-content');
+                const canvas = await html2canvas(content, { scale: 2, useCORS: true, logging: false });
+                const imgData = canvas.toDataURL('image/png');
+                const pdf = new jsPDF('p', 'mm', 'a4');
+                const pageWidth = pdf.internal.pageSize.getWidth();
+                const pageHeight = pdf.internal.pageSize.getHeight();
+                const imgWidth = pageWidth - 20;
+                const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                let heightLeft = imgHeight;
+                let position = 10;
+
+                pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+                heightLeft -= pageHeight;
+
+                while (heightLeft >= 0) {
+                    position = heightLeft - imgHeight + 10;
+                    pdf.addPage();
+                    pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+                    heightLeft -= pageHeight;
+                }
+
+                pdf.save('TG_AI_마케팅팀_매뉴얼.pdf');
+                button.innerHTML = '<i class="fas fa-check"></i> 다운로드 완료!';
+                setTimeout(() => {
+                    button.innerHTML = '<i class="fas fa-file-pdf"></i> PDF 다운로드';
+                    button.disabled = false;
+                }, 2000);
+            } catch (error) {
+                console.error('PDF 생성 오류:', error);
+                alert('PDF 생성 중 오류가 발생했습니다.');
+                button.innerHTML = '<i class="fas fa-file-pdf"></i> PDF 다운로드';
+                button.disabled = false;
+            }
+        }
+
+        document.querySelector('.mobile-menu-toggle')?.addEventListener('click', function() {
+            document.querySelector('.nav-menu').classList.toggle('active');
+        });
+    </script>
+</body>
+</html>

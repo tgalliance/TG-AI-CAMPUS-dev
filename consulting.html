@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 컨설팅 서비스 - TG에듀테크</title>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/enhanced-styles.css">
+    <link rel="stylesheet" href="assets/css/samsung-nav.css?v=3">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* AI 컨설팅 페이지 전용 스타일 */
+        .consulting-page {
+            background: #fff;
+        }
+        
+        /* Hero Section */
+        .consulting-hero {
+            background: linear-gradient(135deg, rgba(30, 58, 138, 0.95) 0%, rgba(59, 130, 246, 0.95) 100%), 
+                        url('https://images.unsplash.com/photo-1552664730-d307ca884978?w=1920&h=600&fit=crop&q=80') center/cover no-repeat;
+            color: white;
+            padding: 60px 0 50px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .consulting-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="grid" width="100" height="100" patternUnits="userSpaceOnUse"><path d="M 100 0 L 0 0 0 100" fill="none" stroke="white" stroke-width="0.5" opacity="0.1"/></pattern></defs><rect width="100%" height="100%" fill="url(%23grid)"/></svg>');
+            opacity: 0.2;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .hero-badge {
+            display: inline-block;
+            padding: 6px 16px;
+            background: rgba(255,255,255,0.25);
+            border-radius: 30px;
+            font-size: 0.85rem;
+            margin-bottom: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+            font-weight: 500;
+        }
+        
+        .hero-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            line-height: 1.3;
+            color: white;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        
+        .hero-subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            color: white;
+            opacity: 0.95;
+            font-weight: 400;
+            text-shadow: 0 1px 5px rgba(0,0,0,0.2);
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn-hero {
+            padding: 14px 35px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-primary-hero {
+            background: white;
+            color: #1e3a8a;
+        }
+        
+        .btn-primary-hero:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+        
+        .btn-secondary-hero {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+        
+        .btn-secondary-hero:hover {
+            background: white;
+            color: #1e3a8a;
+        }
+        
+        /* Section Common */
+        .section {
+            padding: 80px 0;
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 20px;
+            color: #1a1a1a;
+        }
+        
+        .section-subtitle {
+            font-size: 1.2rem;
+            text-align: center;
+            color: #666;
+            margin-bottom: 60px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        /* Problem Section */
+        .problem-section {
+            background: #f8f9fa;
+        }
+        
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        @media (max-width: 992px) {
+            .problem-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .problem-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .problem-card {
+            background: white;
+            padding: 30px 20px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+        }
+        
+        .problem-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        }
+        
+        .problem-icon {
+            font-size: 2.5rem;
+            color: #ef4444;
+            margin-bottom: 15px;
+        }
+        
+        .problem-text {
+            font-size: 1.05rem;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        /* Solution Message */
+        .solution-message {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+        }
+        
+        .solution-message h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 0;
+        }
+        
+        /* Service Cards */
+        .service-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+        
+        .service-card {
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 40px 30px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        
+        .service-card:hover {
+            border-color: #667eea;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.15);
+        }
+        
+        .service-number {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            font-weight: 700;
+            line-height: 50px;
+            margin-bottom: 20px;
+        }
+        
+        .service-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #1a1a1a;
+        }
+        
+        .service-desc {
+            font-size: 1rem;
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        /* Before After */
+        .before-after {
+            background: #f8f9fa;
+        }
+        
+        .comparison-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .comparison-side {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        
+        .comparison-side.before {
+            border-top: 4px solid #ef4444;
+        }
+        
+        .comparison-side.after {
+            border-top: 4px solid #10b981;
+        }
+        
+        .comparison-label {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #666;
+        }
+        
+        .comparison-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        
+        .comparison-side.before .comparison-title {
+            color: #ef4444;
+        }
+        
+        .comparison-side.after .comparison-title {
+            color: #10b981;
+        }
+        
+        .comparison-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .comparison-list li {
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 1.05rem;
+            color: #333;
+        }
+        
+        .comparison-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .comparison-list li::before {
+            margin-right: 10px;
+            font-weight: 700;
+        }
+        
+        .comparison-side.before li::before {
+            content: '✗';
+            color: #ef4444;
+        }
+        
+        .comparison-side.after li::before {
+            content: '✓';
+            color: #10b981;
+        }
+        
+        /* Use Cases */
+        .cases-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+        }
+        
+        .case-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+        }
+        
+        .case-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+        }
+        
+        .case-image {
+            height: 200px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: white;
+        }
+        
+        .case-content {
+            padding: 30px;
+        }
+        
+        .case-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #1a1a1a;
+        }
+        
+        .case-desc {
+            font-size: 1rem;
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        /* Differentiators */
+        .diff-section {
+            background: #1a1a1a;
+            color: white;
+        }
+        
+        .diff-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+        
+        .diff-item {
+            text-align: center;
+        }
+        
+        .diff-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 2rem;
+        }
+        
+        .diff-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .diff-desc {
+            font-size: 1rem;
+            color: #ccc;
+            line-height: 1.6;
+        }
+        
+        /* Process */
+        .process-timeline {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+        }
+        
+        .process-timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #e5e7eb;
+            transform: translateX(-50%);
+        }
+        
+        .process-step {
+            display: flex;
+            align-items: center;
+            margin-bottom: 60px;
+            position: relative;
+        }
+        
+        .process-step:nth-child(odd) {
+            flex-direction: row;
+        }
+        
+        .process-step:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+        
+        .process-number {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            position: relative;
+            z-index: 2;
+            flex-shrink: 0;
+            margin: 0 20px;
+        }
+        
+        .process-content {
+            flex: 1;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        }
+        
+        .process-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #1a1a1a;
+        }
+        
+        .process-desc {
+            font-size: 1rem;
+            color: #666;
+        }
+        
+        /* Final CTA */
+        .final-cta {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            color: white;
+            padding: 100px 0;
+            text-align: center;
+        }
+        
+        .final-cta h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 40px;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn-cta {
+            padding: 18px 50px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-cta-white {
+            background: white;
+            color: #1e3a8a;
+        }
+        
+        .btn-cta-white:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        .btn-cta-outline {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+        
+        .btn-cta-outline:hover {
+            background: white;
+            color: #1e3a8a;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .consulting-hero {
+                padding: 50px 0 40px;
+            }
+            
+            .hero-title {
+                font-size: 1.8rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1rem;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+            }
+            
+            .comparison-container {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .process-timeline::before {
+                left: 30px;
+            }
+            
+            .process-step {
+                flex-direction: row !important;
+            }
+            
+            .process-number {
+                margin: 0 20px 0 0;
+            }
+            
+            .hero-buttons,
+            .cta-buttons {
+                flex-direction: column;
+            }
+            
+            .btn-hero,
+            .btn-cta {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body class="consulting-page">
+    <!-- Header / Navigation -->
+    <header class="header">
+        <!-- Top Utility Bar -->
+        <div class="utility-bar">
+            <div class="container">
+                <div class="utility-wrapper">
+                    <a href="support.html" class="utility-link">고객지원</a>
+                    <a href="notices.html" class="utility-link">공지사항</a>
+                    <a href="inquiry.html" class="utility-link">교육문의</a>
+                    <a href="https://tgnco.kr/tg-alliance/" target="_blank" class="external-link tg-alliance">
+                        TG Alliance <i class="fas fa-external-link-alt"></i>
+                    </a>
+                    <a href="https://www.softmind.co.kr" target="_blank" class="external-link">
+                        소프트마인 <i class="fas fa-external-link-alt"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Navigation Bar -->
+        <nav class="navbar">
+            <div class="container">
+                <div class="nav-wrapper">
+                    <!-- Left Side: Logo + Menu -->
+                    <div class="nav-left">
+                        <a href="index.html" class="logo">
+                            <i class="fas fa-brain"></i>
+                            <span><span class="logo-tg">TG</span>에듀테크</span>
+                        </a>
+                        
+                                                <ul class="nav-menu">
+                            <li><a href="about.html">TG AI 캠퍼스소개</a></li>
+                            <li><a href="manuals.html">AI 활용메뉴얼</a></li>
+                            <li><a href="dictionary.html">AI 용어사전</a></li>
+                            <li><a href="recommended.html">AI 활용추천영상</a></li>
+                            <li><a href="curriculum.html">교육과정</a></li>
+                            <li><a href="support.html" style="color: #3b82f6; font-weight: 600;">나만의 AI 코치</a></li>
+                            <li><a href="dashboard.html">학습 현황</a></li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Right Side: Search + Icons -->
+                    <div class="nav-right">
+                        <!-- Search -->
+                        <div class="search-wrapper">
+                            <form class="search-form">
+                                <button type="submit" class="search-btn">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                                <input type="text" class="search-input" placeholder="검색" autocomplete="off">
+                            </form>
+                        </div>
+                        
+                        <!-- Icon Actions -->
+                        <div class="icon-actions">
+                            <a href="mypage.html" class="icon-link" title="마이페이지">
+                                <img src="assets/images/mypage-icon-new.png?v=2" alt="마이페이지" class="icon-img mypage-icon" style="width: auto !important; height: 20px !important; max-height: 20px !important;">
+                            </a>
+                            <a href="login.html" class="icon-link" id="authIcon" title="로그인">
+                                <img src="assets/images/logout-icon.png" alt="로그인" class="icon-img" style="width: 24px !important; height: 24px !important; max-width: 24px !important; max-height: 24px !important;">
+                            </a>
+                        </div>
+                        
+                        <!-- Mobile Toggle -->
+                        <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                            <i class="fas fa-bars"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="consulting-hero">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <i class="fas fa-lightbulb"></i> AI 컨설팅 서비스
+            </div>
+            <h1 class="hero-title">AI, 도입했는데<br>왜 성과가 안 날까요?</h1>
+            <p class="hero-subtitle">문제는 도입이 아니라 활용 구조입니다</p>
+            <div class="hero-buttons">
+                <a href="inquiry.html" class="btn-hero btn-primary-hero">
+                    <i class="fas fa-calendar-check"></i> 무료 컨설팅 신청
+                </a>
+                <a href="#cases" class="btn-hero btn-secondary-hero">
+                    <i class="fas fa-chart-line"></i> 사례 보기
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="section problem-section">
+        <div class="container">
+            <h2 class="section-title">이런 고민, 하고 계신가요?</h2>
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <div class="problem-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <p class="problem-text">AI를 도입했지만<br>실무에서 잘 안 쓰임</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <p class="problem-text">직원마다<br>활용 수준이 다름</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <p class="problem-text">결과가<br>들쭉날쭉함</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <p class="problem-text">기대했던<br>생산성이 나오지 않음</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Message -->
+    <section class="solution-message">
+        <div class="container">
+            <h2>AI를 도구가 아닌,<br>업무 시스템으로 바꿔드립니다</h2>
+        </div>
+    </section>
+
+    <!-- Service Section -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">컨설팅 서비스 구성</h2>
+            <p class="section-subtitle">단계별로 체계적인 AI 전환을 지원합니다</p>
+            <div class="service-grid">
+                <div class="service-card">
+                    <div class="service-number">1</div>
+                    <h3 class="service-title">AI 수준 진단</h3>
+                    <p class="service-desc">현재 조직의 AI 활용 수준을 정밀하게 분석하고 개선 포인트를 도출합니다</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-number">2</div>
+                    <h3 class="service-title">맞춤 전략 설계</h3>
+                    <p class="service-desc">직무별, 부서별 특성에 맞는 AI 활용 전략을 설계합니다</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-number">3</div>
+                    <h3 class="service-title">실무 중심 교육</h3>
+                    <p class="service-desc">바로 적용 가능한 프롬프트와 실전 노하우를 교육합니다</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-number">4</div>
+                    <h3 class="service-title">적용 및 정착</h3>
+                    <p class="service-desc">실제 업무에 AI를 정착시키고 지속적인 성과를 만들어갑니다</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Before / After Section -->
+    <section class="section before-after">
+        <div class="container">
+            <h2 class="section-title">확실한 차이를 경험하세요</h2>
+            <div class="comparison-container">
+                <div class="comparison-side before">
+                    <p class="comparison-label">BEFORE</p>
+                    <h3 class="comparison-title">AI 도입만 한 상태</h3>
+                    <ul class="comparison-list">
+                        <li>각자 알아서 사용</li>
+                        <li>일관성 없는 결과물</li>
+                        <li>시행착오 반복</li>
+                        <li>비효율적인 업무</li>
+                        <li>성과 측정 불가</li>
+                    </ul>
+                </div>
+                <div class="comparison-side after">
+                    <p class="comparison-label">AFTER</p>
+                    <h3 class="comparison-title">체계적인 AI 활용</h3>
+                    <ul class="comparison-list">
+                        <li>표준화된 활용 방식</li>
+                        <li>일관된 고품질 결과</li>
+                        <li>검증된 프로세스</li>
+                        <li>생산성 30% 이상 향상</li>
+                        <li>명확한 성과 지표</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Use Cases Section -->
+    <section class="section" id="cases">
+        <div class="container">
+            <h2 class="section-title">실제 활용 사례</h2>
+            <p class="section-subtitle">다양한 분야에서 즉시 적용 가능합니다</p>
+            <div class="cases-grid">
+                <div class="case-card">
+                    <div class="case-image">
+                        <i class="fas fa-bullhorn"></i>
+                    </div>
+                    <div class="case-content">
+                        <h3 class="case-title">마케팅 자동화</h3>
+                        <p class="case-desc">
+                            콘텐츠 기획부터 카피라이팅까지 AI로 자동화하여 
+                            제작 시간 50% 단축 및 품질 향상
+                        </p>
+                    </div>
+                </div>
+                <div class="case-card">
+                    <div class="case-image">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <div class="case-content">
+                        <h3 class="case-title">기획 문서 생성</h3>
+                        <p class="case-desc">
+                            제안서, 보고서 작성 시간을 70% 단축하고 
+                            일관된 품질의 문서 자동 생성
+                        </p>
+                    </div>
+                </div>
+                <div class="case-card">
+                    <div class="case-image">
+                        <i class="fas fa-headset"></i>
+                    </div>
+                    <div class="case-content">
+                        <h3 class="case-title">고객 응대 개선</h3>
+                        <p class="case-desc">
+                            AI 기반 고객 응대 시스템 구축으로 
+                            응답 속도 3배 향상 및 만족도 증가
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Differentiators Section -->
+    <section class="section diff-section">
+        <div class="container">
+            <h2 class="section-title" style="color: white;">TG에듀테크만의 차별점</h2>
+            <div class="diff-grid">
+                <div class="diff-item">
+                    <div class="diff-icon">
+                        <i class="fas fa-cogs"></i>
+                    </div>
+                    <h3 class="diff-title">실무 적용 중심</h3>
+                    <p class="diff-desc">단순 교육이 아닌 실제 업무에 바로 적용 가능한 솔루션을 제공합니다</p>
+                </div>
+                <div class="diff-item">
+                    <div class="diff-icon">
+                        <i class="fas fa-puzzle-piece"></i>
+                    </div>
+                    <h3 class="diff-title">기업 맞춤형 설계</h3>
+                    <p class="diff-desc">조직의 특성과 업무 환경에 최적화된 맞춤형 전략을 설계합니다</p>
+                </div>
+                <div class="diff-item">
+                    <div class="diff-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <h3 class="diff-title">즉시 활용 가능</h3>
+                    <p class="diff-desc">컨설팅 완료 즉시 업무에 적용하여 빠른 성과를 낼 수 있습니다</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Process Section -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">진행 프로세스</h2>
+            <p class="section-subtitle">체계적인 4단계 프로세스로 진행됩니다</p>
+            <div class="process-timeline">
+                <div class="process-step">
+                    <div class="process-number">1</div>
+                    <div class="process-content">
+                        <h3 class="process-title">상담</h3>
+                        <p class="process-desc">조직의 현황과 니즈를 파악하고 최적의 솔루션을 제안합니다</p>
+                    </div>
+                </div>
+                <div class="process-step">
+                    <div class="process-number">2</div>
+                    <div class="process-content">
+                        <h3 class="process-title">진단</h3>
+                        <p class="process-desc">현재 AI 활용 수준을 정밀 분석하고 개선 포인트를 도출합니다</p>
+                    </div>
+                </div>
+                <div class="process-step">
+                    <div class="process-number">3</div>
+                    <div class="process-content">
+                        <h3 class="process-title">전략 설계</h3>
+                        <p class="process-desc">직무별 맞춤 전략을 수립하고 실행 계획을 구체화합니다</p>
+                    </div>
+                </div>
+                <div class="process-step">
+                    <div class="process-number">4</div>
+                    <div class="process-content">
+                        <h3 class="process-title">실행 및 적용</h3>
+                        <p class="process-desc">교육 및 실무 적용을 진행하고 지속적으로 성과를 모니터링합니다</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA Section -->
+    <section class="final-cta">
+        <div class="container">
+            <h2>AI, 제대로 쓰고 싶다면<br>지금 시작하세요</h2>
+            <div class="cta-buttons">
+                <a href="inquiry.html" class="btn-cta btn-cta-white">
+                    <i class="fas fa-paper-plane"></i> 무료 상담 신청
+                </a>
+                <a href="inquiry.html" class="btn-cta btn-cta-outline">
+                    <i class="fas fa-phone"></i> 문의하기
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo-section">
+                        <img src="assets/images/common/footer_tg.jpg" alt="TG 건물" class="footer-building-image">
+                        <div class="footer-text-content">
+                            <h4>TG AI 캠퍼스</h4>
+                            <p>AI 기술 교육 전문 플랫폼</p>
+                        </div>
+                    </div>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>AI 교육 과정</h4>
+                    <ul>
+                        <li><a href="manuals.html#tab-basics-link">기초편</a></li>
+                        <li><a href="manuals.html#tab-advanced-link">실전편</a></li>
+                        <li><a href="manuals.html#tab-prompt-link">프롬프트</a></li>
+                        <li><a href="manuals.html#tab-job-link">직무별 활용</a></li>
+                        <li><a href="manuals.html#tab-advanced-ai-link">AI 고도화</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>AI 실전</h4>
+                    <ul>
+                        <li><a href="manual-prompt-basic.html">프롬프트 작성법</a></li>
+                        <li><a href="manual-automation.html">업무 자동화</a></li>
+                        <li><a href="manual-workflow.html">워크플로우 구축</a></li>
+                        <li><a href="manual-collaboration.html">AI 협업 도구</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>학습 지원</h4>
+                    <ul>
+                        <li><a href="support.html">나만의 AI 코치</a></li>
+                        <li><a href="notices.html">공지사항</a></li>
+                        <li><a href="dictionary.html">AI 용어 사전</a></li>
+                        <li><a href="dashboard.html">학습 현황</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>TG 라운지</h4>
+                    <ul>
+                        <li><a href="about.html">TG AI 캠퍼스 소개</a></li>
+                        <li><a href="tg-family.html">TG 패밀리</a></li>
+                        <li><a href="news.html">TG Alliance 소식</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 TG AI 캠퍼스. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        document.getElementById('mobileMenuToggle')?.addEventListener('click', function() {
+            document.querySelector('.nav-menu').classList.toggle('active');
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

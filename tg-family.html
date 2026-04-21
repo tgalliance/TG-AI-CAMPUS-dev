@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TG Alliance - TG AI 캠퍼스</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/enhanced-styles.css">
+    <link rel="stylesheet" href="assets/css/sections.css">
+    <link rel="stylesheet" href="assets/css/samsung-nav.css?v=3">
+    <link rel="stylesheet" href="assets/css/apple-style.css">
+    <link rel="stylesheet" href="assets/css/tg-news-style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #f8f9fa;
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+
+        /* Hero Banner - Hyundai Style */
+        .alliance-hero {
+            position: relative;
+            height: 45vh;
+            min-height: 400px;
+            max-height: 500px;
+            overflow: hidden;
+            background: #000;
+        }
+
+        .hero-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.7;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.5));
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            max-width: 1320px;
+            margin: 0 auto;
+            padding: 0 60px;
+            color: white;
+        }
+
+        .hero-title {
+            font-size: 5rem;
+            font-weight: 700;
+            margin-bottom: 30px;
+            line-height: 1.2;
+            letter-spacing: -2px;
+        }
+
+        .hero-title .tg-blue {
+            color: #0099FF;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            font-weight: 300;
+            line-height: 1.6;
+            max-width: 600px;
+            opacity: 0.95;
+        }
+
+        /* Companies Grid Section */
+        .companies-section {
+            padding: 100px 0;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 15px;
+        }
+
+        .section-subtitle {
+            font-size: 1.1rem;
+            color: #666;
+            font-weight: 400;
+        }
+
+        .companies-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0;
+            margin-top: 40px;
+        }
+
+        .company-card {
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .company-card:hover {
+            transform: translateY(-5px);
+            z-index: 10;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .company-image {
+            position: relative;
+            height: 250px;
+            overflow: hidden;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .company-card:nth-child(1) .company-image {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.9), rgba(118, 75, 162, 0.9)),
+                        url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&q=80');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .company-card:nth-child(2) .company-image {
+            background: linear-gradient(135deg, rgba(30, 144, 255, 0.9), rgba(0, 191, 255, 0.9)),
+                        url('https://images.unsplash.com/photo-1531297484001-80022131f5a1?w=800&q=80');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .company-card:nth-child(3) .company-image {
+            background: linear-gradient(135deg, rgba(67, 233, 123, 0.9), rgba(56, 249, 215, 0.9)),
+                        url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800&q=80');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .company-card:nth-child(4) .company-image {
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.9), rgba(255, 168, 1, 0.9)),
+                        url('https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=800&q=80');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .company-card:nth-child(5) .company-image {
+            background: linear-gradient(135deg, rgba(250, 112, 154, 0.9), rgba(254, 225, 64, 0.9)),
+                        url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&q=80');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .company-card:nth-child(6) .company-image {
+            background: linear-gradient(135deg, rgba(48, 207, 208, 0.9), rgba(51, 8, 103, 0.9)),
+                        url('https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .company-card:nth-child(7) .company-image {
+            background: linear-gradient(135deg, rgba(168, 237, 234, 0.9), rgba(254, 214, 227, 0.9)),
+                        url('https://images.unsplash.com/photo-1569025743873-ea3a9ade89f9?w=800&q=80');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .company-logo {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: white;
+            width: 100%;
+            padding: 20px;
+        }
+
+        .logo-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .logo-text {
+            font-size: 1.8rem;
+            font-weight: 700;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .logo-subtitle {
+            font-size: 0.85rem;
+            font-weight: 400;
+            opacity: 0.9;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .company-content {
+            background: #000;
+            color: white;
+            padding: 40px 30px;
+            min-height: 280px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .company-name {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .company-name-icon {
+            font-size: 1.4rem;
+        }
+
+        .company-description {
+            font-size: 0.95rem;
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.85);
+            font-weight: 400;
+        }
+
+        .company-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: white;
+            text-decoration: underline;
+            margin-top: 15px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .company-link:hover {
+            gap: 12px;
+            opacity: 0.8;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .companies-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .hero-title {
+                font-size: 4rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .alliance-hero {
+                height: 40vh;
+                min-height: 350px;
+            }
+
+            .hero-content {
+                padding: 0 30px;
+            }
+
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.1rem;
+            }
+
+            .companies-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .company-image {
+                height: 200px;
+            }
+
+            .company-content {
+                min-height: 240px;
+                padding: 30px 25px;
+            }
+
+            .company-name {
+                font-size: 1.4rem;
+            }
+
+            .company-description {
+                font-size: 0.9rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header / Navigation -->
+    <header class="header">
+        <!-- Top Utility Bar -->
+        <div class="utility-bar">
+            <div class="container">
+                <div class="utility-wrapper">
+                    <a href="news.html" class="utility-link">TG 라운지</a>
+                    <a href="notices.html" class="utility-link">공지사항</a>
+                    <a href="tg-family.html" class="utility-link">TG패밀리</a>
+                    <a href="https://tgnco.kr/tg-alliance/" target="_blank" class="external-link tg-alliance">
+                        TG Alliance <i class="fas fa-external-link-alt"></i>
+                    </a>
+                    <span class="external-link" style="color: #ff8c00; cursor: default;">
+                        TG 에듀테크
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Navigation Bar -->
+        <nav class="navbar">
+            <div class="container">
+                <div class="nav-wrapper">
+                    <!-- Left Side: Logo + Menu -->
+                    <div class="nav-left">
+                        <a href="index.html" class="logo">
+                            <i class="fas fa-brain"></i>
+                            <span><span class="logo-tg">TG</span> AI 캠퍼스</span>
+                        </a>
+                        
+                                                <ul class="nav-menu">
+                            <li><a href="about.html">TG AI 캠퍼스소개</a></li>
+                            <li><a href="manuals.html">AI 활용메뉴얼</a></li>
+                            <li><a href="dictionary.html">AI 용어사전</a></li>
+                            <li><a href="recommended.html">AI 활용추천영상</a></li>
+                            <li><a href="curriculum.html">교육과정</a></li>
+                            <li><a href="support.html" style="color: #3b82f6; font-weight: 600;">나만의 AI 코치</a></li>
+                            <li><a href="dashboard.html">학습 현황</a></li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Right Side: Search + Icons -->
+                    <div class="nav-right">
+                        <!-- Search -->
+                        <div class="search-wrapper">
+                            <form class="search-form">
+                                <button type="submit" class="search-btn">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                                <input type="text" class="search-input" placeholder="검색" autocomplete="off">
+                            </form>
+                        </div>
+                        
+                        <!-- Icon Actions -->
+                        <div class="icon-actions">
+                            <a href="mypage.html" class="icon-link" title="마이페이지">
+                                <img src="assets/images/mypage-icon-new.png?v=2" alt="마이페이지" class="icon-img mypage-icon" style="width: auto !important; height: 20px !important; max-height: 20px !important;">
+                            </a>
+                            <a href="login.html" class="icon-link" id="authIcon" title="로그인">
+                                <img src="assets/images/logout-icon.png" alt="로그인" class="icon-img" style="width: 24px !important; height: 24px !important; max-width: 24px !important; max-height: 24px !important;">
+                            </a>
+                        </div>
+                        
+                        <!-- Mobile Toggle -->
+                        <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                            <i class="fas fa-bars"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Banner Section -->
+    <section class="alliance-hero">
+        <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=1920&q=80" alt="TG Alliance" class="hero-image">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1 class="hero-title">
+                <span class="tg-blue">TG</span> Alliance
+            </h1>
+            <p class="hero-subtitle">
+                혁신과 협력으로 더 나은 미래를 만들어가는<br>
+                TG Alliance 그룹을 소개합니다
+            </p>
+        </div>
+    </section>
+
+    <!-- Companies Grid Section -->
+    <section class="companies-section">
+        <div class="section-header">
+            <h2 class="section-title">TG 패밀리</h2>
+            <p class="section-subtitle">함께 성장하는 TG 그룹의 다양한 사업 영역</p>
+        </div>
+
+        <div class="companies-grid">
+            <!-- TG 나래 -->
+            <div class="company-card" onclick="window.open('https://www.tgalliance.co.kr', '_blank')">
+                <div class="company-image">
+                    <div class="company-logo">
+                        <i class="fas fa-crown logo-icon"></i>
+                        <span class="logo-text">TG 나래</span>
+                        <span class="logo-subtitle">Holdings Company</span>
+                    </div>
+                </div>
+                <div class="company-content">
+                    <h3 class="company-name">
+                        <i class="fas fa-building company-name-icon"></i>
+                        <span>TG 나래</span>
+                    </h3>
+                    <p class="company-description">
+                        TG 그룹의 지주회사로서 계열사들의 시너지를 창출하고, 
+                        지속 가능한 성장을 이끌어가는 핵심 역할을 수행합니다.
+                    </p>
+                    <a href="https://www.tgalliance.co.kr" target="_blank" class="company-link" onclick="event.stopPropagation()">
+                        자세히 보기 <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- TG 삼보 -->
+            <div class="company-card" onclick="window.open('https://www.trigem.co.kr/company/company_history.jsp', '_blank')">
+                <div class="company-image">
+                    <div class="company-logo">
+                        <i class="fas fa-desktop logo-icon"></i>
+                        <span class="logo-text">TG 삼보</span>
+                        <span class="logo-subtitle">Computer Technology</span>
+                    </div>
+                </div>
+                <div class="company-content">
+                    <h3 class="company-name">
+                        <i class="fas fa-laptop company-name-icon"></i>
+                        <span>TG 삼보</span>
+                    </h3>
+                    <p class="company-description">
+                        삼보컴퓨터의 미래 속에 디지털의 미래가 살아 숨쉬고 있습니다. 
+                        혁신적인 IT 기술과 친환경 솔루션으로 더 나은 디지털 세상을 만들어갑니다.
+                    </p>
+                    <a href="https://www.trigem.co.kr/company/company_history.jsp" target="_blank" class="company-link" onclick="event.stopPropagation()">
+                        자세히 보기 <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- TGS -->
+            <div class="company-card">
+                <div class="company-image">
+                    <div class="company-logo">
+                        <i class="fas fa-handshake logo-icon"></i>
+                        <span class="logo-text">TGS</span>
+                        <span class="logo-subtitle">Service Provider</span>
+                    </div>
+                </div>
+                <div class="company-content">
+                    <h3 class="company-name">
+                        <i class="fas fa-cogs company-name-icon"></i>
+                        <span>TGS</span>
+                    </h3>
+                    <p class="company-description">
+                        우리는 고객의 가치 향상을 위한 서비스를 제공합니다. 
+                        최상의 IT 서비스로 고객의 비즈니스 성공을 지원합니다.
+                    </p>
+                </div>
+            </div>
+
+            <!-- TG&Co -->
+            <div class="company-card" onclick="window.open('https://tg.inostone.net/', '_blank')">
+                <div class="company-image">
+                    <div class="company-logo">
+                        <i class="fas fa-mobile-alt logo-icon"></i>
+                        <span class="logo-text">TG&Co</span>
+                        <span class="logo-subtitle">Device Supply</span>
+                    </div>
+                </div>
+                <div class="company-content">
+                    <h3 class="company-name">
+                        <i class="fas fa-tablet-alt company-name-icon"></i>
+                        <span>TG&Co</span>
+                    </h3>
+                    <p class="company-description">
+                        최적의 디바이스를 공급하여 고객과 함께 더 편리한 스마트 세상을 만들어 갑니다. 
+                        혁신적인 제품으로 디지털 라이프를 선도합니다.
+                    </p>
+                    <a href="https://tg.inostone.net/" target="_blank" class="company-link" onclick="event.stopPropagation()">
+                        자세히 보기 <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- TG소프트마인 -->
+            <div class="company-card">
+                <div class="company-image">
+                    <div class="company-logo">
+                        <i class="fas fa-code logo-icon"></i>
+                        <span class="logo-text">TG소프트마인</span>
+                        <span class="logo-subtitle">DX Solution Partner</span>
+                    </div>
+                </div>
+                <div class="company-content">
+                    <h3 class="company-name">
+                        <i class="fas fa-project-diagram company-name-icon"></i>
+                        <span>TG소프트마인</span>
+                    </h3>
+                    <p class="company-description">
+                        DX 솔루션 파트너로써, 우리는 글로벌 네트워크와 함께 
+                        더 편리한 IT 세상을 만들어 갑니다.
+                    </p>
+                </div>
+            </div>
+
+            <!-- TG trigem -->
+            <div class="company-card">
+                <div class="company-image">
+                    <div class="company-logo">
+                        <i class="fas fa-lightbulb logo-icon"></i>
+                        <span class="logo-text">TG trigem</span>
+                        <span class="logo-subtitle">IT Consulting</span>
+                    </div>
+                </div>
+                <div class="company-content">
+                    <h3 class="company-name">
+                        <i class="fas fa-chart-line company-name-icon"></i>
+                        <span>TG trigem</span>
+                    </h3>
+                    <p class="company-description">
+                        솔루션 파트너 협업을 통해 지속 가능한 IT컨설팅/솔루션을 제공합니다. 
+                        최적의 IT 전략으로 고객의 성공을 함께합니다.
+                    </p>
+                </div>
+            </div>
+
+            <!-- TG E&Company -->
+            <div class="company-card">
+                <div class="company-image">
+                    <div class="company-logo">
+                        <i class="fas fa-globe logo-icon"></i>
+                        <span class="logo-text">TG E&Company</span>
+                        <span class="logo-subtitle">Global Network</span>
+                    </div>
+                </div>
+                <div class="company-content">
+                    <h3 class="company-name">
+                        <i class="fas fa-network-wired company-name-icon"></i>
+                        <span>TG E&Company</span>
+                    </h3>
+                    <p class="company-description">
+                        세상을 함께 성장시키는 글로벌 기업 네트워크를 꿈꾸다. 
+                        국경을 넘어 함께 성장하는 비즈니스 파트너십을 구축합니다.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo-section">
+                        <img src="assets/images/common/footer_tg.jpg" alt="TG 건물" class="footer-building-image">
+                        <div class="footer-text-content">
+                            <h4>TG AI 캠퍼스</h4>
+                            <p>AI 기술 교육 전문 플랫폼</p>
+                        </div>
+                    </div>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>AI 교육 과정</h4>
+                    <ul>
+                        <li><a href="manuals.html#tab-basics-link">기초편</a></li>
+                        <li><a href="manuals.html#tab-advanced-link">실전편</a></li>
+                        <li><a href="manuals.html#tab-prompt-link">프롬프트</a></li>
+                        <li><a href="manuals.html#tab-job-link">직무별 활용</a></li>
+                        <li><a href="manuals.html#tab-advanced-ai-link">AI 고도화</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>AI 실전</h4>
+                    <ul>
+                        <li><a href="manual-prompt-basic.html">프롬프트 작성법</a></li>
+                        <li><a href="manual-automation.html">업무 자동화</a></li>
+                        <li><a href="manual-workflow.html">워크플로우 구축</a></li>
+                        <li><a href="manual-collaboration.html">AI 협업 도구</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>학습 지원</h4>
+                    <ul>
+                        <li><a href="support.html">나만의 AI 코치</a></li>
+                        <li><a href="notices.html">공지사항</a></li>
+                        <li><a href="dictionary.html">AI 용어 사전</a></li>
+                        <li><a href="dashboard.html">학습 현황</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>TG 라운지</h4>
+                    <ul>
+                        <li><a href="about.html">TG AI 캠퍼스 소개</a></li>
+                        <li><a href="tg-family.html">TG 패밀리</a></li>
+                        <li><a href="news.html">TG Alliance 소식</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 TG AI 캠퍼스. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

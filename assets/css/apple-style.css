@@ -1,0 +1,792 @@
+/* ==================== Apple-Style Cards ==================== */
+
+.features.apple-style {
+    padding: 80px 0;
+    background: #f5f5f7;
+}
+
+.apple-cards-container {
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 40px 2rem;
+}
+
+.apple-cards-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.apple-cards-row:last-child {
+    margin-bottom: 0;
+}
+
+/* Card Styles */
+.apple-card {
+    background: #f5f5f7;
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* Background Images for Each Card - Clear and Vibrant */
+.apple-card:nth-child(1) {
+    background-image: url('https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=1400&h=900&fit=crop&q=90');
+}
+
+.apple-card:nth-child(2) {
+    background-image: url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1400&h=900&fit=crop&q=90');
+}
+
+.apple-cards-row:nth-child(2) .apple-card:nth-child(1) {
+    background-image: url('https://images.unsplash.com/photo-1551434678-e076c223a692?w=900&h=900&fit=crop&q=90');
+}
+
+.apple-cards-row:nth-child(2) .apple-card:nth-child(2) {
+    background-image: url('https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=900&h=900&fit=crop&q=90');
+}
+
+.apple-cards-row:nth-child(2) .apple-card:nth-child(3) {
+    background-image: url('https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=900&h=900&fit=crop&q=90');
+}
+
+.apple-cards-row:nth-child(3) .apple-card {
+    background-image: url('https://images.unsplash.com/photo-1556761175-b413da4baf72?w=1400&h=700&fit=crop&q=90');
+}
+
+.apple-card:hover {
+    transform: scale(1.02);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* Card Sizes */
+.apple-card-large {
+    flex: 1;
+    min-height: 480px;
+}
+
+.apple-card-medium {
+    flex: 1;
+    min-height: 420px;
+}
+
+.apple-card-full {
+    width: 100%;
+    min-height: 380px;
+}
+
+/* Card Content - Apple Style with Image on Top */
+.apple-card-content {
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    height: 100%;
+    position: relative;
+    z-index: 3;
+    background: linear-gradient(to top, white 40%, transparent 40%);
+}
+
+/* Text Content Area */
+.apple-card-content h3 {
+    padding: 10px 40px 0 40px;
+    margin: 0;
+}
+
+.apple-card-content p {
+    padding: 0 40px;
+    margin: 15px 0;
+}
+
+.apple-card-content .apple-learn-more {
+    padding: 0 40px 35px 40px;
+    margin: 0;
+}
+
+.apple-card .feature-icon {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #0099FF 0%, #0077CC 100%);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.apple-card:hover .feature-icon {
+    transform: scale(1.05);
+}
+
+.apple-card .feature-icon i {
+    font-size: 28px;
+    color: white;
+}
+
+.apple-card h3 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #1d1d1f;
+    margin: 0;
+    line-height: 1.2;
+}
+
+.apple-card p {
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #6e6e73;
+    margin: 0;
+}
+
+/* Learn More Link */
+.apple-learn-more {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #0099FF;
+    font-size: 0.95rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.apple-learn-more:hover {
+    gap: 12px;
+    color: #0077CC;
+}
+
+.apple-learn-more i {
+    font-size: 0.875rem;
+    transition: transform 0.3s ease;
+}
+
+.apple-learn-more:hover i {
+    transform: translateX(4px);
+}
+
+/* Background Patterns - Removed */
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .apple-cards-row {
+        flex-direction: column;
+    }
+    
+    .apple-card-large,
+    .apple-card-medium {
+        min-height: 380px;
+    }
+    
+    .apple-card-content {
+        padding: 40px 30px;
+    }
+    
+    .apple-card h3 {
+        font-size: 1.75rem;
+    }
+    
+    .apple-card p {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .features.apple-style {
+        padding: 60px 0;
+    }
+    
+    .apple-cards-container {
+        padding: 20px 15px;
+    }
+    
+    .apple-card-large,
+    .apple-card-medium,
+    .apple-card-full {
+        min-height: 320px;
+    }
+    
+    .apple-card-content {
+        padding: 30px 25px;
+    }
+    
+    .apple-card .feature-icon {
+        width: 60px;
+        height: 60px;
+        margin-bottom: 20px;
+    }
+    
+    .apple-card .feature-icon i {
+        font-size: 28px;
+    }
+    
+    .apple-card h3 {
+        font-size: 1.5rem;
+        margin-bottom: 15px;
+    }
+    
+    .apple-card p {
+        font-size: 0.95rem;
+        margin-bottom: 20px;
+    }
+}
+
+/* Scroll Animation */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.apple-card {
+    animation: fadeInUp 0.6s ease-out forwards;
+    opacity: 0;
+}
+
+.apple-card:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.apple-card:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.apple-card:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+.apple-cards-row:nth-child(2) .apple-card:nth-child(1) {
+    animation-delay: 0.4s;
+}
+
+.apple-cards-row:nth-child(2) .apple-card:nth-child(2) {
+    animation-delay: 0.5s;
+}
+
+.apple-cards-row:nth-child(2) .apple-card:nth-child(3) {
+    animation-delay: 0.6s;
+}
+
+.apple-cards-row:nth-child(3) .apple-card {
+    animation-delay: 0.7s;
+}
+
+/* 마이페이지 고급 스타일링 */
+.learning-summary {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-bottom: 32px;
+}
+
+@media (max-width: 1024px) {
+    .learning-summary {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 640px) {
+    .learning-summary {
+        grid-template-columns: 1fr;
+    }
+}
+
+.learning-summary .summary-card {
+    color: white !important;
+    border-radius: 14px;
+    padding: 18px 20px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    min-height: 130px;
+}
+
+.learning-summary .summary-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100px;
+    height: 100px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 50%;
+    transform: translate(30%, -30%);
+}
+
+.learning-summary .summary-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.2);
+}
+
+/* 아이콘과 숫자를 가로로 배치 */
+.summary-card .summary-top {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+}
+
+.summary-card .summary-icon {
+    font-size: 2rem;
+    opacity: 0.95;
+    flex-shrink: 0;
+}
+
+.summary-card .summary-main {
+    flex: 1;
+}
+
+.summary-card .summary-value {
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 4px;
+}
+
+.summary-card .summary-label {
+    font-size: 0.88rem;
+    opacity: 0.9;
+    line-height: 1.2;
+}
+
+.summary-card .summary-progress {
+    background: rgba(255,255,255,0.2);
+    height: 5px;
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 6px;
+}
+
+.summary-card .summary-progress .progress-bar {
+    background: white;
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.5s ease;
+}
+
+.summary-card .summary-detail {
+    font-size: 0.8rem;
+    opacity: 0.85;
+}
+
+/* 최근 활동 타임라인 */
+.activity-timeline {
+    position: relative;
+    padding-left: 0;
+}
+
+.activity-timeline .activity-item {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 16px;
+    padding: 14px 16px;
+    background: white;
+    border-radius: 10px;
+    border-left: 3px solid #e5e7eb;
+    transition: all 0.3s ease;
+}
+
+.activity-timeline .activity-item:hover {
+    border-left-color: #667eea;
+    box-shadow: 0 4px 16px rgba(102,126,234,0.15);
+    transform: translateX(5px);
+}
+
+.activity-timeline .activity-icon {
+    flex-shrink: 0;
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.1rem;
+}
+
+.activity-timeline .activity-content {
+    flex: 1;
+}
+
+.activity-timeline .activity-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 6px;
+}
+
+.activity-timeline .activity-description {
+    font-size: 0.85rem;
+    color: #64748b;
+    margin-bottom: 6px;
+    line-height: 1.5;
+}
+
+.activity-timeline .activity-time {
+    font-size: 0.85rem;
+    color: #94a3b8;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* 추천 과정 카드 */
+.recommended-courses {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+@media (max-width: 1024px) {
+    .recommended-courses {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 640px) {
+    .recommended-courses {
+        grid-template-columns: 1fr;
+    }
+}
+
+.course-card-enhanced {
+    background: white;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    transition: all 0.3s ease;
+}
+
+.course-card-enhanced:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+}
+
+.course-card-enhanced .course-thumbnail {
+    position: relative;
+    height: 150px;
+    overflow: hidden;
+}
+
+.course-card-enhanced .course-thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.course-card-enhanced:hover .course-thumbnail img {
+    transform: scale(1.1);
+}
+
+.course-card-enhanced .course-level {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: white;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.course-card-enhanced .course-info {
+    padding: 16px;
+}
+
+.course-card-enhanced .course-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 10px;
+}
+
+.course-card-enhanced .course-description {
+    font-size: 0.9rem;
+    color: #64748b;
+    margin-bottom: 16px;
+    line-height: 1.6;
+}
+
+.course-card-enhanced .course-meta {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 12px;
+    font-size: 0.85rem;
+    color: #94a3b8;
+}
+
+.course-card-enhanced .course-meta span {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.course-card-enhanced .course-tags {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+}
+
+.course-card-enhanced .course-tags .tag {
+    background: #f1f5f9;
+    color: #64748b;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.course-card-enhanced .btn-course {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.course-card-enhanced .btn-course:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102,126,234,0.4);
+}
+
+/* 학습 목표 그리드 */
+.goals-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+@media (max-width: 1024px) {
+    .goals-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 640px) {
+    .goals-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.goal-card {
+    background: white;
+    padding: 18px;
+    border-radius: 14px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    transition: all 0.3s ease;
+}
+
+.goal-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+}
+
+.goal-card .goal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.goal-card .goal-progress-circle {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: conic-gradient(
+        #667eea 0% var(--progress),
+        #e5e7eb var(--progress) 100%
+    );
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.goal-card .goal-progress-circle::before {
+    content: '';
+    position: absolute;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: white;
+}
+
+.goal-card .goal-progress-circle span {
+    position: relative;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #667eea;
+}
+
+.goal-card h4 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 8px;
+}
+
+.goal-card p {
+    font-size: 0.9rem;
+    color: #64748b;
+    margin-bottom: 12px;
+}
+
+.goal-card .goal-progress-bar {
+    height: 8px;
+    background: #f1f5f9;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.goal-card .goal-progress-bar .progress-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.5s ease;
+}
+
+/* 배지 그리드 */
+.badges-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+@media (max-width: 1024px) {
+    .badges-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 640px) {
+    .badges-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.badge-card {
+    background: white;
+    padding: 18px;
+    border-radius: 14px;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    transition: all 0.3s ease;
+}
+
+.badge-card.earned {
+    border: 2px solid #10b981;
+}
+
+.badge-card.locked {
+    opacity: 0.6;
+    border: 2px dashed #e5e7eb;
+}
+
+.badge-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+}
+
+.badge-card .badge-icon {
+    width: 70px;
+    height: 70px;
+    margin: 0 auto 12px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.75rem;
+    color: white;
+}
+
+.badge-card.locked .badge-icon {
+    background: #e5e7eb !important;
+    color: #94a3b8;
+}
+
+.badge-card h4 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 8px;
+}
+
+.badge-card p {
+    font-size: 0.9rem;
+    color: #64748b;
+    margin-bottom: 12px;
+}
+
+.badge-card .badge-date,
+.badge-card .badge-requirement {
+    font-size: 0.85rem;
+    color: #94a3b8;
+}
+
+.badge-card.earned .badge-date {
+    color: #10b981;
+    font-weight: 600;
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+    .activity-timeline .activity-item {
+        flex-direction: column;
+        gap: 12px;
+    }
+}
+
+/* 마이페이지 섹션 간격 최적화 */
+.mypage-container .content-section {
+    margin-bottom: 32px;
+}
+
+.mypage-container .content-header {
+    margin-bottom: 20px;
+}
+
+.mypage-container .content-title {
+    font-size: 1.3rem;
+    margin: 0;
+}
+
+.recent-activity {
+    margin-top: 32px !important;
+}
+
+.recommended-section {
+    margin-top: 32px !important;
+}
+
+.learning-goals {
+    margin-top: 32px !important;
+}
+
+/* 컨텐츠 헤더 버튼 스타일 */
+.content-header .btn-primary,
+.content-header .btn-secondary {
+    padding: 8px 16px;
+    font-size: 0.9rem;
+}

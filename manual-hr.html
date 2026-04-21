@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>인사·총무팀 AI 활용 매뉴얼 - TG AI 캠퍼스</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/samsung-nav.css?v=3">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        .manual-container { display: flex; max-width: 1400px; margin: 50px auto; gap: 30px; padding: 0 20px; }
+        .manual-sidebar { width: 280px; background: white; border-radius: 15px; padding: 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); position: sticky; top: 100px; height: fit-content; }
+        .manual-sidebar h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 20px; color: #1a202c; }
+        .manual-sidebar ul { list-style: none; padding: 0; }
+        .manual-sidebar li { margin-bottom: 12px; }
+        .manual-sidebar a { color: #666; text-decoration: none; display: block; padding: 8px 12px; border-radius: 8px; transition: all 0.3s; }
+        .manual-sidebar a:hover, .manual-sidebar a.active { background: #f093fb; color: white; }
+        .manual-content { flex: 1; background: white; border-radius: 15px; padding: 50px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+        .manual-header { border-bottom: 3px solid #f093fb; padding-bottom: 30px; margin-bottom: 40px; }
+        .manual-header h1 { font-size: 2.5rem; font-weight: 700; color: #1a202c; margin-bottom: 15px; }
+        .manual-meta { display: flex; gap: 20px; color: #666; font-size: 0.95rem; }
+        .manual-meta span { display: flex; align-items: center; gap: 8px; }
+        .pdf-button { position: fixed; bottom: 30px; right: 30px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; border: none; padding: 15px 30px; border-radius: 50px; font-size: 1rem; font-weight: 600; cursor: pointer; box-shadow: 0 4px 20px rgba(240, 147, 251, 0.4); transition: all 0.3s; z-index: 1000; }
+        .pdf-button:hover { transform: translateY(-3px); box-shadow: 0 6px 30px rgba(240, 147, 251, 0.6); }
+        .section { margin-bottom: 50px; }
+        .section h2 { font-size: 1.8rem; font-weight: 700; color: #1a202c; margin-bottom: 20px; padding-left: 15px; border-left: 5px solid #f093fb; }
+        .section h3 { font-size: 1.3rem; font-weight: 600; color: #2d3748; margin: 30px 0 15px; }
+        .section p { font-size: 1.05rem; line-height: 1.8; color: #4a5568; margin-bottom: 15px; }
+        .prompt-box { background: #f7fafc; border: 2px solid #f093fb; border-radius: 10px; padding: 25px; margin: 25px 0; }
+        .prompt-box .label { font-weight: 700; color: #f5576c; margin-bottom: 15px; display: block; font-size: 1.1rem; }
+        .prompt-box pre { background: white; padding: 20px; border-radius: 8px; border: 1px solid #e2e8f0; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word; line-height: 1.6; }
+        .result-box { background: #f0fff4; border-left: 4px solid #48bb78; padding: 20px 25px; border-radius: 10px; margin: 25px 0; }
+        .result-box::before { content: "✅ 예상 결과"; font-weight: 700; color: #48bb78; display: block; margin-bottom: 10px; }
+        .tip-box { background: #fff5f5; border-left: 4px solid #f5576c; padding: 20px 25px; border-radius: 10px; margin: 25px 0; }
+        .tip-box::before { content: "💡 활용 팁"; font-weight: 700; color: #f5576c; display: block; margin-bottom: 10px; }
+        .use-case { background: linear-gradient(135deg, #f093fb15 0%, #f5576c15 100%); padding: 30px; border-radius: 15px; margin: 30px 0; }
+        .use-case h4 { color: #f5576c; font-size: 1.2rem; margin-bottom: 15px; }
+        ul, ol { padding-left: 30px; margin: 20px 0; }
+        li { margin-bottom: 12px; line-height: 1.7; color: #4a5568; }
+        @media (max-width: 768px) {
+            .manual-container { flex-direction: column; }
+            .manual-sidebar { width: 100%; position: static; }
+            .manual-content { padding: 30px 20px; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="utility-bar">
+            <div class="container">
+                <div class="utility-wrapper">
+                    <a href="news.html" class="utility-link">TG 라운지</a>
+                    <a href="notices.html" class="utility-link">공지사항</a>
+                    <a href="tg-family.html" class="utility-link">TG패밀리</a>
+                    <a href="https://tgnco.kr/tg-alliance/" target="_blank" class="external-link tg-alliance">TG Alliance <i class="fas fa-external-link-alt"></i></a>
+                    <span class="external-link" style="color: #ff8c00; cursor: default;">
+                        TG 에듀테크
+                    </span>
+                </div>
+            </div>
+        </div>
+        <nav class="navbar">
+            <div class="container">
+                <div class="nav-wrapper">
+                    <div class="nav-left">
+                        <a href="index.html" class="logo"><i class="fas fa-brain"></i><span><span class="logo-tg">TG</span> AI 캠퍼스</span></a>
+                                                <ul class="nav-menu">
+                            <li><a href="about.html">TG AI 캠퍼스소개</a></li>
+                            <li><a href="manuals.html">AI 활용메뉴얼</a></li>
+                            <li><a href="dictionary.html">AI 용어사전</a></li>
+                            <li><a href="recommended.html">AI 활용추천영상</a></li>
+                            <li><a href="curriculum.html">교육과정</a></li>
+                            <li><a href="support.html" style="color: #3b82f6; font-weight: 600;">나만의 AI 코치</a></li>
+                            <li><a href="dashboard.html">학습 현황</a></li>
+                        </ul>
+                    </div>
+                    <div class="nav-right">
+                        <div class="icon-actions">
+                            <a href="mypage.html" class="icon-link"><img src="assets/images/mypage-icon-new.png?v=2" alt="마이페이지" style="height: 20px;"></a>
+                            <a href="login.html" class="icon-link"><img src="assets/images/logout-icon.png" alt="로그인" style="height: 24px;"></a>
+                        </div>
+                        <button class="mobile-menu-toggle"><i class="fas fa-bars"></i></button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="manual-container">
+        <aside class="manual-sidebar">
+            <h3><i class="fas fa-list"></i> 목차</h3>
+            <ul>
+                <li><a href="#recruitment" class="active">1. 채용·선발</a></li>
+                <li><a href="#onboarding">2. 온보딩</a></li>
+                <li><a href="#training">3. 교육·개발</a></li>
+                <li><a href="#evaluation">4. 평가·보상</a></li>
+                <li><a href="#admin">5. 총무·복지</a></li>
+                <li><a href="#communication">6. 사내 소통</a></li>
+            </ul>
+            <hr style="margin: 30px 0; border: none; border-top: 1px solid #e2e8f0;">
+            <a href="manuals.html" class="btn btn-outline" style="width: 100%; text-align: center;">
+                <i class="fas fa-arrow-left"></i> 목록으로
+            </a>
+        </aside>
+
+        <main class="manual-content" id="manual-content">
+            <div class="manual-header">
+                <h1><i class="fas fa-users"></i> 인사·총무팀 AI 활용 매뉴얼</h1>
+                <div class="manual-meta">
+                    <span><i class="fas fa-clock"></i> 읽는 시간: 45분</span>
+                    <span><i class="fas fa-briefcase"></i> 대상: 인사/총무 담당자</span>
+                    <span><i class="fas fa-star"></i> 실전 프롬프트 30+</span>
+                </div>
+            </div>
+
+            <section class="section" id="recruitment">
+                <h2>1. 채용·선발 업무 AI 활용법</h2>
+
+                <h3>📋 채용 공고 작성</h3>
+                <div class="use-case">
+                    <h4>상황: 백엔드 개발자 채용 공고 작성</h4>
+                    <div class="prompt-box">
+                        <span class="label">🎯 실전 프롬프트:</span>
+                        <pre>당신은 IT 채용 전문가입니다.
+
+**포지션:** 시니어 백엔드 개발자
+
+**주요 업무:**
+- Spring Boot 기반 MSA 설계 및 개발
+- AWS 인프라 관리 및 최적화
+- 주니어 개발자 멘토링
+
+**자격 요건:**
+- Java/Spring 프레임워크 5년 이상 실무 경험
+- RESTful API 설계 및 구현 능력
+- MySQL, Redis 등 DB 설계 경험
+- Git, CI/CD 파이프라인 구축 경험
+
+**우대 사항:**
+- Kafka, RabbitMQ 등 메시지 큐 경험
+- Docker, Kubernetes 경험
+- 스타트업 근무 경험
+
+**회사 정보:**
+- TG Alliance 계열사
+- 핀테크 서비스 운영
+- 연 매출 500억원 규모
+
+**작성 요청:**
+1. 지원자가 매력을 느낄 수 있는 채용 공고
+2. 구성: 회사 소개(100자) + 직무 설명(300자) + 복지(200자)
+3. 톤: 전문적이면서도 친근한 느낌
+4. 성장 기회와 기술 스택 강조</pre>
+                    </div>
+                    <div class="result-box">
+                        AI가 매력적인 채용 공고를 생성해줍니다. 회사 비전, 기술 스택, 성장 기회를 강조하며, 지원자의 관심을 끄는 문구를 포함합니다.
+                    </div>
+                </div>
+
+                <h3>❓ 면접 질문 생성</h3>
+                <div class="prompt-box">
+                    <span class="label">🎯 실전 프롬프트:</span>
+                    <pre>당신은 20년 경력의 인사 전문가입니다.
+
+**면접 대상:** 마케팅 팀장 후보
+
+**직무 특성:**
+- SNS 마케팅 전략 수립 및 실행
+- 5명 팀원 관리
+- 월 예산 3,000만원 운영
+
+**평가 항목:**
+1. 리더십 및 팀 관리 능력
+2. 디지털 마케팅 전문성
+3. 데이터 기반 의사결정 능력
+4. 문제 해결 능력
+
+**요청:**
+각 평가 항목당 3개씩, 총 12개의 면접 질문 생성
+- 행동 기반 질문(STAR 기법)
+- 상황 대처 질문
+- 실무 역량 확인 질문
+각 질문에 대한 평가 포인트도 함께 제공</pre>
+                </div>
+
+                <div class="tip-box">
+                    <strong>활용 팁:</strong> 생성된 질문에서 회사 상황에 맞는 5~7개를 선별하고, 
+                    후속 질문도 미리 준비하세요. 면접관 여러 명이 같은 질문을 하지 않도록 
+                    질문을 분배하는 것도 AI에게 요청할 수 있습니다.
+                </div>
+
+                <h3>📧 합격/불합격 통보 이메일</h3>
+                <div class="prompt-box">
+                    <span class="label">🎯 실전 프롬프트 (합격자용):</span>
+                    <pre>**상황:**
+신입 마케터 최종 합격자에게 보낼 이메일 작성
+
+**포함 내용:**
+- 합격 축하 메시지
+- 입사 날짜: 2026년 4월 1일
+- 입사 전 준비 사항 (서류 목록)
+- 첫 출근 시간 및 장소
+- 복장 안내
+- 담당자 연락처
+
+**톤:** 축하하는 느낌 + 전문적
+**길이:** 300자 이내</pre>
+                </div>
+
+                <div class="prompt-box">
+                    <span class="label">🎯 실전 프롬프트 (불합격자용):</span>
+                    <pre>**상황:**
+2차 면접 불합격자에게 보낼 정중한 거절 이메일
+
+**요구사항:**
+- 지원에 대한 감사 표현
+- 역량은 우수하나 다른 후보자 선발 사유
+- 향후 기회 열어두는 문구
+- 피드백 제공 (선택 사항 안내)
+- 회사에 대한 좋은 인상 유지
+
+**톤:** 정중하고 진심어린 느낌
+**길이:** 200자 이내
+**주의:** 법적 분쟁 소지 없도록 표현 주의</pre>
+                </div>
+            </section>
+
+            <section class="section" id="onboarding">
+                <h2>2. 온보딩 업무 AI 활용법</h2>
+
+                <h3>📚 온보딩 체크리스트 작성</h3>
+                <div class="prompt-box">
+                    <span class="label">🎯 실전 프롬프트:</span>
+                    <pre>당신은 온보딩 프로세스 전문가입니다.
+
+**신입사원 정보:**
+- 포지션: 재무팀 사원
+- 입사일: 2026년 4월 1일
+- 근무지: 서울 본사
+
+**온보딩 기간:** 입사 후 4주
+
+**작성 요청:**
+입사 전, 첫 날, 첫 주, 첫 달 단계별 체크리스트
+각 단계마다 다음 포함:
+- HR 팀이 준비할 사항
+- 본인이 완료할 사항
+- 팀장/멘토가 진행할 사항
+
+**형식:**
+표 형식 (단계 | 담당자 | 항목 | 완료 여부)</pre>
+                </div>
+
+                <h3>📖 환영 메시지 & 가이드북</h3>
+                <div class="prompt-box">
+                    <span class="label">🎯 실전 프롬프트:</span>
+                    <pre>**상황:**
+신입사원 김OO님을 위한 환영 메시지 작성
+
+**포함 내용:**
+1. CEO 환영 인사 (150자)
+2. 회사 미션 & 비전 소개 (100자)
+3. 첫 날 일정 안내
+   - 09:00 인사팀 오리엔테이션
+   - 11:00 팀 소개 및 자리 안내
+   - 14:00 전사 시스템 교육
+4. 첫 주 목표 (부담 없는 톤으로)
+5. 멘토 소개
+6. 질문/도움 요청 채널 안내
+
+**톤:** 따뜻하고 친근하면서 전문적
+**길이:** 총 500자 이내</pre>
+                </div>
+
+                <div class="tip-box">
+                    AI로 작성한 온보딩 가이드는 PDF로 저장해서 신입사원에게 사전 전달하세요.
+                    회사 문화, 주요 업무 시스템 접속 방법, 복지 제도 등을 한눈에 볼 수 있게 구성하면 좋습니다.
+                </div>
+            </section>
+
+            <section class="section" id="training">
+                <h2>3. 교육·개발 업무 AI 활용법</h2>
+
+                <h3>📅 교육 과정 기획</h3>
+                <div class="prompt-box">
+                    <span class="label">🎯 실전 프롬프트:</span>
+                    <pre>당신은 HRD 전문가입니다.
+
+**교육 목표:**
+전 직원 대상 "AI 리터러시" 역량 강화
+
+**대상:**
+- TG Alliance 전 계열사 직원 500명
+- IT 역량 수준: 초급~중급
+
+**제약 조건:**
+- 예산: 3,000만원
+- 기간: 3개월
+- 형식: 온라인 + 오프라인 혼합
+
+**요청:**
+1. 커리큘럼 구성 (모듈별 주제 및 시간)
+2. 강사 섭외 계획 (내부/외부)
+3. 평가 방법
+4. 예상 일정표
+5. 효과 측정 지표 (KPI)
+
+**결과 형식:**
+표 + 간단한 설명</pre>
+                </div>
+
+                <h3>📊 교육 만족도 설문 작성</h3>
+                <div class="prompt-box">
+                    <span class="label">🎯 실전 프롬프트:</span>
+                    <pre>**교육 과정:** ChatGPT 활용 실무 과정 (2일, 12시간)
+
+**설문 목적:**
+- 교육 만족도 측정
+- 강사 평가
+- 개선 사항 파악
+
+**요청:**
+교육 만족도 설문지 작성 (15문항)
+- 5점 척도 질문: 10개
+- 주관식 질문: 5개
+- 섹션 구분: 강사, 내용, 진행 방식, 시설, 종합
+
+**포함 항목:**
+- NPS (순추천지수) 질문
+- 실무 적용 가능성
+- 난이도 평가</pre>
+                </div>
+            </section>
+
+            <section class="section" id="evaluation">
+                <h2>4. 평가·보상 업무 AI 활용법</h2>
+
+                <h3>📝 직무기술서(JD) 작성</h3>
+                <div class="prompt-box">
+                    <span class="label">🎯 실전 프롬프트:</span>
+                    <pre>당신은 직무 분석 전문가입니다.
+
+**포지션:** 마케팅 매니저
+
+**부서:** 마케팅팀 (7명)
+
+**보고 라인:** CMO
+
+**작성 요청:**
+직무기술서(Job Description) 작성
+
+**포함 항목:**
+1. 직무 개요 (100자)
+2. 주요 책임 (5~7개, 각 1줄)
+3. 세부 업무 (각 책임별 2~3개 하위 업무)
+4. 필수 역량 (Hard Skills 5개, Soft Skills 3개)
+5. 학력 및 경력 요건
+6. 성과 지표 (KPI 3~5개)
+
+**참고:**
+- 디지털 마케팅 중심 (SNS, 검색광고, 이메일)
+- 데이터 분석 능력 필요
+- 에이전시 협업 경험 우대</pre>
+                </div>
+
+                <h3>⭐ 성과평가 피드백 작성</h3>
+                <div class="prompt-box">
+                    <span class="label">🎯 실전 프롬프트:</span>
+                    <pre>당신은 경험 많은 팀장입니다.
+
+**평가 대상:** 김OO (입사 2년차, 마케팅 담당)
+
+**성과 요약:**
+- 인스타그램 팔로워 30% 증가 (목표 20%)
+- 블로그 콘텐츠 월 8개 작성 (목표 10개, 80% 달성)
+- 고객 문의 응대 만족도 4.5/5.0
+- 광고 운영 ROI 개선 (120% → 150%)
+
+**개선 필요:**
+- 보고서 작성 속도 느림
+- 크로스 기능팀 협업 부족
+
+**요청:**
+건설적인 피드백 작성 (300자)
+- 잘한 점 구체적으로 칭찬
+- 개선점 부드럽게 제안
+- 다음 목표 제시
+- 동기부여하는 톤</pre>
+                </div>
+
+                <div class="tip-box">
+                    평가 피드백은 AI가 초안을 작성하더라도 반드시 직접 수정하고 개인화하세요.
+                    구체적인 사례와 직원의 개인적 상황을 반영하는 것이 중요합니다.
+                </div>
+            </section>
+
+            <section class="section" id="admin">
+                <h2>5. 총무·복지 업무 AI 활용법</h2>
+
+                <h3>📢 복지 제도 안내문 작성</h3>
+                <div class="prompt-box">
+                    <span class="label">🎯 실전 프롬프트:</span>
+                    <pre>**상황:**
+2026년 신규 복지 제도 도입 안내
+
+**신규 복지:**
+1. 재택근무 확대 (주 2회 → 주 3회)
+2. 자기계발비 지원 (연 100만원)
+3. 건강검진 항목 추가 (암 검사 등)
+4. 경조사 휴가 확대
+
+**안내문 요청:**
+- 대상: 전 직원
+- 길이: 500자 이내
+- 구성: 도입 배경 + 제도 설명 + 신청 방법
+- 톤: 친근하고 긍정적
+- 문의 담당자 정보 포함</pre>
+                </div>
+
+                <h3>🏢 사무실 이전 안내</h3>
+                <div class="prompt-box">
+                    <span class="label">🎯 실전 프롬프트:</span>
+                    <pre>**사무실 이전 정보:**
+- 현재: 강남구 역삼동
+- 이전: 서초구 서초동 (2026년 5월 1일)
+- 교통: 2호선 서초역 3번 출구 도보 5분
+- 주차: 지하 2층 (직원 50대 가능)
+
+**안내 사항:**
+1. 이전 일정 및 사유
+2. 신규 사무실 특징 (넓어진 공간, 편의시설 등)
+3. 교통편 안내 (지하철, 버스, 주차)
+4. 이사 당일 재택근무 안내
+5. 개인 물품 포장 가이드
+6. 문의 담당자
+
+**톤:** 변화를 긍정적으로 받아들이도록
+**길이:** 600자</pre>
+                </div>
+
+                <h3>📋 비품 신청 양식 자동화</h3>
+                <div class="prompt-box">
+                    <span class="label">🎯 실전 프롬프트:</span>
+                    <pre>**요청:**
+사무용품 신청 양식 및 프로세스 설계
+
+**현재 문제:**
+- 구두 요청으로 누락 발생
+- 재고 파악 어려움
+- 승인 프로세스 불명확
+
+**요구사항:**
+1. 신청 양식 항목 설계
+   - 신청자 정보
+   - 물품 정보 (카테고리별)
+   - 수량 및 사유
+   - 긴급도
+2. 승인 프로세스 (3단계)
+3. 재고 알림 기준
+
+**결과물:**
+구글폼 또는 엑셀 양식으로 구현 가능한 설계</pre>
+                </div>
+            </section>
+
+            <section class="section" id="communication">
+                <h2>6. 사내 소통 AI 활용법</h2>
+
+                <h3>📰 월간 뉴스레터 작성</h3>
+                <div class="prompt-box">
+                    <span class="label">🎯 실전 프롬프트:</span>
+                    <pre>당신은 사내 커뮤니케이션 전문가입니다.
+
+**발행:** 2026년 3월 TG Alliance 월간 뉴스레터
+
+**포함 내용:**
+1. CEO 메시지 (150자)
+2. 이달의 성과
+   - 신규 고객 유치 20% 증가
+   - 신제품 출시 성공
+3. 직원 소개 (신규 입사자 3명)
+4. 교육 일정 안내
+5. 생일자 축하 (5명)
+6. 다음 달 주요 일정
+
+**톤:** 밝고 긍정적, 팀워크 강조
+**길이:** 총 800자
+**형식:** 이메일 본문용 HTML 구조 포함</pre>
+                </div>
+
+                <h3>🎤 CEO 메시지 대필</h3>
+                <div class="prompt-box">
+                    <span class="label">🎯 실전 프롬프트:</span>
+                    <pre>**상황:**
+2026년 신년사 작성 (CEO 명의)
+
+**회사 현황:**
+- 2025년 매출 30% 성장
+- 신규 사업 2개 진출
+- 직원 수 50% 증가
+
+**2026년 목표:**
+- AI 기술 도입 본격화
+- 해외 시장 진출 준비
+- 조직 문화 혁신
+
+**메시지 요청:**
+1. 2025년 성과 감사
+2. 2026년 비전 제시
+3. 직원들에게 기대하는 바
+4. 동기부여 및 격려
+
+**톤:** 진중하면서도 희망적
+**길이:** 1,000자</pre>
+                </div>
+
+                <div class="tip-box">
+                    CEO 메시지는 AI가 초안을 작성하더라도 CEO의 말투와 철학을 반영해 수정해야 합니다.
+                    과거 CEO 메시지를 AI에게 학습시킨 후 작성을 요청하면 더 자연스러운 결과를 얻을 수 있습니다.
+                </div>
+            </section>
+
+            <div style="text-align: center; margin-top: 60px; padding: 40px; background: linear-gradient(135deg, #f093fb15 0%, #f5576c15 100%); border-radius: 15px;">
+                <h3 style="font-size: 1.5rem; margin-bottom: 20px;">더 많은 직무별 매뉴얼 보기</h3>
+                <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                    <a href="manual-finance.html" class="btn btn-outline">재무·회계팀</a>
+                    <a href="manual-marketing.html" class="btn btn-outline">마케팅팀</a>
+                    <a href="manual-dev.html" class="btn btn-outline">개발팀</a>
+                    <a href="manuals.html" class="btn btn-primary">전체 목록</a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <button class="pdf-button" onclick="downloadPDF()">
+        <i class="fas fa-file-pdf"></i> PDF 다운로드
+    </button>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo-section">
+                        <img src="assets/images/common/footer_tg.jpg" alt="TG 건물" class="footer-building-image">
+                        <div class="footer-text-content">
+                            <h4>TG AI 캠퍼스</h4>
+                            <p>AI 기술 교육 전문 플랫폼</p>
+                        </div>
+                    </div>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>AI 교육 과정</h4>
+                    <ul>
+                        <li><a href="manuals.html#tab-basics-link">기초편</a></li>
+                        <li><a href="manuals.html#tab-advanced-link">실전편</a></li>
+                        <li><a href="manuals.html#tab-prompt-link">프롬프트</a></li>
+                        <li><a href="manuals.html#tab-job-link">직무별 활용</a></li>
+                        <li><a href="manuals.html#tab-advanced-ai-link">AI 고도화</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>AI 실전</h4>
+                    <ul>
+                        <li><a href="manual-prompt-basic.html">프롬프트 작성법</a></li>
+                        <li><a href="manual-automation.html">업무 자동화</a></li>
+                        <li><a href="manual-workflow.html">워크플로우 구축</a></li>
+                        <li><a href="manual-collaboration.html">AI 협업 도구</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>학습 지원</h4>
+                    <ul>
+                        <li><a href="support.html">나만의 AI 코치</a></li>
+                        <li><a href="notices.html">공지사항</a></li>
+                        <li><a href="dictionary.html">AI 용어 사전</a></li>
+                        <li><a href="dashboard.html">학습 현황</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>TG 라운지</h4>
+                    <ul>
+                        <li><a href="about.html">TG AI 캠퍼스 소개</a></li>
+                        <li><a href="tg-family.html">TG 패밀리</a></li>
+                        <li><a href="news.html">TG Alliance 소식</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 TG AI 캠퍼스. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.querySelectorAll('.manual-sidebar a[href^="#"]').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const headerOffset = 120;
+                    const elementPosition = target.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                    
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+                    
+                    document.querySelectorAll('.manual-sidebar a').forEach(a => a.classList.remove('active'));
+                    this.classList.add('active');
+                }
+            });
+        });
+
+        async function downloadPDF() {
+            const button = document.querySelector('.pdf-button');
+            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 생성 중...';
+            button.disabled = true;
+
+            try {
+                const { jsPDF } = window.jspdf;
+                const content = document.getElementById('manual-content');
+                const canvas = await html2canvas(content, { scale: 2, useCORS: true, logging: false });
+                const imgData = canvas.toDataURL('image/png');
+                const pdf = new jsPDF('p', 'mm', 'a4');
+                const pageWidth = pdf.internal.pageSize.getWidth();
+                const pageHeight = pdf.internal.pageSize.getHeight();
+                const imgWidth = pageWidth - 20;
+                const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                let heightLeft = imgHeight;
+                let position = 10;
+
+                pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+                heightLeft -= pageHeight;
+
+                while (heightLeft >= 0) {
+                    position = heightLeft - imgHeight + 10;
+                    pdf.addPage();
+                    pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+                    heightLeft -= pageHeight;
+                }
+
+                pdf.save('TG_AI_인사총무팀_매뉴얼.pdf');
+                button.innerHTML = '<i class="fas fa-check"></i> 다운로드 완료!';
+                setTimeout(() => {
+                    button.innerHTML = '<i class="fas fa-file-pdf"></i> PDF 다운로드';
+                    button.disabled = false;
+                }, 2000);
+            } catch (error) {
+                console.error('PDF 생성 오류:', error);
+                alert('PDF 생성 중 오류가 발생했습니다.');
+                button.innerHTML = '<i class="fas fa-file-pdf"></i> PDF 다운로드';
+                button.disabled = false;
+            }
+        }
+
+        document.querySelector('.mobile-menu-toggle')?.addEventListener('click', function() {
+            document.querySelector('.nav-menu').classList.toggle('active');
+        });
+    </script>
+</body>
+</html>

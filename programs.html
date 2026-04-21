@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>강좌 소개 - TG AI 캠퍼스</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/enhanced-styles.css">
+    <link rel="stylesheet" href="assets/css/samsung-nav.css?v=3">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .programs-hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 100px 0 60px;
+            color: white;
+            text-align: center;
+        }
+        .programs-hero h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        .programs-section {
+            padding: 80px 0;
+        }
+        .program-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            margin-bottom: 40px;
+            transition: transform 0.3s;
+        }
+        .program-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+        }
+        .program-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 40px;
+            color: white;
+        }
+        .program-header h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+        .program-header p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+        }
+        .program-body {
+            padding: 40px;
+        }
+        .program-meta {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        .program-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1rem;
+            color: #666;
+        }
+        .program-meta-item i {
+            color: #3b82f6;
+            font-size: 1.2rem;
+        }
+        .program-results {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 10px;
+            margin-top: 30px;
+        }
+        .program-results h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #1a202c;
+        }
+        .program-results ul {
+            list-style: none;
+            padding: 0;
+        }
+        .program-results li {
+            padding: 10px 0;
+            padding-left: 30px;
+            position: relative;
+            font-size: 1.05rem;
+            color: #4a5568;
+        }
+        .program-results li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #10b981;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        .program-cta {
+            text-align: center;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="utility-bar">
+            <div class="container">
+                <div class="utility-wrapper">
+                    <a href="news.html" class="utility-link">TG 라운지</a>
+                    <a href="notices.html" class="utility-link">공지사항</a>
+                    <a href="tg-family.html" class="utility-link">TG패밀리</a>
+                    <a href="https://tgnco.kr/tg-alliance/" target="_blank" class="external-link tg-alliance">
+                        TG Alliance <i class="fas fa-external-link-alt"></i>
+                    </a>
+                    <span class="external-link" style="color: #ff8c00; cursor: default;">
+                        TG 에듀테크
+                    </span>
+                </div>
+            </div>
+        </div>
+        <nav class="navbar">
+            <div class="container">
+                <div class="nav-wrapper">
+                    <div class="nav-left">
+                        <a href="index.html" class="logo">
+                            <i class="fas fa-brain"></i>
+                            <span><span class="logo-tg">TG</span> AI 캠퍼스</span>
+                        </a>
+                                                <ul class="nav-menu">
+                            <li><a href="about.html">TG AI 캠퍼스소개</a></li>
+                            <li><a href="manuals.html">AI 활용메뉴얼</a></li>
+                            <li><a href="dictionary.html">AI 용어사전</a></li>
+                            <li><a href="recommended.html">AI 활용추천영상</a></li>
+                            <li><a href="curriculum.html">교육과정</a></li>
+                            <li><a href="support.html" style="color: #3b82f6; font-weight: 600;">나만의 AI 코치</a></li>
+                            <li><a href="dashboard.html">학습 현황</a></li>
+                        </ul>
+                    </div>
+                    <div class="nav-right">
+                        <div class="icon-actions">
+                            <a href="mypage.html" class="icon-link"><img src="assets/images/mypage-icon.png" alt="마이페이지" style="height: 20px;"></a>
+                            <a href="login.html" class="icon-link"><img src="assets/images/logout-icon.png" alt="로그인" style="height: 24px;"></a>
+                        </div>
+                        <button class="mobile-menu-toggle"><i class="fas fa-bars"></i></button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <section class="programs-hero">
+        <div class="container">
+            <h1>강좌 소개</h1>
+            <p style="font-size: 1.2rem; opacity: 0.95;">TG AI 캠퍼스의 9개 핵심 강좌를 만나보세요</p>
+        </div>
+    </section>
+
+    <section class="programs-section">
+        <div class="container" style="max-width: 1000px;">
+            
+            <!-- 1. 프롬프트 엔지니어링 & AI 콘텐츠 -->
+            <div class="program-card">
+                <div class="program-header">
+                    <h2>1. 프롬프트 엔지니어링 & AI 콘텐츠</h2>
+                    <p>효과적인 프롬프트 작성법과 AI 기반 콘텐츠 제작</p>
+                </div>
+                <div class="program-body">
+                    <div class="program-meta">
+                        <div class="program-meta-item"><i class="fas fa-signal"></i> 초급~중급</div>
+                        <div class="program-meta-item"><i class="fas fa-clock"></i> 4주 과정</div>
+                        <div class="program-meta-item"><i class="fas fa-users"></i> 전 직원 대상</div>
+                    </div>
+                    <p style="font-size: 1.1rem; line-height: 1.8; color: #4a5568; margin-bottom: 20px;">
+                        AI와의 효과적인 대화 방법을 배우고, 업무에 필요한 고품질 콘텐츠를 빠르게 생성하는 기술을 습득합니다.
+                        ChatGPT, Claude, Gemini 등 다양한 AI 도구를 활용한 실전 프롬프트 작성법을 학습합니다.
+                    </p>
+                    <div class="program-results">
+                        <h3><i class="fas fa-trophy"></i> 학습 결과</h3>
+                        <ul>
+                            <li>프롬프트 작성 스킬 향상</li>
+                            <li>AI 콘텐츠 품질 대폭 개선</li>
+                            <li>업무 창의성 및 생산성 향상</li>
+                            <li>다양한 AI 도구 활용 능력</li>
+                        </ul>
+                    </div>
+                    <div class="program-cta">
+                        <a href="courses.html?course=prompt-engineering" class="btn btn-primary btn-large">
+                            <i class="fas fa-play-circle"></i> 강좌 보러가기
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. AI 업무 활용 -->
+            <div class="program-card">
+                <div class="program-header" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                    <h2>2. AI 업무 활용</h2>
+                    <p>일상 업무에 AI를 적용하여 생산성 극대화</p>
+                </div>
+                <div class="program-body">
+                    <div class="program-meta">
+                        <div class="program-meta-item"><i class="fas fa-signal"></i> 초급</div>
+                        <div class="program-meta-item"><i class="fas fa-clock"></i> 3주 과정</div>
+                        <div class="program-meta-item"><i class="fas fa-users"></i> 전 직원 필수</div>
+                    </div>
+                    <p style="font-size: 1.1rem; line-height: 1.8; color: #4a5568; margin-bottom: 20px;">
+                        이메일 작성, 회의록 정리, 보고서 작성 등 일상 업무에 AI를 즉시 적용할 수 있는 실전 노하우를 배웁니다.
+                        업무 효율을 2배 이상 높이는 AI 활용 전략을 학습합니다.
+                    </p>
+                    <div class="program-results">
+                        <h3><i class="fas fa-trophy"></i> 학습 결과</h3>
+                        <ul>
+                            <li>업무 프로세스 개선</li>
+                            <li>생산성 200% 향상</li>
+                            <li>반복 업무 자동화</li>
+                            <li>업무 시간 단축</li>
+                        </ul>
+                    </div>
+                    <div class="program-cta">
+                        <a href="courses.html?course=ai-business" class="btn btn-primary btn-large">
+                            <i class="fas fa-play-circle"></i> 강좌 보러가기
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. 생성형 AI 100% 활용 -->
+            <div class="program-card">
+                <div class="program-header" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                    <h2>3. 생성형 AI 100% 활용 (초급)</h2>
+                    <p>ChatGPT, DALL-E 등 생성형 AI 도구 완벽 마스터</p>
+                </div>
+                <div class="program-body">
+                    <div class="program-meta">
+                        <div class="program-meta-item"><i class="fas fa-signal"></i> 초급</div>
+                        <div class="program-meta-item"><i class="fas fa-clock"></i> 2주 과정</div>
+                        <div class="program-meta-item"><i class="fas fa-users"></i> 비개발자 대상</div>
+                    </div>
+                    <p style="font-size: 1.1rem; line-height: 1.8; color: #4a5568; margin-bottom: 20px;">
+                        ChatGPT, Midjourney, DALL-E, Stable Diffusion 등 최신 생성형 AI 도구를 활용하여
+                        텍스트, 이미지, 영상 콘텐츠를 자유자재로 생성하는 방법을 배웁니다.
+                    </p>
+                    <div class="program-results">
+                        <h3><i class="fas fa-trophy"></i> 학습 결과</h3>
+                        <ul>
+                            <li>생성형 AI 도구 완벽 이해</li>
+                            <li>고품질 콘텐츠 빠른 생성</li>
+                            <li>창의적 아이디어 구현</li>
+                            <li>비용 절감 및 시간 단축</li>
+                        </ul>
+                    </div>
+                    <div class="program-cta">
+                        <a href="courses.html?course=generative-ai" class="btn btn-primary btn-large">
+                            <i class="fas fa-play-circle"></i> 강좌 보러가기
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. 챗GPT & 스마트 워킹 -->
+            <div class="program-card">
+                <div class="program-header" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+                    <h2>4. 챗GPT & 스마트 워킹</h2>
+                    <p>ChatGPT를 활용한 실전 업무 자동화</p>
+                </div>
+                <div class="program-body">
+                    <div class="program-meta">
+                        <div class="program-meta-item"><i class="fas fa-signal"></i> 초급~중급</div>
+                        <div class="program-meta-item"><i class="fas fa-clock"></i> 3주 과정</div>
+                        <div class="program-meta-item"><i class="fas fa-users"></i> 사무직 대상</div>
+                    </div>
+                    <p style="font-size: 1.1rem; line-height: 1.8; color: #4a5568; margin-bottom: 20px;">
+                        ChatGPT를 업무에 깊이 통합하여 스마트하게 일하는 방법을 배웁니다.
+                        문서 작성, 데이터 분석, 의사결정 지원 등 실무 적용 사례를 중심으로 학습합니다.
+                    </p>
+                    <div class="program-results">
+                        <h3><i class="fas fa-trophy"></i> 학습 결과</h3>
+                        <ul>
+                            <li>ChatGPT 고급 활용법</li>
+                            <li>업무 자동화 시스템 구축</li>
+                            <li>의사결정 속도 향상</li>
+                            <li>문서 품질 개선</li>
+                        </ul>
+                    </div>
+                    <div class="program-cta">
+                        <a href="courses.html?course=chatgpt-working" class="btn btn-primary btn-large">
+                            <i class="fas fa-play-circle"></i> 강좌 보러가기
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. AI 자동화 & 데이터 분석 -->
+            <div class="program-card">
+                <div class="program-header" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+                    <h2>5. AI 자동화 & 데이터 분석 (중급)</h2>
+                    <p>AI 기반 업무 자동화 및 데이터 인사이트 도출</p>
+                </div>
+                <div class="program-body">
+                    <div class="program-meta">
+                        <div class="program-meta-item"><i class="fas fa-signal"></i> 중급</div>
+                        <div class="program-meta-item"><i class="fas fa-clock"></i> 6주 과정</div>
+                        <div class="program-meta-item"><i class="fas fa-users"></i> 데이터 담당자</div>
+                    </div>
+                    <p style="font-size: 1.1rem; line-height: 1.8; color: #4a5568; margin-bottom: 20px;">
+                        Python, Excel, Power BI 등 도구와 AI를 결합하여 복잡한 업무를 자동화하고
+                        데이터에서 의미 있는 인사이트를 빠르게 추출하는 방법을 학습합니다.
+                    </p>
+                    <div class="program-results">
+                        <h3><i class="fas fa-trophy"></i> 학습 결과</h3>
+                        <ul>
+                            <li>AI 기반 업무 자동화 구축</li>
+                            <li>데이터 분석 역량 강화</li>
+                            <li>시각화 및 리포팅 능력</li>
+                            <li>의사결정 지원 시스템 개발</li>
+                        </ul>
+                    </div>
+                    <div class="program-cta">
+                        <a href="courses.html?course=ai-automation" class="btn btn-primary btn-large">
+                            <i class="fas fa-play-circle"></i> 강좌 보러가기
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 6~9 간략 버전으로 계속 -->
+            <div class="program-card">
+                <div class="program-header" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);">
+                    <h2>6. AI 윤리 및 보안</h2>
+                    <p>책임 있는 AI 활용을 위한 윤리 및 보안 가이드</p>
+                </div>
+                <div class="program-body">
+                    <div class="program-meta">
+                        <div class="program-meta-item"><i class="fas fa-signal"></i> 전체</div>
+                        <div class="program-meta-item"><i class="fas fa-clock"></i> 2주</div>
+                    </div>
+                    <p style="font-size: 1.1rem; line-height: 1.8; color: #4a5568;">
+                        AI 사용 시 발생할 수 있는 윤리적 이슈와 보안 위험을 이해하고, 안전하게 AI를 활용하는 방법을 배웁니다.
+                    </p>
+                    <div class="program-cta" style="margin-top: 20px;">
+                        <a href="courses.html?course=ai-ethics" class="btn btn-primary btn-large">강좌 보러가기</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="program-card">
+                <div class="program-header" style="background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);">
+                    <h2>7. AI 마케팅 자동화 (고급)</h2>
+                    <p>AI 기반 마케팅 전략 및 자동화 시스템 구축</p>
+                </div>
+                <div class="program-body">
+                    <div class="program-meta">
+                        <div class="program-meta-item"><i class="fas fa-signal"></i> 고급</div>
+                        <div class="program-meta-item"><i class="fas fa-clock"></i> 8주</div>
+                    </div>
+                    <p style="font-size: 1.1rem; line-height: 1.8; color: #4a5568;">
+                        AI를 활용한 고객 분석, 타겟팅, 콘텐츠 최적화, 캠페인 자동화 등 마케팅 전 과정을 AI로 혁신합니다.
+                    </p>
+                    <div class="program-cta" style="margin-top: 20px;">
+                        <a href="courses.html?course=ai-marketing" class="btn btn-primary btn-large">강좌 보러가기</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="program-card">
+                <div class="program-header" style="background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%);">
+                    <h2>8. MeTTa 프로그래밍</h2>
+                    <p>AI 추론을 위한 MeTTa 언어 및 하이퍼그래프 학습</p>
+                </div>
+                <div class="program-body">
+                    <div class="program-meta">
+                        <div class="program-meta-item"><i class="fas fa-signal"></i> 고급</div>
+                        <div class="program-meta-item"><i class="fas fa-clock"></i> 10주</div>
+                    </div>
+                    <p style="font-size: 1.1rem; line-height: 1.8; color: #4a5568;">
+                        MeTTa 언어를 활용한 AI 추론 시스템 개발 및 하이퍼그래프 기반 지식 표현을 학습합니다. (개발자 대상)
+                    </p>
+                    <div class="program-cta" style="margin-top: 20px;">
+                        <a href="courses.html?course=metta" class="btn btn-primary btn-large">강좌 보러가기</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="program-card">
+                <div class="program-header" style="background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);">
+                    <h2>9. MLOps 실무</h2>
+                    <p>AI/ML 모델의 배포, 운영, 모니터링 전문 과정</p>
+                </div>
+                <div class="program-body">
+                    <div class="program-meta">
+                        <div class="program-meta-item"><i class="fas fa-signal"></i> 고급</div>
+                        <div class="program-meta-item"><i class="fas fa-clock"></i> 12주</div>
+                    </div>
+                    <p style="font-size: 1.1rem; line-height: 1.8; color: #4a5568;">
+                        실제 프로덕션 환경에서 AI 모델을 안정적으로 배포하고 운영하는 MLOps 전 과정을 학습합니다. (개발자/엔지니어 대상)
+                    </p>
+                    <div class="program-cta" style="margin-top: 20px;">
+                        <a href="courses.html?course=mlops" class="btn btn-primary btn-large">강좌 보러가기</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo-section">
+                        <img src="assets/images/common/footer_tg.jpg" alt="TG 건물" class="footer-building-image">
+                        <div class="footer-text-content">
+                            <h4>TG AI 캠퍼스</h4>
+                            <p>AI 기술 교육 전문 플랫폼</p>
+                        </div>
+                    </div>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>AI 교육 과정</h4>
+                    <ul>
+                        <li><a href="manuals.html#tab-basics-link">기초편</a></li>
+                        <li><a href="manuals.html#tab-advanced-link">실전편</a></li>
+                        <li><a href="manuals.html#tab-prompt-link">프롬프트</a></li>
+                        <li><a href="manuals.html#tab-job-link">직무별 활용</a></li>
+                        <li><a href="manuals.html#tab-advanced-ai-link">AI 고도화</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>AI 실전</h4>
+                    <ul>
+                        <li><a href="manual-prompt-basic.html">프롬프트 작성법</a></li>
+                        <li><a href="manual-automation.html">업무 자동화</a></li>
+                        <li><a href="manual-workflow.html">워크플로우 구축</a></li>
+                        <li><a href="manual-collaboration.html">AI 협업 도구</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>학습 지원</h4>
+                    <ul>
+                        <li><a href="support.html">나만의 AI 코치</a></li>
+                        <li><a href="notices.html">공지사항</a></li>
+                        <li><a href="dictionary.html">AI 용어 사전</a></li>
+                        <li><a href="dashboard.html">학습 현황</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>TG 라운지</h4>
+                    <ul>
+                        <li><a href="about.html">TG AI 캠퍼스 소개</a></li>
+                        <li><a href="tg-family.html">TG 패밀리</a></li>
+                        <li><a href="news.html">TG Alliance 소식</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 TG AI 캠퍼스. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    <script src="assets/js/main.js"></script>
+</body>
+</html>

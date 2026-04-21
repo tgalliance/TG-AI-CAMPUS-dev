@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>프롬프트 엔지니어링 기초 - TG AI 캠퍼스</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/samsung-nav.css?v=3">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        .manual-container {
+            display: flex;
+            max-width: 1400px;
+            margin: 50px auto;
+            gap: 30px;
+            padding: 0 20px;
+        }
+        .manual-sidebar {
+            width: 280px;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 100px;
+            height: fit-content;
+        }
+        .manual-sidebar h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #1a202c;
+        }
+        .manual-sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+        .manual-sidebar li {
+            margin-bottom: 12px;
+        }
+        .manual-sidebar a {
+            color: #666;
+            text-decoration: none;
+            display: block;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        .manual-sidebar a:hover,
+        .manual-sidebar a.active {
+            background: #667eea;
+            color: white;
+        }
+        .manual-content {
+            flex: 1;
+            background: white;
+            border-radius: 15px;
+            padding: 50px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        .manual-header {
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 30px;
+            margin-bottom: 40px;
+        }
+        .manual-header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1a202c;
+            margin-bottom: 15px;
+        }
+        .manual-meta {
+            display: flex;
+            gap: 20px;
+            color: #666;
+            font-size: 0.95rem;
+        }
+        .manual-meta span {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .pdf-button {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+        .pdf-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 30px rgba(102, 126, 234, 0.6);
+        }
+        .section {
+            margin-bottom: 50px;
+        }
+        .section h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #1a202c;
+            margin-bottom: 20px;
+            padding-left: 15px;
+            border-left: 5px solid #667eea;
+        }
+        .section h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin: 30px 0 15px;
+        }
+        .section p {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            color: #4a5568;
+            margin-bottom: 15px;
+        }
+        .highlight-box {
+            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+            border-left: 4px solid #667eea;
+            padding: 20px 25px;
+            border-radius: 10px;
+            margin: 25px 0;
+        }
+        .highlight-box strong {
+            color: #667eea;
+            font-weight: 700;
+        }
+        .example-box {
+            background: #f7fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 25px 0;
+        }
+        .example-box .label {
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 10px;
+            display: block;
+        }
+        .example-box pre {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        ul, ol {
+            padding-left: 30px;
+            margin: 20px 0;
+        }
+        li {
+            margin-bottom: 12px;
+            line-height: 1.7;
+            color: #4a5568;
+        }
+        .tip-box {
+            background: #f0fff4;
+            border-left: 4px solid #48bb78;
+            padding: 20px 25px;
+            border-radius: 10px;
+            margin: 25px 0;
+        }
+        .tip-box::before {
+            content: "💡 TIP";
+            font-weight: 700;
+            color: #48bb78;
+            display: block;
+            margin-bottom: 10px;
+        }
+        .warning-box {
+            background: #fffaf0;
+            border-left: 4px solid #ed8936;
+            padding: 20px 25px;
+            border-radius: 10px;
+            margin: 25px 0;
+        }
+        .warning-box::before {
+            content: "⚠️ 주의";
+            font-weight: 700;
+            color: #ed8936;
+            display: block;
+            margin-bottom: 10px;
+        }
+        @media (max-width: 768px) {
+            .manual-container {
+                flex-direction: column;
+            }
+            .manual-sidebar {
+                width: 100%;
+                position: static;
+            }
+            .manual-content {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="utility-bar">
+            <div class="container">
+                <div class="utility-wrapper">
+                    <a href="news.html" class="utility-link">TG 라운지</a>
+                    <a href="notices.html" class="utility-link">공지사항</a>
+                    <a href="tg-family.html" class="utility-link">TG패밀리</a>
+                    <a href="https://tgnco.kr/tg-alliance/" target="_blank" class="external-link tg-alliance">TG Alliance <i class="fas fa-external-link-alt"></i></a>
+                    <span class="external-link" style="color: #ff8c00; cursor: default;">
+                        TG 에듀테크
+                    </span>
+                </div>
+            </div>
+        </div>
+        <nav class="navbar">
+            <div class="container">
+                <div class="nav-wrapper">
+                    <div class="nav-left">
+                        <a href="index.html" class="logo"><i class="fas fa-brain"></i><span><span class="logo-tg">TG</span> AI 캠퍼스</span></a>
+                                                <ul class="nav-menu">
+                            <li><a href="about.html">TG AI 캠퍼스소개</a></li>
+                            <li><a href="manuals.html">AI 활용메뉴얼</a></li>
+                            <li><a href="dictionary.html">AI 용어사전</a></li>
+                            <li><a href="recommended.html">AI 활용추천영상</a></li>
+                            <li><a href="curriculum.html">교육과정</a></li>
+                            <li><a href="support.html" style="color: #3b82f6; font-weight: 600;">나만의 AI 코치</a></li>
+                            <li><a href="dashboard.html">학습 현황</a></li>
+                        </ul>
+                    </div>
+                    <div class="nav-right">
+                        <div class="icon-actions">
+                            <a href="mypage.html" class="icon-link"><img src="assets/images/mypage-icon-new.png?v=2" alt="마이페이지" style="height: 20px;"></a>
+                            <a href="login.html" class="icon-link"><img src="assets/images/logout-icon.png" alt="로그인" style="height: 24px;"></a>
+                        </div>
+                        <button class="mobile-menu-toggle"><i class="fas fa-bars"></i></button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="manual-container">
+        <aside class="manual-sidebar">
+            <h3><i class="fas fa-list"></i> 목차</h3>
+            <ul>
+                <li><a href="#intro" class="active">1. 프롬프트란?</a></li>
+                <li><a href="#principles">2. 작성 원칙</a></li>
+                <li><a href="#structure">3. 구조화 기법</a></li>
+                <li><a href="#examples">4. 실전 예제</a></li>
+                <li><a href="#tips">5. 고급 팁</a></li>
+                <li><a href="#common-mistakes">6. 흔한 실수</a></li>
+            </ul>
+            <hr style="margin: 30px 0; border: none; border-top: 1px solid #e2e8f0;">
+            <a href="manuals.html" class="btn btn-outline" style="width: 100%; text-align: center;">
+                <i class="fas fa-arrow-left"></i> 목록으로
+            </a>
+        </aside>
+
+        <main class="manual-content" id="manual-content">
+            <div class="manual-header">
+                <h1>프롬프트 엔지니어링 기초</h1>
+                <div class="manual-meta">
+                    <span><i class="fas fa-clock"></i> 읽는 시간: 30분</span>
+                    <span><i class="fas fa-signal"></i> 난이도: 입문</span>
+                    <span><i class="fas fa-user"></i> 대상: 전 직원</span>
+                </div>
+            </div>
+
+            <section class="section" id="intro">
+                <h2>1. 프롬프트란 무엇인가?</h2>
+                <p>
+                    프롬프트(Prompt)는 AI 모델에게 전달하는 지시문 또는 질문입니다. 
+                    ChatGPT, Claude, Gemini 같은 생성형 AI를 효과적으로 활용하려면 명확하고 구체적인 프롬프트 작성이 필수입니다.
+                </p>
+
+                <div class="highlight-box">
+                    <strong>왜 프롬프트가 중요한가?</strong>
+                    <p style="margin-top: 10px;">
+                        같은 AI 모델이라도 프롬프트에 따라 결과가 완전히 달라집니다. 
+                        좋은 프롬프트는 업무 효율을 10배 이상 높일 수 있습니다.
+                    </p>
+                </div>
+
+                <h3>나쁜 프롬프트 vs 좋은 프롬프트</h3>
+                
+                <div class="example-box">
+                    <span class="label">❌ 나쁜 프롬프트 예시:</span>
+                    <pre>"마케팅 계획서 써줘"</pre>
+                    <p style="color: #e53e3e; margin-top: 10px;">
+                        → 너무 막연하고 구체적인 정보가 없어 일반적인 답변만 받게 됩니다.
+                    </p>
+                </div>
+
+                <div class="example-box">
+                    <span class="label">✅ 좋은 프롬프트 예시:</span>
+                    <pre>당신은 10년 경력의 디지털 마케팅 전문가입니다.
+
+**목표:**
+- 2026년 1분기 신규 고객 유치 마케팅 계획서 작성
+
+**대상 고객:**
+- 30~40대 직장인
+- IT/스타트업 업계 종사자
+
+**예산:** 5,000만원
+
+**요구사항:**
+1. 시장 분석 (경쟁사 3개 포함)
+2. SNS 마케팅 전략 (인스타그램, 링크드인)
+3. 월별 실행 계획
+4. KPI 및 측정 방법
+
+**형식:** A4 5페이지 분량, 표와 차트 포함</pre>
+                    <p style="color: #38a169; margin-top: 10px;">
+                        → 역할, 목표, 제약조건, 형식이 명확해 정확한 결과를 받을 수 있습니다.
+                    </p>
+                </div>
+            </section>
+
+            <section class="section" id="principles">
+                <h2>2. 효과적인 프롬프트 작성 5대 원칙</h2>
+
+                <h3>원칙 1: 명확성 (Clarity)</h3>
+                <p>
+                    모호한 표현을 피하고, 구체적인 요구사항을 명시하세요.
+                </p>
+                <ul>
+                    <li><strong>나쁜 예:</strong> "좋은 제목 추천해줘"</li>
+                    <li><strong>좋은 예:</strong> "B2B SaaS 제품 랜딩 페이지의 헤드라인을 작성해줘. 클릭률을 높일 수 있도록 호기심을 자극하고, 15자 이내로 제한해줘."</li>
+                </ul>
+
+                <h3>원칙 2: 맥락 제공 (Context)</h3>
+                <p>
+                    AI가 상황을 이해할 수 있도록 배경 정보를 제공하세요.
+                </p>
+                <div class="example-box">
+                    <span class="label">✅ 맥락 제공 예시:</span>
+                    <pre>**배경:**
+우리 회사는 중소기업 대상 HR 소프트웨어를 판매합니다.
+주요 고객층은 50~200명 규모 기업의 인사팀장입니다.
+
+**현재 상황:**
+경쟁사 3개가 최근 가격을 20% 인하했고, 우리 매출이 감소하고 있습니다.
+
+**목표:**
+가격 경쟁력 없이도 차별화할 수 있는 마케팅 메시지를 만들어주세요.</pre>
+                </div>
+
+                <h3>원칙 3: 역할 부여 (Role)</h3>
+                <p>
+                    AI에게 전문가 역할을 부여하면 더 전문적인 답변을 받을 수 있습니다.
+                </p>
+                <ul>
+                    <li>"당신은 20년 경력의 재무 분석가입니다."</li>
+                    <li>"당신은 뉴욕타임스 베스트셀러 작가입니다."</li>
+                    <li>"당신은 실리콘밸리 출신 UX 디자이너입니다."</li>
+                </ul>
+
+                <h3>원칙 4: 형식 지정 (Format)</h3>
+                <p>
+                    원하는 결과물의 형식을 명확히 지정하세요.
+                </p>
+                <ul>
+                    <li>표 형식 (Markdown 테이블)</li>
+                    <li>번호 매긴 목록</li>
+                    <li>JSON 형식</li>
+                    <li>단계별 가이드</li>
+                    <li>요약 (3줄 이내)</li>
+                </ul>
+
+                <h3>원칙 5: 제약조건 명시 (Constraints)</h3>
+                <p>
+                    길이, 톤, 제외 사항 등을 명확히 하세요.
+                </p>
+                <ul>
+                    <li><strong>길이:</strong> "300자 이내로 작성"</li>
+                    <li><strong>톤:</strong> "친근하고 캐주얼한 말투"</li>
+                    <li><strong>제외:</strong> "전문 용어 사용 금지"</li>
+                </ul>
+            </section>
+
+            <section class="section" id="structure">
+                <h2>3. 프롬프트 구조화 기법</h2>
+
+                <h3>🎯 기본 템플릿 (R.I.S.E 기법)</h3>
+                <div class="highlight-box">
+                    <strong>R.I.S.E 템플릿</strong>
+                    <ul style="margin-top: 15px; padding-left: 20px;">
+                        <li><strong>R (Role):</strong> 역할 부여</li>
+                        <li><strong>I (Input):</strong> 입력 정보/맥락</li>
+                        <li><strong>S (Steps):</strong> 수행 단계</li>
+                        <li><strong>E (Expectation):</strong> 기대 결과</li>
+                    </ul>
+                </div>
+
+                <div class="example-box">
+                    <span class="label">✅ R.I.S.E 적용 예시:</span>
+                    <pre>**[Role] 역할:**
+당신은 10년 경력의 UX 라이터입니다.
+
+**[Input] 입력 정보:**
+- 제품: 모바일 뱅킹 앱
+- 상황: 사용자가 송금 한도 초과 시 표시되는 에러 메시지
+- 현재 메시지: "한도 초과. 재시도하세요."
+
+**[Steps] 수행 단계:**
+1. 사용자 감정 고려 (불안감 최소화)
+2. 해결 방법 명시
+3. 친근한 톤 유지
+4. 15자 이내로 작성
+
+**[Expectation] 기대 결과:**
+- 3가지 대안 메시지 제안
+- 각 메시지에 대한 짧은 설명 포함</pre>
+                </div>
+
+                <h3>🔗 체인 프롬프팅 (Chain Prompting)</h3>
+                <p>
+                    복잡한 작업은 여러 단계로 나누어 진행하세요.
+                </p>
+                <div class="example-box">
+                    <span class="label">예시: 블로그 포스트 작성</span>
+                    <pre><strong>1단계:</strong> "AI 트렌드 2026" 주제로 5가지 소제목 제안해줘
+
+<strong>2단계:</strong> 첫 번째 소제목 "GPT-5의 등장과 영향"에 대해 500자로 작성
+
+<strong>3단계:</strong> 이 내용에 통계 데이터 3개 추가해줘
+
+<strong>4단계:</strong> SEO에 최적화된 메타 설명(150자) 작성해줘</pre>
+                </div>
+
+                <div class="tip-box">
+                    체인 프롬프팅은 복잡한 보고서, 기획서, 긴 콘텐츠 작성 시 매우 효과적입니다.
+                    한 번에 모든 것을 요구하지 말고, 단계별로 다듬어 나가세요.
+                </div>
+            </section>
+
+            <section class="section" id="examples">
+                <h2>4. 직무별 실전 프롬프트 예제</h2>
+
+                <h3>📊 재무팀: 재무제표 분석</h3>
+                <div class="example-box">
+                    <pre>당신은 CFO 출신의 재무 분석 전문가입니다.
+
+**첨부 데이터:**
+- 2025년 1~4분기 손익계산서
+- 전년도 동기 대비 데이터
+
+**분석 요청:**
+1. 주요 재무 지표 계산 (영업이익률, ROE, 유동비율)
+2. 전년 대비 증감 원인 분석
+3. 다음 분기 개선 방안 3가지
+
+**결과 형식:**
+- 엑셀 표 형식으로 정리
+- 경영진 보고용 요약 (5줄)</pre>
+                </div>
+
+                <h3>📢 마케팅팀: SNS 콘텐츠 기획</h3>
+                <div class="example-box">
+                    <pre>당신은 인스타그램 마케팅 전문가입니다.
+
+**브랜드 정보:**
+- 친환경 화장품 브랜드
+- 타겟: 2030 여성
+- 브랜드 톤: 밝고 친근함
+
+**요청사항:**
+이번 주 인스타그램 피드 게시물 3개 기획
+- 각 게시물의 메인 메시지
+- 캡션 (이모지 포함, 150자)
+- 해시태그 15개
+- 이미지 콘셉트 설명</pre>
+                </div>
+
+                <h3>👥 인사팀: 채용 공고 작성</h3>
+                <div class="example-box">
+                    <pre>당신은 IT 기업 채용 담당자입니다.
+
+**채용 포지션:** 시니어 백엔드 개발자
+
+**주요 업무:**
+- Spring Boot 기반 API 개발
+- AWS 인프라 관리
+- 주니어 개발자 멘토링
+
+**자격 요건:**
+- 경력 5년 이상
+- Java, Spring, MySQL 능숙
+- 클라우드 경험 필수
+
+**우대 사항:**
+- MSA 설계 경험
+- 스타트업 근무 경험
+
+**요청:**
+지원자가 매력을 느낄 수 있는 채용 공고 작성
+- 회사 소개 (100자)
+- 직무 설명 (200자)
+- 복지 및 문화 강조
+- 친근하고 전문적인 톤</pre>
+                </div>
+            </section>
+
+            <section class="section" id="tips">
+                <h2>5. 고급 프롬프팅 팁</h2>
+
+                <h3>💡 Few-Shot Learning 활용</h3>
+                <p>
+                    예시를 제공하면 AI가 패턴을 학습해 더 정확한 결과를 만듭니다.
+                </p>
+                <div class="example-box">
+                    <span class="label">예시:</span>
+                    <pre>다음 형식으로 제품 설명을 작성해줘:
+
+**예시 1:**
+제품명: 무선 이어폰 X100
+설명: 초경량 5g 디자인으로 장시간 착용해도 편안합니다. ANC 기술로 지하철에서도 몰입감 있는 청취 경험을 선사합니다.
+
+**예시 2:**
+제품명: 스마트 워치 S5
+설명: 심박수, 수면, 스트레스를 24시간 모니터링합니다. 50m 방수로 수영 중에도 착용 가능하며, 한 번 충전으로 7일 사용 가능합니다.
+
+---
+
+이제 이 형식으로 작성해줘:
+제품명: 블루투스 스피커 B200</pre>
+                </div>
+
+                <h3>🔄 반복 개선 (Iterative Refinement)</h3>
+                <p>
+                    한 번에 완벽한 결과를 기대하지 말고, 단계별로 개선하세요.
+                </p>
+                <div class="example-box">
+                    <pre><strong>1차:</strong> "이메일 마케팅 제목 10개 추천해줘"
+↓ (결과 확인 후)
+
+<strong>2차:</strong> "3번째와 7번째 제목을 합쳐서 더 임팩트 있게 만들어줘"
+↓
+
+<strong>3차:</strong> "이모지 2개 추가하고, 긴급성을 강조해줘"</pre>
+                </div>
+
+                <h3>🎭 페르소나 설정</h3>
+                <p>
+                    대상 독자의 페르소나를 설정하면 더 타겟팅된 콘텐츠를 만들 수 있습니다.
+                </p>
+                <div class="example-box">
+                    <pre>**타겟 페르소나:**
+- 이름: 김현수 (가상)
+- 나이: 35세
+- 직업: IT 스타트업 마케팅 팀장
+- 고민: 한정된 예산으로 최대 성과 내기
+- 선호: 데이터 기반 의사결정, 빠른 실행
+
+이 페르소나를 위한 웨비나 초대 이메일을 작성해줘.</pre>
+                </div>
+            </section>
+
+            <section class="section" id="common-mistakes">
+                <h2>6. 흔한 실수와 해결법</h2>
+
+                <div class="warning-box">
+                    <strong>실수 1: 너무 짧은 프롬프트</strong>
+                    <p>"제안서 써줘" ❌</p>
+                    <p><strong>해결:</strong> 배경, 목적, 형식을 모두 포함하세요.</p>
+                </div>
+
+                <div class="warning-box">
+                    <strong>실수 2: 여러 요청을 한 번에</strong>
+                    <p>"제안서도 쓰고 이메일도 작성하고 PPT 슬라이드도 만들어줘" ❌</p>
+                    <p><strong>해결:</strong> 한 번에 하나씩 요청하세요.</p>
+                </div>
+
+                <div class="warning-box">
+                    <strong>실수 3: 결과를 검증하지 않음</strong>
+                    <p>AI의 답변을 그대로 사용 ❌</p>
+                    <p><strong>해결:</strong> 항상 사실 확인하고, 수정하세요. AI는 때때로 틀린 정보를 자신있게 말합니다.</p>
+                </div>
+
+                <div class="warning-box">
+                    <strong>실수 4: 맥락 없이 이어가기</strong>
+                    <p>새 대화에서 "그거 수정해줘" ❌</p>
+                    <p><strong>해결:</strong> 매번 충분한 맥락을 제공하세요.</p>
+                </div>
+
+                <div class="tip-box">
+                    <strong>최종 팁:</strong> 프롬프트 작성도 연습이 필요합니다. 
+                    같은 작업을 다양한 프롬프트로 시도해보고, 가장 좋은 결과를 낸 프롬프트를 저장해두세요.
+                    나만의 프롬프트 라이브러리를 만드는 것이 핵심입니다!
+                </div>
+            </section>
+
+            <div style="text-align: center; margin-top: 60px; padding: 40px; background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%); border-radius: 15px;">
+                <h3 style="font-size: 1.5rem; margin-bottom: 20px;">이 매뉴얼이 도움이 되셨나요?</h3>
+                <p style="margin-bottom: 30px;">더 많은 AI 활용 팁을 보려면 다른 매뉴얼도 확인해보세요!</p>
+                <a href="manuals.html" class="btn btn-primary" style="padding: 15px 40px; font-size: 1.1rem;">
+                    <i class="fas fa-arrow-left"></i> 매뉴얼 목록으로
+                </a>
+            </div>
+        </main>
+    </div>
+
+    <button class="pdf-button" onclick="downloadPDF()">
+        <i class="fas fa-file-pdf"></i> PDF 다운로드
+    </button>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo-section">
+                        <img src="assets/images/common/footer_tg.jpg" alt="TG 건물" class="footer-building-image">
+                        <div class="footer-text-content">
+                            <h4>TG AI 캠퍼스</h4>
+                            <p>AI 기술 교육 전문 플랫폼</p>
+                        </div>
+                    </div>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>AI 교육 과정</h4>
+                    <ul>
+                        <li><a href="manuals.html#tab-basics-link">기초편</a></li>
+                        <li><a href="manuals.html#tab-advanced-link">실전편</a></li>
+                        <li><a href="manuals.html#tab-prompt-link">프롬프트</a></li>
+                        <li><a href="manuals.html#tab-job-link">직무별 활용</a></li>
+                        <li><a href="manuals.html#tab-advanced-ai-link">AI 고도화</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>AI 실전</h4>
+                    <ul>
+                        <li><a href="manual-prompt-basic.html">프롬프트 작성법</a></li>
+                        <li><a href="manual-automation.html">업무 자동화</a></li>
+                        <li><a href="manual-workflow.html">워크플로우 구축</a></li>
+                        <li><a href="manual-collaboration.html">AI 협업 도구</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>학습 지원</h4>
+                    <ul>
+                        <li><a href="support.html">나만의 AI 코치</a></li>
+                        <li><a href="notices.html">공지사항</a></li>
+                        <li><a href="dictionary.html">AI 용어 사전</a></li>
+                        <li><a href="dashboard.html">학습 현황</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>TG 라운지</h4>
+                    <ul>
+                        <li><a href="about.html">TG AI 캠퍼스 소개</a></li>
+                        <li><a href="tg-family.html">TG 패밀리</a></li>
+                        <li><a href="news.html">TG Alliance 소식</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 TG AI 캠퍼스. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 목차 스크롤 연동
+        document.querySelectorAll('.manual-sidebar a[href^="#"]').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const headerOffset = 120;
+                    const elementPosition = target.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                    
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+                    
+                    // 활성 링크 업데이트
+                    document.querySelectorAll('.manual-sidebar a').forEach(a => a.classList.remove('active'));
+                    this.classList.add('active');
+                }
+            });
+        });
+
+        // PDF 다운로드 기능
+        async function downloadPDF() {
+            const button = document.querySelector('.pdf-button');
+            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 생성 중...';
+            button.disabled = true;
+
+            try {
+                const { jsPDF } = window.jspdf;
+                const content = document.getElementById('manual-content');
+                
+                // html2canvas로 콘텐츠를 이미지로 변환
+                const canvas = await html2canvas(content, {
+                    scale: 2,
+                    useCORS: true,
+                    logging: false
+                });
+
+                const imgData = canvas.toDataURL('image/png');
+                const pdf = new jsPDF('p', 'mm', 'a4');
+                
+                const pageWidth = pdf.internal.pageSize.getWidth();
+                const pageHeight = pdf.internal.pageSize.getHeight();
+                const imgWidth = pageWidth - 20; // 좌우 여백 10mm
+                const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                
+                let heightLeft = imgHeight;
+                let position = 10;
+
+                pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+                heightLeft -= pageHeight;
+
+                // 페이지 추가 (콘텐츠가 길 경우)
+                while (heightLeft >= 0) {
+                    position = heightLeft - imgHeight + 10;
+                    pdf.addPage();
+                    pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+                    heightLeft -= pageHeight;
+                }
+
+                pdf.save('TG_AI_프롬프트_엔지니어링_기초.pdf');
+                
+                button.innerHTML = '<i class="fas fa-check"></i> 다운로드 완료!';
+                setTimeout(() => {
+                    button.innerHTML = '<i class="fas fa-file-pdf"></i> PDF 다운로드';
+                    button.disabled = false;
+                }, 2000);
+            } catch (error) {
+                console.error('PDF 생성 오류:', error);
+                alert('PDF 생성 중 오류가 발생했습니다. 다시 시도해주세요.');
+                button.innerHTML = '<i class="fas fa-file-pdf"></i> PDF 다운로드';
+                button.disabled = false;
+            }
+        }
+
+        // 모바일 메뉴
+        document.querySelector('.mobile-menu-toggle')?.addEventListener('click', function() {
+            document.querySelector('.nav-menu').classList.toggle('active');
+        });
+    </script>
+</body>
+</html>

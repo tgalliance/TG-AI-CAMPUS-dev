@@ -1,0 +1,1301 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TG AI 캠퍼스 - 전사 직원 AI 교육 플랫폼</title>
+    <link rel="preload" as="video" href="assets/videos/banner/banner_01.mp4.mp4" type="video/mp4">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/enhanced-styles.css">
+    <link rel="stylesheet" href="assets/css/sections.css">
+    <link rel="stylesheet" href="assets/css/samsung-nav.css?v=3">
+    <link rel="stylesheet" href="assets/css/apple-style.css">
+    <link rel="stylesheet" href="assets/css/scroll-indicator.css">
+    <link rel="stylesheet" href="assets/css/tg-news-style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header / Navigation -->
+    <header class="header">
+        <!-- Top Utility Bar -->
+        <div class="utility-bar">
+            <div class="container">
+                <div class="utility-wrapper">
+                    <a href="news.html" class="utility-link">TG 라운지</a>
+                    <a href="notices.html" class="utility-link">공지사항</a>
+                    <a href="tg-family.html" class="utility-link">TG패밀리</a>
+                    <a href="https://tgnco.kr/tg-alliance/" target="_blank" class="external-link tg-alliance">
+                        TG Alliance <i class="fas fa-external-link-alt"></i>
+                    </a>
+                    <span class="external-link" style="color: #ff8c00; cursor: default;">
+                        TG 에듀테크
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Navigation Bar -->
+        <nav class="navbar">
+            <div class="container">
+                <div class="nav-wrapper">
+                    <!-- Left Side: Logo + Menu -->
+                    <div class="nav-left">
+                        <a href="index.html" class="logo">
+                            <i class="fas fa-brain"></i>
+                            <span><span class="logo-tg">TG</span> AI 캠퍼스</span>
+                        </a>
+                        
+                                                <ul class="nav-menu">
+                            <li><a href="about.html">TG AI 캠퍼스소개</a></li>
+                            <li><a href="manuals.html">AI 활용메뉴얼</a></li>
+                            <li><a href="dictionary.html">AI 용어사전</a></li>
+                            <li><a href="recommended.html">AI 활용추천영상</a></li>
+                            <li><a href="curriculum.html">교육과정</a></li>
+                            <li><a href="support.html" style="color: #3b82f6; font-weight: 600;">나만의 AI 코치</a></li>
+                            <li><a href="dashboard.html">학습 현황</a></li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Right Side: Search + Icons -->
+                    <div class="nav-right">
+                        <!-- Search -->
+                        <div class="search-wrapper">
+                            <form class="search-form">
+                                <button type="submit" class="search-btn">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                                <input type="text" class="search-input" placeholder="검색" autocomplete="off">
+                            </form>
+                        </div>
+                        
+                        <!-- Icon Actions -->
+                        <div class="icon-actions">
+                            <a href="mypage.html" class="icon-link" title="마이페이지">
+                                <img src="assets/images/mypage-icon-new.png?v=2" alt="마이페이지" class="icon-img mypage-icon" style="width: auto !important; height: 20px !important; max-height: 20px !important;">
+                            </a>
+                            <a href="login.html" class="icon-link" id="authIcon" title="로그인">
+                                <img src="assets/images/logout-icon.png" alt="로그인" class="icon-img" style="width: 24px !important; height: 24px !important; max-width: 24px !important; max-height: 24px !important;">
+                            </a>
+                        </div>
+                        
+                        <!-- Mobile Toggle -->
+                        <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                            <i class="fas fa-bars"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!--  메인 배너 섹션 Section -->
+    <section class="hero hero-with-image">
+        <div class="hero-background">
+            <div class="hero-slide active" data-slide="0">
+                <video muted playsinline autoplay preload="auto" class="hero-bg-video" id="heroBannerFirst" poster="assets/images/main/main_banner01.jpg">
+                    <source src="assets/videos/banner/banner_01.mp4.mp4" type="video/mp4">
+                </video>
+            </div>
+            <div class="hero-slide" data-slide="1">
+                <video muted playsinline preload="none" class="hero-bg-video">
+                    <source src="assets/videos/banner/banner_02.mp4" type="video/mp4">
+                </video>
+            </div>
+            <div class="hero-slide" data-slide="2">
+                <video muted playsinline preload="none" class="hero-bg-video">
+                    <source src="assets/videos/banner/banner_03.mp4" type="video/mp4">
+                </video>
+            </div>
+            <div class="hero-slide" data-slide="3">
+                <video muted playsinline preload="none" class="hero-bg-video">
+                    <source src="assets/videos/banner/banner_04.mp4" type="video/mp4">
+                </video>
+            </div>
+            <div class="hero-overlay"></div>
+        </div>
+
+        <!-- Slider Dots -->
+        <div class="hero-slider-dots">
+            <span class="slider-dot active" data-slide="0"></span>
+            <span class="slider-dot" data-slide="1"></span>
+            <span class="slider-dot" data-slide="2"></span>
+            <span class="slider-dot" data-slide="3"></span>
+        </div>
+        
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <i class="fas fa-graduation-cap"></i> TG ALLIANCE 전사 AI 교육 플랫폼
+                </div>
+                <h1 class="hero-title" style="font-size: 3.3rem; font-weight: 400; letter-spacing: -0.04em;">AI 활용 역량을 키우는<br><span style="color: #3b82f6; font-weight: 400; font-size: 2.3rem;">TG Alliance</span><span style="color: white; font-weight: 400; font-size: 2.3rem;"> 인을 위한 AI <strong>Training Center</strong></span></h1>
+                <div class="hero-buttons" style="justify-content: center; margin-top: 28px;">
+                    <a href="support.html" class="btn btn-primary btn-large">
+                        <i class="fas fa-robot"></i> 나만의 AI 코치
+                    </a>
+                </div>
+                <!-- [hero-description] (필요시 아래 주석 해제하여 복구)
+                <p class="hero-description" style="margin-top: 100px;">
+                    프롬프트부터 AI 자동화까지<br>
+                    전사 직원을 위한 체계적인 AI 교육 플랫폼
+                </p>
+                -->
+                <div class="hero-stats" style="display:none;">
+                    <div class="hero-stat-item">
+                        <a href="manuals.html#tab-advanced-link" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 15px;">
+                            <i class="fas fa-book-open" style="color: #fbbf24; font-size: 1.2rem;"></i>
+                            <div>
+                                <strong>AI 실무적용</strong>
+                                <span>프롬프트 작성 마스터</span>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="hero-stat-item">
+                        <a href="manuals.html#tab-job-link" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 15px;">
+                            <i class="fas fa-newspaper" style="color: #3b82f6; font-size: 1.2rem;"></i>
+                            <div>
+                                <strong>AI 직무별</strong>
+                                <span>내 직무에 맞는 AI 활용법</span>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="hero-stat-item">
+                        <a href="manual-collaboration.html" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 15px;">
+                            <i class="fas fa-rss" style="color: #10b981; font-size: 1.2rem;"></i>
+                            <div>
+                                <strong>협업 및 표준화</strong>
+                                <span>팀 프롬프트 라이브러리</span>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TG AI HUB 배너  Section -->
+    <section id="tg-gateway-section" style="padding: 40px 0 0 0; background: #fff;">
+        <div class="container" style="padding-left: 0; padding-right: 0;">
+        <h2 style="font-size: 1.8rem; font-weight: 800; margin-bottom: 14px; letter-spacing: -0.5px; text-align: center;">
+            <span style="color: #0099FF;">TG</span> AI HUB
+        </h2>
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; height: 620px;">
+
+            <!-- TG AI HUB 배너 01  -->
+            <a href="support.html" class="tg-gw-card" style="position: relative; display: block; overflow: hidden; text-decoration: none;">
+                <img src="assets\images\main\img_aihub01.jpg" alt="AI 코치"
+                     style="position: absolute; width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease;">
+                <div style="position: absolute; inset: 0; background: rgba(10,20,50,0.62);"></div>
+                <div style="position: absolute; top: 48px; left: 40px; right: 40px; overflow: hidden; padding-bottom: 6px;">
+                    <p class="tg-gw-main-txt" style="color: #fff; font-size: 1.9375rem; font-weight: 400; line-height: 1.45; margin: 0;">AI 교육강좌를 위해<br>AI코치가 함께합니다.</p>
+                </div>
+                <div style="position: absolute; top: 180px; left: 40px; overflow: hidden; padding-bottom: 3px;">
+                    <p class="tg-gw-sub-txt" style="color: #fff; font-size: 0.88rem; margin: 0; text-decoration: underline; text-underline-offset: 4px;"><strong>나만의 AI 코치</strong> 바로가기</p>
+                </div>
+            </a>
+
+            <!-- TG AI HUB 배너 02-->
+            <a href="news.html" class="tg-gw-card" style="position: relative; display: block; overflow: hidden; text-decoration: none;">
+                <img src="https://images.unsplash.com/photo-1556761175-4b46a572b786?w=800&h=600&fit=crop" alt="TG 라운지"
+                     style="position: absolute; width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease;">
+                <div style="position: absolute; inset: 0; background: rgba(5,10,30,0.72);"></div>
+                <div style="position: absolute; top: 48px; left: 40px; right: 40px; overflow: hidden; padding-bottom: 6px;">
+                    <p class="tg-gw-main-txt" style="color: #fff; font-size: 1.9375rem; font-weight: 400; line-height: 1.45; margin: 0;">TG 人 들만의<br>Talk&amp;Talk</p>
+                </div>
+                <div style="position: absolute; top: 180px; left: 40px; overflow: hidden; padding-bottom: 3px;">
+                    <p class="tg-gw-sub-txt" style="color: #fff; font-size: 0.88rem; margin: 0; text-decoration: underline; text-underline-offset: 4px;"><strong>TG 라운지</strong> 바로가기</p>
+                </div>
+            </a>
+
+            <!-- TG AI HUB 배너 02-->
+            <a href="tg-family.html" class="tg-gw-card" style="position: relative; display: block; overflow: hidden; text-decoration: none;">
+                <img src="assets\images\main\img_aihub02.jpg" alt="TG 패밀리"
+                     style="position: absolute; width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease;">
+                <div style="position: absolute; inset: 0; background: rgba(10,20,50,0.62);"></div>
+                <div style="position: absolute; top: 48px; left: 40px; right: 40px; overflow: hidden; padding-bottom: 6px;">
+                    <p class="tg-gw-main-txt" style="color: #fff; font-size: 1.9375rem; font-weight: 400; line-height: 1.45; margin: 0;">따로 똑같이<br>우리는 TG입니다.</p>
+                </div>
+                <div style="position: absolute; top: 180px; left: 40px; overflow: hidden; padding-bottom: 3px;">
+                    <p class="tg-gw-sub-txt" style="color: #fff; font-size: 0.88rem; margin: 0; text-decoration: underline; text-underline-offset: 4px;"><strong>TG 패밀리</strong> 바로가기</p>
+                </div>
+            </a>
+
+        </div>
+        </div>
+    </section>
+    <style>
+        .tg-gw-card { position: relative; }
+        .tg-gw-card img { transition: transform 0.6s ease; }
+        .tg-gw-card:hover img { transform: scale(1.06); }
+
+        /* 테두리 드로잉 애니메이션 - ㄱ+ㄴ 만나는 효과 */
+        @keyframes draw-before {
+            0%   { transform: scaleX(0) scaleY(0); }
+            22%  { transform: scaleX(1) scaleY(0); }
+            50%  { transform: scaleX(1) scaleY(1); }
+            68%  { transform: scaleX(1) scaleY(1); }
+            82%  { transform: scaleX(1) scaleY(0); }
+            100% { transform: scaleX(0) scaleY(0); }
+        }
+        @keyframes draw-after {
+            0%   { transform: scaleX(0) scaleY(0); }
+            22%  { transform: scaleX(1) scaleY(0); }
+            50%  { transform: scaleX(1) scaleY(1); }
+            68%  { transform: scaleX(1) scaleY(1); }
+            82%  { transform: scaleX(1) scaleY(0); }
+            100% { transform: scaleX(0) scaleY(0); }
+        }
+        .tg-gw-card::before,
+        .tg-gw-card::after {
+            content: '';
+            position: absolute;
+            top: 14px; left: 14px; right: 14px; bottom: 14px;
+            z-index: 10;
+        }
+        .tg-gw-card::before {
+            border-top: 1.5px solid rgba(255,255,255,0.9);
+            border-right: 1.5px solid rgba(255,255,255,0.9);
+            transform: scaleX(0) scaleY(0);
+            transform-origin: top right;
+        }
+        .tg-gw-card::after {
+            border-bottom: 1.5px solid rgba(255,255,255,0.9);
+            border-left: 1.5px solid rgba(255,255,255,0.9);
+            transform: scaleX(0) scaleY(0);
+            transform-origin: bottom left;
+        }
+        .tg-gw-card:hover::before,
+        .tg-gw-card.in-view::before {
+            animation: draw-before 1.6s ease forwards;
+        }
+        .tg-gw-card:hover::after,
+        .tg-gw-card.in-view::after {
+            animation: draw-after 1.6s ease forwards;
+        }
+
+        /* TG GATEWAY 텍스트 커튼 애니메이션 */
+        .tg-gw-main-txt {
+            transform: translateY(110%);
+            transition: transform 0.78s cubic-bezier(0.16, 1, 0.3, 1) 0.1s;
+        }
+        .tg-gw-sub-txt {
+            transform: translateY(110%);
+            transition: transform 0.72s cubic-bezier(0.16, 1, 0.3, 1) 0.42s;
+        }
+        .tg-gw-card.txt-shown .tg-gw-main-txt,
+        .tg-gw-card.txt-shown .tg-gw-sub-txt {
+            transform: translateY(0);
+        }
+
+        /* TG HIGHLIGHT 스크롤 & 호버 애니메이션 */
+        @keyframes hl-fade-up {
+            0%   { opacity: 0;   transform: translateY(28px); }
+            100% { opacity: 1;   transform: translateY(0); }
+        }
+        @keyframes hl-hover-up {
+            0%   { opacity: 0.4; transform: translateY(14px); }
+            100% { opacity: 1;   transform: translateY(0); }
+        }
+        .tg-hl-card {
+            opacity: 0;
+            transform: translateY(28px);
+        }
+        .tg-hl-card.in-view {
+            animation: hl-fade-up 0.6s ease forwards;
+        }
+        .tg-hl-card:hover {
+            animation: hl-hover-up 0.45s ease forwards;
+        }
+    </style>
+
+    <!-- TG HIGHLIGHT Section -->
+    <section id="tg-highlight-section" style="padding: 30px 0 20px; background: #fff;">
+        <div class="container" style="padding-left: 0; padding-right: 0;">
+            <h2 style="font-size: 1.8rem; font-weight: 800; margin-bottom: 30px; letter-spacing: -0.5px; text-align: center;">
+                <span style="color: #0099FF;">TG</span> HIGHLIGHT
+            </h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 3px;">
+
+                <!-- Card 1 -->
+                <a href="news-detail-sambo-history.html" class="tg-hl-card" style="position: relative; display: block; overflow: hidden; text-decoration: none; height: 350px;">
+                    <img src="assets/images/main/tghigh01.png" alt="제로 트러스트 기반 디바이스 협약"
+                         class="tg-hl-img" style="position: absolute; width: 100%; height: 100%; object-fit: cover; object-position: top; transition: transform 0.6s ease;">
+                    <div class="tg-hl-panel" style="background: rgba(26,26,46,0.80);">
+                        <p class="tg-hl-text">TG 삼보, 프라이빗 테크놀로지스와 제로트러스트 기반 디바이스 업무 협약 체결</p>
+                        <span class="tg-hl-arrow">→</span>
+                    </div>
+                </a>
+
+                <!-- Card 2 -->
+                <a href="news-detail.html?id=2" class="tg-hl-card" style="position: relative; display: block; overflow: hidden; text-decoration: none; height: 350px;">
+                    <div style="position: absolute; left: 0; top: 0; width: 62%; height: 100%; overflow: hidden;">
+                        <img src="assets/images/main/img_news02.png" alt="스테이 스트롱"
+                             class="tg-hl-img" style="width: 100%; height: 100%; object-fit: cover; object-position: top; transition: transform 0.6s ease;">
+                        <div style="position: absolute; top: 0; right: 0; width: 40%; height: 100%; background: linear-gradient(to right, transparent, rgba(107,26,26,1));"></div>
+                    </div>
+                    <div class="tg-hl-panel" style="background: rgba(107,26,26,0.80); z-index: 2;">
+                        <p class="tg-hl-text">이홍선 삼보컴퓨터 회장 '스테이 스트롱' 캠페인 동참</p>
+                        <span class="tg-hl-arrow">→</span>
+                    </div>
+                </a>
+
+                <!-- Card 3 -->
+                <a href="news-detail.html?id=3" class="tg-hl-card" style="position: relative; display: block; overflow: hidden; text-decoration: none; height: 350px;">
+                    <img src="assets/images/main/tghigh03.png" alt="수탁·위탁 우수 기업"
+                         class="tg-hl-img" style="position: absolute; width: 100%; height: 100%; object-fit: cover; object-position: top; transition: transform 0.6s ease;">
+                    <div class="tg-hl-panel" style="background: rgba(26,46,26,0.80);">
+                        <p class="tg-hl-text">삼보 PC·삼성 노트북, 공공조달 1위</p>
+                        <span class="tg-hl-arrow">→</span>
+                    </div>
+                </a>
+
+                <!-- Card 4 -->
+                <a href="news-detail-sambo-history.html" class="tg-hl-card" style="position: relative; display: block; overflow: hidden; text-decoration: none; height: 350px; background: #1a1a1a;">
+                    <img src="assets/images/main/tghigh.png" alt="TG그린스위치 확대"
+                         class="tg-hl-img" style="position: absolute; left: 0; top: 0; height: 100%; width: auto; object-fit: contain; object-position: left top; transition: transform 0.6s ease;">
+                    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to right, transparent 45%, #1a1a1a 72%); z-index: 1;"></div>
+                    <div class="tg-hl-panel" style="background: rgba(26,26,26,0.80); z-index: 2;">
+                        <p class="tg-hl-text">청계천에서 나스닥까지! 불꽃처럼 타오르다, 삼보컴퓨터</p>
+                        <span class="tg-hl-arrow">→</span>
+                    </div>
+                </a>
+
+            </div>
+        </div>
+    </section>
+    <style>
+        .tg-hl-panel {
+            position: absolute;
+            top: 0; right: 0;
+            width: 38%;
+            height: 100%;
+            padding: 32px 28px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: width 0.5s ease;
+        }
+        .tg-hl-card:hover .tg-hl-panel { width: 52%; }
+        .tg-hl-card:hover .tg-hl-img { transform: scale(1.06); }
+        .tg-hl-text {
+            color: #fff;
+            font-size: 1.2rem;
+            font-weight: 700;
+            line-height: 1.65;
+            margin: 0;
+            transform: translateX(40px);
+            opacity: 0;
+            transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.3s, opacity 0.5s ease 0.3s;
+        }
+        .tg-hl-arrow {
+            color: #fff;
+            font-size: 2.2rem;
+            font-weight: 300;
+            line-height: 1;
+            transform: translateX(40px);
+            opacity: 0;
+            transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.55s, opacity 0.45s ease 0.55s;
+        }
+        .tg-hl-card.txt-shown .tg-hl-text,
+        .tg-hl-card.txt-shown .tg-hl-arrow {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    </style>
+
+    <!-- Mid Banner Section -->
+    <section style="position: relative; height: 480px; overflow: hidden; background: #000;">
+        <video autoplay muted playsinline loop
+               style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.85;">
+            <source src="assets/videos/banner/banner_05.mp4.mp4" type="video/mp4">
+        </video>
+        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, rgba(0,0,50,0.55) 0%, rgba(0,0,0,0.3) 100%);"></div>
+        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; color: white; z-index: 2;">
+            <p style="font-size: 1rem; letter-spacing: 4px; text-transform: uppercase; opacity: 0.85; margin-bottom: 16px; font-weight: 300;">TG Alliance AI Campus</p>
+            <h2 style="font-size: 2.8rem; font-weight: 700; line-height: 1.3; margin-bottom: 20px; text-shadow: 0 2px 20px rgba(0,0,0,0.4);">AI로 만드는<br>새로운 업무의 미래</h2>
+            <a href="curriculum.html" style="display: inline-block; padding: 14px 36px; background: rgba(255,255,255,0.15); border: 1.5px solid rgba(255,255,255,0.7); color: white; border-radius: 30px; font-size: 0.95rem; font-weight: 500; text-decoration: none; backdrop-filter: blur(6px); transition: all 0.3s;"
+               onmouseover="this.style.background='rgba(255,255,255,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.15)'">
+                교육과정 바로가기 →
+            </a>
+        </div>
+    </section>
+
+    <!-- [AI 활용추천영상 섹션] (필요시 아래 주석 해제하여 복구)
+    <section class="recommended-videos" style="padding: 40px 0; background: #f8f9fa;">
+        <div class="container">
+            <h2 class="section-title">AI 활용추천영상</h2>
+            <p class="section-subtitle">실무에 바로 적용 가능한 AI 활용 영상 가이드</p>
+            <div class="videos-grid" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; max-width: 1200px; margin: 0 auto 40px;">
+                <div class="video-card" style="background: white; border-radius: 0; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); transition: transform 0.3s; cursor: pointer;" onclick="location.href='https://www.genspark.ai/api/code_sandbox_light/preview/92857f6c-224c-4aee-84f1-787c80fe304f/course-view.html?id=102&video=EZ7QsUqhZ8U'">
+                    <div style="position: relative; height: 150px; overflow: hidden;">
+                        <img src="https://img.youtube.com/vi/EZ7QsUqhZ8U/sddefault.jpg" alt="AI로 업무 자동화하기" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.onerror=null; this.src='https://img.youtube.com/vi/EZ7QsUqhZ8U/hqdefault.jpg';">
+                        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 50px; height: 50px; background: rgba(0,0,0,0.7); border-radius: 50%; display: flex; align-items: center; justify-content: center;"><i class="fas fa-play" style="font-size: 1.2rem; color: white; margin-left: 4px;"></i></div>
+                        <div style="position: absolute; top: 8px; left: 8px; background: #f59e0b; color: white; padding: 4px 10px; border-radius: 15px; font-size: 0.7rem; font-weight: 600;">업무</div>
+                    </div>
+                    <div style="padding: 15px;">
+                        <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 8px; line-height: 1.3;">AI로 업무 자동화하기</h3>
+                        <p style="font-size: 0.8rem; color: #666; margin-bottom: 10px; line-height: 1.4;">반복 업무를 AI로 자동화하는 실전 노하우</p>
+                        <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem;"><span style="color: #3b82f6; font-weight: 600;">영상 보기</span><span style="color: #999;">25분 · 초급</span></div>
+                    </div>
+                </div>
+                <div class="video-card" style="background: white; border-radius: 0; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); transition: transform 0.3s; cursor: pointer;" onclick="location.href='https://www.genspark.ai/api/code_sandbox_light/preview/92857f6c-224c-4aee-84f1-787c80fe304f/course-view.html?id=203&video=8C2Ub1HK4Ww'">
+                    <div style="position: relative; height: 150px; overflow: hidden;">
+                        <img src="https://img.youtube.com/vi/8C2Ub1HK4Ww/sddefault.jpg" alt="프롬프트 최적화 전략" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.onerror=null; this.src='https://img.youtube.com/vi/8C2Ub1HK4Ww/hqdefault.jpg';">
+                        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 50px; height: 50px; background: rgba(0,0,0,0.7); border-radius: 50%; display: flex; align-items: center; justify-content: center;"><i class="fas fa-play" style="font-size: 1.2rem; color: white; margin-left: 4px;"></i></div>
+                        <div style="position: absolute; top: 8px; left: 8px; background: #8b5cf6; color: white; padding: 4px 10px; border-radius: 15px; font-size: 0.7rem; font-weight: 600;">프롬프트</div>
+                    </div>
+                    <div style="padding: 15px;">
+                        <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 8px; line-height: 1.3;">프롬프트 최적화 전략</h3>
+                        <p style="font-size: 0.8rem; color: #666; margin-bottom: 10px; line-height: 1.4;">AI 응답 품질을 높이는 프롬프트 작성법</p>
+                        <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem;"><span style="color: #3b82f6; font-weight: 600;">영상 보기</span><span style="color: #999;">42분 · 고급</span></div>
+                    </div>
+                </div>
+                <div class="video-card" style="background: white; border-radius: 0; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); transition: transform 0.3s; cursor: pointer;" onclick="location.href='https://www.genspark.ai/api/code_sandbox_light/preview/92857f6c-224c-4aee-84f1-787c80fe304f/course-view.html?id=401&video=IwbUxvakOmQ'">
+                    <div style="position: relative; height: 150px; overflow: hidden;">
+                        <img src="https://img.youtube.com/vi/IwbUxvakOmQ/sddefault.jpg" alt="2026 AI 최신 트렌드" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.onerror=null; this.src='https://img.youtube.com/vi/IwbUxvakOmQ/hqdefault.jpg';">
+                        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 50px; height: 50px; background: rgba(0,0,0,0.7); border-radius: 50%; display: flex; align-items: center; justify-content: center;"><i class="fas fa-play" style="font-size: 1.2rem; color: white; margin-left: 4px;"></i></div>
+                        <div style="position: absolute; top: 8px; left: 8px; background: #10b981; color: white; padding: 4px 10px; border-radius: 15px; font-size: 0.7rem; font-weight: 600;">트렌드</div>
+                    </div>
+                    <div style="padding: 15px;">
+                        <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 8px; line-height: 1.3;">2026 AI 최신 트렌드</h3>
+                        <p style="font-size: 0.8rem; color: #666; margin-bottom: 10px; line-height: 1.4;">2026년 주목해야 할 AI 기술 동향</p>
+                        <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem;"><span style="color: #3b82f6; font-weight: 600;">영상 보기</span><span style="color: #999;">30분 · 전체</span></div>
+                    </div>
+                </div>
+                <div class="video-card" style="background: white; border-radius: 0; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); transition: transform 0.3s; cursor: pointer;" onclick="location.href='https://www.genspark.ai/api/code_sandbox_light/preview/92857f6c-224c-4aee-84f1-787c80fe304f/course-view.html?id=402&video=HyLGGy_vwJM'">
+                    <div style="position: relative; height: 150px; overflow: hidden;">
+                        <img src="https://img.youtube.com/vi/HyLGGy_vwJM/sddefault.jpg" alt="AI 에이전트 시대" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.onerror=null; this.src='https://img.youtube.com/vi/HyLGGy_vwJM/hqdefault.jpg';">
+                        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 50px; height: 50px; background: rgba(0,0,0,0.7); border-radius: 50%; display: flex; align-items: center; justify-content: center;"><i class="fas fa-play" style="font-size: 1.2rem; color: white; margin-left: 4px;"></i></div>
+                        <div style="position: absolute; top: 8px; left: 8px; background: #ec4899; color: white; padding: 4px 10px; border-radius: 15px; font-size: 0.7rem; font-weight: 600;">최신</div>
+                    </div>
+                    <div style="padding: 15px;">
+                        <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 8px; line-height: 1.3;">AI 에이전트 시대</h3>
+                        <p style="font-size: 0.8rem; color: #666; margin-bottom: 10px; line-height: 1.4;">자율적으로 업무를 처리하는 AI 에이전트의 미래</p>
+                        <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem;"><span style="color: #3b82f6; font-weight: 600;">영상 보기</span><span style="color: #999;">28분 · 전체</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    -->
+
+    <!-- AI 가이드 Section -->
+    <style>.courses-preview .course-thumbnail { height: 240px; }</style>
+    <section class="courses-preview" style="padding: 16px 0 40px; background: var(--bg-light);">
+        <div class="container" style="padding-left: 0; padding-right: 0;">
+            <h2 class="section-title" style="font-size: 1.8rem; font-weight: 800; letter-spacing: -0.5px;">START LEARNING AI</h2>
+            <p class="section-subtitle">지금 바로 시작할 수 있는 핵심 교육 과정</p>
+            <div class="courses-grid" style="max-width: 100%; padding: 0; grid-template-columns: repeat(3, 1fr);">
+                <div class="course-card">
+                    <div class="course-thumbnail">
+                        <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&h=450&fit=crop&q=80" alt="AI 기본 개념">
+                    </div>
+                    <div class="course-info">
+                        <h3>AI 기본 개념</h3>
+                        <p>AI, ML, DL의 차이부터 생성형 AI까지 기초 개념 완벽 이해</p>
+                        <div class="course-meta">
+                            <span><i class="fas fa-signal"></i> 초급</span>
+                            <span><i class="fas fa-clock"></i> 15분</span>
+                        </div>
+                        <a href="manual-basic.html" class="btn btn-outline">매뉴얼 보기</a>
+                    </div>
+                </div>
+                <div class="course-card">
+                    <div class="course-thumbnail">
+                        <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&h=450&fit=crop&q=80" alt="AI 최신 동향">
+                    </div>
+                    <div class="course-info">
+                        <h3>AI 최신 동향</h3>
+                        <p>GPT-5, Claude 4, Gemini 2.0 등 최신 AI 트렌드</p>
+                        <div class="course-meta">
+                            <span><i class="fas fa-signal"></i> 전체</span>
+                            <span><i class="fas fa-clock"></i> 20분</span>
+                        </div>
+                        <a href="manual-trends.html" class="btn btn-outline">매뉴얼 보기</a>
+                    </div>
+                </div>
+                <div class="course-card">
+                    <div class="course-thumbnail">
+                        <img src="https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&h=450&fit=crop" alt="프롬프트 실전 활용법">
+                    </div>
+                    <div class="course-info">
+                        <h3>프롬프트 실전 활용법</h3>
+                        <p>100+ 실전 프롬프트 템플릿, 직무별 활용 예제</p>
+                        <div class="course-meta">
+                            <span><i class="fas fa-signal"></i> 중급</span>
+                            <span><i class="fas fa-clock"></i> 45분</span>
+                        </div>
+                        <a href="manual-prompt-advanced.html" class="btn btn-outline">매뉴얼 보기</a>
+                    </div>
+                </div>
+                <!-- [AI 메뉴얼 카드 4~8] (필요시 아래 주석 해제하여 복구)
+                <div class="course-card">
+                    <div class="course-thumbnail">
+                        <img src="https://images.unsplash.com/photo-1551434678-e076c223a692?w=800&h=450&fit=crop" alt="공통 업무 자동화">
+                    </div>
+                    <div class="course-info">
+                        <h3>공통 업무 자동화</h3>
+                        <p>이메일, 보고서, 회의록 등 공통 업무 AI 자동화</p>
+                        <div class="course-meta">
+                            <span><i class="fas fa-signal"></i> 초급</span>
+                            <span><i class="fas fa-clock"></i> 35분</span>
+                        </div>
+                        <a href="manual-common.html" class="btn btn-outline">매뉴얼 보기</a>
+                    </div>
+                </div>
+                <div class="course-card">
+                    <div class="course-thumbnail">
+                        <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=450&fit=crop" alt="업무 자동화 설계">
+                    </div>
+                    <div class="course-info">
+                        <h3>업무 자동화 설계</h3>
+                        <p>반복 업무 자동화를 위한 체계적인 설계 방법론</p>
+                        <div class="course-meta">
+                            <span><i class="fas fa-signal"></i> 고급</span>
+                            <span><i class="fas fa-clock"></i> 40분</span>
+                        </div>
+                        <a href="manual-automation.html" class="btn btn-outline">매뉴얼 보기</a>
+                    </div>
+                </div>
+                <div class="course-card">
+                    <div class="course-thumbnail">
+                        <img src="https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=800&h=450&fit=crop" alt="AI 워크플로우 구축">
+                    </div>
+                    <div class="course-info">
+                        <h3>AI 워크플로우 구축</h3>
+                        <p>입력→처리→결과 자동화 및 보고서 문서 자동 생성</p>
+                        <div class="course-meta">
+                            <span><i class="fas fa-signal"></i> 고급</span>
+                            <span><i class="fas fa-clock"></i> 35분</span>
+                        </div>
+                        <a href="manual-workflow.html" class="btn btn-outline">매뉴얼 보기</a>
+                    </div>
+                </div>
+                <div class="course-card">
+                    <div class="course-thumbnail">
+                        <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=800&h=450&fit=crop" alt="AI 협업 도구 활용">
+                    </div>
+                    <div class="course-info">
+                        <h3>AI 협업 도구 활용</h3>
+                        <p>팀과 함께 AI를 활용하는 협업 전략과 표준화 방법</p>
+                        <div class="course-meta">
+                            <span><i class="fas fa-signal"></i> 중급</span>
+                            <span><i class="fas fa-clock"></i> 30분</span>
+                        </div>
+                        <a href="manual-collaboration.html" class="btn btn-outline">매뉴얼 보기</a>
+                    </div>
+                </div>
+                <div class="course-card">
+                    <div class="course-thumbnail">
+                        <img src="https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=800&h=450&fit=crop" alt="직무별 AI 활용 가이드">
+                    </div>
+                    <div class="course-info">
+                        <h3>직무별 AI 활용 가이드</h3>
+                        <p>마케팅·기획·인사·재무 등 직무별 맞춤 AI 활용법</p>
+                        <div class="course-meta">
+                            <span><i class="fas fa-signal"></i> 초급</span>
+                            <span><i class="fas fa-clock"></i> 25분</span>
+                        </div>
+                        <a href="manuals.html#tab-job-link" class="btn btn-outline">매뉴얼 보기</a>
+                    </div>
+                </div>
+                -->
+            </div>
+        </div>
+    </section>
+
+    <!-- [TG 패밀리 섹션] (필요시 아래 주석 해제하여 복구)
+    <section class="tg-family-section" style="padding: 40px 0; background: #f8f9fa; position: relative;">
+        <div class="container">
+            <h2 class="section-title">TG 패밀리</h2>
+            <p class="section-subtitle" style="max-width: 700px; margin: 0 auto 40px;">함께 성장하는 TG 그룹의 다양한 사업 영역</p>
+            <div style="position: relative; max-width: 1200px; margin: 0 auto 40px;">
+                <button id="familyPrevBtn" style="position: absolute; left: -60px; top: 50%; transform: translateY(-50%); z-index: 10; width: 50px; height: 50px; border-radius: 50%; background: white; border: none; box-shadow: 0 4px 15px rgba(0,0,0,0.15); cursor: pointer; transition: all 0.3s;"><i class="fas fa-chevron-left" style="font-size: 1.2rem; color: #333;"></i></button>
+                <button id="familyNextBtn" style="position: absolute; right: -60px; top: 50%; transform: translateY(-50%); z-index: 10; width: 50px; height: 50px; border-radius: 50%; background: white; border: none; box-shadow: 0 4px 15px rgba(0,0,0,0.15); cursor: pointer; transition: all 0.3s;"><i class="fas fa-chevron-right" style="font-size: 1.2rem; color: #333;"></i></button>
+                <div class="family-slider-container" style="overflow: hidden; position: relative;">
+                    <div id="familySlider" class="family-grid" style="display: flex; transition: transform 0.5s ease; gap: 20px;">
+                        <div class="family-card" style="min-width: calc(25% - 15px); background: white; border-radius: 0; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.08); transition: all 0.3s; cursor: pointer;" onclick="window.open('https://www.tgalliance.co.kr', '_blank')">
+                            <div style="position: relative; height: 200px; background: linear-gradient(135deg, rgba(102, 126, 234, 0.9), rgba(118, 75, 162, 0.9)); display: flex; align-items: center; justify-content: center; color: white;"><div style="text-align: center;"><i class="fas fa-crown" style="font-size: 3rem; margin-bottom: 15px; display: block;"></i><div style="font-size: 1.5rem; font-weight: 700;">TG 나래</div><div style="font-size: 0.75rem; opacity: 0.9; margin-top: 5px; letter-spacing: 1px;">Holdings Company</div></div></div>
+                            <div style="padding: 25px;"><h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 12px;">TG 나래</h3><p style="font-size: 0.85rem; color: #666; line-height: 1.6;">TG 그룹의 지주회사로서 계열사들의 시너지를 창출합니다.</p></div>
+                        </div>
+                        <div class="family-card" style="min-width: calc(25% - 15px); background: white; border-radius: 0; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.08); transition: all 0.3s; cursor: pointer;" onclick="window.open('https://www.trigem.co.kr/company/company_history.jsp', '_blank')">
+                            <div style="position: relative; height: 200px; background: linear-gradient(135deg, rgba(30, 144, 255, 0.9), rgba(0, 191, 255, 0.9)); display: flex; align-items: center; justify-content: center; color: white;"><div style="text-align: center;"><i class="fas fa-desktop" style="font-size: 3rem; margin-bottom: 15px; display: block;"></i><div style="font-size: 1.5rem; font-weight: 700;">TG 삼보</div><div style="font-size: 0.75rem; opacity: 0.9; margin-top: 5px; letter-spacing: 1px;">Computer Technology</div></div></div>
+                            <div style="padding: 25px;"><h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 12px;">TG 삼보</h3><p style="font-size: 0.85rem; color: #666; line-height: 1.6;">혁신적인 IT 기술로 디지털의 미래를 만들어갑니다.</p></div>
+                        </div>
+                        <div class="family-card" style="min-width: calc(25% - 15px); background: white; border-radius: 0; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.08); transition: all 0.3s; cursor: pointer;">
+                            <div style="position: relative; height: 200px; background: linear-gradient(135deg, rgba(67, 233, 123, 0.9), rgba(56, 249, 215, 0.9)); display: flex; align-items: center; justify-content: center; color: white;"><div style="text-align: center;"><i class="fas fa-handshake" style="font-size: 3rem; margin-bottom: 15px; display: block;"></i><div style="font-size: 1.5rem; font-weight: 700;">TGS</div><div style="font-size: 0.75rem; opacity: 0.9; margin-top: 5px; letter-spacing: 1px;">Service Provider</div></div></div>
+                            <div style="padding: 25px;"><h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 12px;">TGS</h3><p style="font-size: 0.85rem; color: #666; line-height: 1.6;">최상의 IT 서비스로 고객의 비즈니스를 지원합니다.</p></div>
+                        </div>
+                        <div class="family-card" style="min-width: calc(25% - 15px); background: white; border-radius: 0; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.08); transition: all 0.3s; cursor: pointer;" onclick="window.open('https://tg.inostone.net/', '_blank')">
+                            <div style="position: relative; height: 200px; background: linear-gradient(135deg, rgba(255, 107, 107, 0.9), rgba(255, 168, 1, 0.9)); display: flex; align-items: center; justify-content: center; color: white;"><div style="text-align: center;"><i class="fas fa-mobile-alt" style="font-size: 3rem; margin-bottom: 15px; display: block;"></i><div style="font-size: 1.5rem; font-weight: 700;">TG&Co</div><div style="font-size: 0.75rem; opacity: 0.9; margin-top: 5px; letter-spacing: 1px;">Device Supply</div></div></div>
+                            <div style="padding: 25px;"><h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 12px;">TG&Co</h3><p style="font-size: 0.85rem; color: #666; line-height: 1.6;">최적의 디바이스로 스마트 세상을 만들어갑니다.</p></div>
+                        </div>
+                        <div class="family-card" style="min-width: calc(25% - 15px); background: white; border-radius: 0; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.08); transition: all 0.3s; cursor: pointer;">
+                            <div style="position: relative; height: 200px; background: linear-gradient(135deg, rgba(250, 112, 154, 0.9), rgba(254, 225, 64, 0.9)); display: flex; align-items: center; justify-content: center; color: white;"><div style="text-align: center;"><i class="fas fa-code" style="font-size: 3rem; margin-bottom: 15px; display: block;"></i><div style="font-size: 1.5rem; font-weight: 700;">TG소프트마인</div><div style="font-size: 0.75rem; opacity: 0.9; margin-top: 5px; letter-spacing: 1px;">DX Solution Partner</div></div></div>
+                            <div style="padding: 25px;"><h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 12px;">TG소프트마인</h3><p style="font-size: 0.85rem; color: #666; line-height: 1.6;">DX 솔루션 파트너로 더 편리한 IT 세상을 만듭니다.</p></div>
+                        </div>
+                        <div class="family-card" style="min-width: calc(25% - 15px); background: white; border-radius: 0; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.08); transition: all 0.3s; cursor: pointer;">
+                            <div style="position: relative; height: 200px; background: linear-gradient(135deg, rgba(48, 207, 208, 0.9), rgba(51, 8, 103, 0.9)); display: flex; align-items: center; justify-content: center; color: white;"><div style="text-align: center;"><i class="fas fa-lightbulb" style="font-size: 3rem; margin-bottom: 15px; display: block;"></i><div style="font-size: 1.5rem; font-weight: 700;">TG trigem</div><div style="font-size: 0.75rem; opacity: 0.9; margin-top: 5px; letter-spacing: 1px;">IT Consulting</div></div></div>
+                            <div style="padding: 25px;"><h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 12px;">TG trigem</h3><p style="font-size: 0.85rem; color: #666; line-height: 1.6;">지속 가능한 IT컨설팅/솔루션을 제공합니다.</p></div>
+                        </div>
+                        <div class="family-card" style="min-width: calc(25% - 15px); background: white; border-radius: 0; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.08); transition: all 0.3s; cursor: pointer;">
+                            <div style="position: relative; height: 200px; background: linear-gradient(135deg, rgba(168, 237, 234, 0.9), rgba(254, 214, 227, 0.9)); display: flex; align-items: center; justify-content: center; color: white;"><div style="text-align: center;"><i class="fas fa-globe" style="font-size: 3rem; margin-bottom: 15px; display: block;"></i><div style="font-size: 1.5rem; font-weight: 700;">TG E&Company</div><div style="font-size: 0.75rem; opacity: 0.9; margin-top: 5px; letter-spacing: 1px;">Global Network</div></div></div>
+                            <div style="padding: 25px;"><h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 12px;">TG E&Company</h3><p style="font-size: 0.85rem; color: #666; line-height: 1.6;">글로벌 기업 네트워크를 구축합니다.</p></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    -->
+
+
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo-section">
+                        <img src="assets/images/common/footer_tg.jpg" alt="TG 건물" class="footer-building-image">
+                        <div class="footer-text-content">
+                            <h4 style="font-size: 1.1rem;"><span style="color: #0099FF;">TG</span> AI 캠퍼스</h4>
+                            <p>AI 기술 교육 전문 플랫폼</p>
+                        </div>
+                    </div>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>AI 교육 과정</h4>
+                    <ul>
+                        <li><a href="manuals.html#tab-basics-link">기초편</a></li>
+                        <li><a href="manuals.html#tab-advanced-link">실전편</a></li>
+                        <li><a href="manuals.html#tab-prompt-link">프롬프트</a></li>
+                        <li><a href="manuals.html#tab-job-link">직무별 활용</a></li>
+                        <li><a href="manuals.html#tab-advanced-ai-link">AI 고도화</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>AI 실전</h4>
+                    <ul>
+                        <li><a href="manual-prompt-basic.html">프롬프트 작성법</a></li>
+                        <li><a href="manual-automation.html">업무 자동화</a></li>
+                        <li><a href="manual-workflow.html">워크플로우 구축</a></li>
+                        <li><a href="manual-collaboration.html">AI 협업 도구</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>학습 지원</h4>
+                    <ul>
+                        <li><a href="support.html">나만의 AI 코치</a></li>
+                        <li><a href="notices.html">공지사항</a></li>
+                        <li><a href="dictionary.html">AI 용어 사전</a></li>
+                        <li><a href="dashboard.html">학습 현황</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>TG 라운지</h4>
+                    <ul>
+                        <li><a href="about.html">TG AI 캠퍼스 소개</a></li>
+                        <li><a href="tg-family.html">TG 패밀리</a></li>
+                        <li><a href="news.html">TG Alliance 소식</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>본사 : 서울특별시 종로구 비봉길 12(구기동) &nbsp;|&nbsp; &copy; 2026 TG AI 캠퍼스. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="assets/js/storage.js"></script>
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/search.js"></script>
+    <script>
+        // 로그인 상태 확인 및 네비게이션 업데이트
+        function updateNavigation() {
+            const isLoggedIn = localStorage.getItem('ai_learning_logged_in') === 'true';
+            const userData = JSON.parse(localStorage.getItem('ai_learning_user') || '{}');
+            
+            const authIcon = document.getElementById('authIcon');
+            
+            if (isLoggedIn && userData.email) {
+                // 로그인된 상태 - 로그아웃 아이콘으로 변경
+                authIcon.innerHTML = '<img src="assets/images/logout-icon.png" alt="로그아웃" class="icon-img">';
+                authIcon.title = '로그아웃';
+                authIcon.href = '#';
+                authIcon.classList.add('logged-in');
+                authIcon.onclick = function(e) {
+                    e.preventDefault();
+                    if (confirm('로그아웃 하시겠습니까?')) {
+                        localStorage.removeItem('ai_learning_logged_in');
+                        localStorage.removeItem('ai_learning_user');
+                        alert('로그아웃 되었습니다.');
+                        location.reload();
+                    }
+                };
+            } else {
+                // 로그아웃 상태 - 로그인 아이콘
+                authIcon.innerHTML = '<img src="assets/images/logout-icon.png" alt="로그인" class="icon-img">';
+                authIcon.title = '로그인';
+                authIcon.href = 'login.html';
+                authIcon.classList.remove('logged-in');
+                authIcon.onclick = null;
+            }
+        }
+        
+        // 페이지 로드 시 실행
+        updateNavigation();
+        
+        // 모바일 메뉴 토글
+        document.getElementById('mobileMenuToggle').addEventListener('click', function() {
+            document.querySelector('.nav-menu').classList.toggle('active');
+        });
+        
+        // Hero Slider — Video Banner (banner1~4 mp4, 슬라이드당 최대 5초)
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.hero-slide');
+        const dots = document.querySelectorAll('.slider-dot');
+        const totalSlides = slides.length;
+        const SLIDE_DURATIONS = [1000, 3000, 3000, 10000]; // 1번 1초, 2번 3초, 3번 3초, 4번 10초
+        let slideTimer = null;
+
+        function scheduleNext() {
+            clearTimeout(slideTimer);
+            if (currentSlide === totalSlides - 1) return; // 4번 영상은 타이머 전환 없음
+            const duration = SLIDE_DURATIONS[currentSlide] ?? 5000;
+            slideTimer = setTimeout(() => {
+                showSlide((currentSlide + 1) % totalSlides);
+            }, duration);
+        }
+
+        function showSlide(index) {
+            clearTimeout(slideTimer);
+
+            const prevIndex = currentSlide;
+            const prevVideo = slides[prevIndex].querySelector('video');
+
+            // 이전 슬라이드 비활성화
+            slides.forEach(s => s.classList.remove('active'));
+            dots.forEach(d => d.classList.remove('active'));
+
+            currentSlide = index;
+            slides[currentSlide].classList.add('active');
+            dots[currentSlide].classList.add('active');
+
+            // 이전 비디오 정지 & preload 해제 (메모리 절약)
+            if (prevVideo && prevIndex !== currentSlide) {
+                prevVideo.pause();
+                prevVideo.preload = 'none';
+            }
+
+            // 현재 비디오 재생
+            const activeVideo = slides[currentSlide].querySelector('video');
+            if (activeVideo) {
+                activeVideo.preload = 'auto';
+                activeVideo.currentTime = 0;
+                activeVideo.playbackRate = (currentSlide === 1) ? 2.5 : (currentSlide === 2) ? 2.0 : 1.0; // 배너2 2.5배, 배너3 2.0배
+                activeVideo.play().catch(() => {});
+
+                // 다음 비디오 메타데이터 미리 로드
+                const nextIdx = (currentSlide + 1) % totalSlides;
+                const nextVideo = slides[nextIdx].querySelector('video');
+                if (nextVideo && nextVideo.preload === 'none') {
+                    nextVideo.preload = 'metadata';
+                }
+            }
+
+            // 5초 타이머 — 영상이 더 길어도 5초 후 강제 전환
+            scheduleNext();
+        }
+
+        // 영상이 끝나면 다음으로 (4번은 루프)
+        slides.forEach((slide, i) => {
+            const video = slide.querySelector('video');
+            if (video) {
+                video.addEventListener('ended', () => {
+                    if (i !== currentSlide) return;
+                    if (i === totalSlides - 1) {
+                        video.currentTime = 0;
+                        video.play().catch(() => {}); // 4번 영상 반복
+                    } else {
+                        showSlide((currentSlide + 1) % totalSlides);
+                    }
+                });
+            }
+        });
+
+        // 점 클릭으로 수동 이동
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => showSlide(index));
+        });
+
+        // 배너 영상 재생 속도 설정 (1번 2.2배속, 나머지 2.0배속)
+        slides.forEach((slide, i) => {
+            const v = slide.querySelector('video');
+            const rate = 2.0;
+            if (v) v.playbackRate = rate;
+            if (v) v.addEventListener('loadedmetadata', () => { v.playbackRate = rate; });
+        });
+
+        // 첫 번째 영상 시작
+        (function initBanner() {
+            const firstVideo = slides[0].querySelector('video');
+            if (firstVideo) {
+                firstVideo.play().catch(() => {});
+                const secondVideo = slides[1] && slides[1].querySelector('video');
+                if (secondVideo) secondVideo.preload = 'metadata';
+            }
+            scheduleNext();
+        })();
+
+        // TG Family Slider
+        let familyCurrentIndex = 0;
+        const familySlider = document.getElementById('familySlider');
+        const familyCards = document.querySelectorAll('.family-card');
+        const familyPrevBtn = document.getElementById('familyPrevBtn');
+        const familyNextBtn = document.getElementById('familyNextBtn');
+        const totalFamilyCards = familyCards.length;
+        const visibleCards = 4; // 한 번에 보이는 카드 수
+
+        function updateFamilySlider() {
+            const cardWidth = familyCards[0].offsetWidth;
+            const gap = 20;
+            const moveAmount = -(familyCurrentIndex * (cardWidth + gap));
+            familySlider.style.transform = `translateX(${moveAmount}px)`;
+
+            // 버튼 활성화/비활성화
+            familyPrevBtn.style.opacity = familyCurrentIndex === 0 ? '0.3' : '1';
+            familyPrevBtn.style.cursor = familyCurrentIndex === 0 ? 'not-allowed' : 'pointer';
+            
+            familyNextBtn.style.opacity = familyCurrentIndex >= totalFamilyCards - visibleCards ? '0.3' : '1';
+            familyNextBtn.style.cursor = familyCurrentIndex >= totalFamilyCards - visibleCards ? 'not-allowed' : 'pointer';
+        }
+
+        familyPrevBtn.addEventListener('click', () => {
+            if (familyCurrentIndex > 0) {
+                familyCurrentIndex--;
+                updateFamilySlider();
+            }
+        });
+
+        familyNextBtn.addEventListener('click', () => {
+            if (familyCurrentIndex < totalFamilyCards - visibleCards) {
+                familyCurrentIndex++;
+                updateFamilySlider();
+            }
+        });
+
+        // 초기화
+        updateFamilySlider();
+
+        // 버튼 호버 효과
+        familyPrevBtn.addEventListener('mouseenter', function() {
+            if (familyCurrentIndex > 0) {
+                this.style.transform = 'translateY(-50%) scale(1.1)';
+            }
+        });
+
+        familyPrevBtn.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(-50%) scale(1)';
+        });
+
+        familyNextBtn.addEventListener('mouseenter', function() {
+            if (familyCurrentIndex < totalFamilyCards - visibleCards) {
+                this.style.transform = 'translateY(-50%) scale(1.1)';
+            }
+        });
+
+        familyNextBtn.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(-50%) scale(1)';
+        });
+    </script>
+
+    <style>
+        /* TG Family Card Hover Effects */
+        .family-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.15) !important;
+        }
+
+        /* Responsive Grid for TG Family */
+        @media (max-width: 1024px) {
+            .family-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .family-grid {
+                grid-template-columns: 1fr !important;
+            }
+        }
+    </style>
+    
+    <!-- Scroll Down Indicator (Fixed) -->
+    <div class="scroll-indicator" onclick="window.scrollTo({top: window.pageYOffset + 500, behavior: 'smooth'})">
+        <div class="mouse">
+            <div class="wheel"></div>
+        </div>
+        <div class="arrow-down">
+            <i class="fas fa-chevron-down"></i>
+        </div>
+    </div>
+    
+    <script>
+        // Hide scroll indicator when near bottom
+        window.addEventListener('scroll', function() {
+            const scrollIndicator = document.querySelector('.scroll-indicator');
+            const scrollPosition = window.pageYOffset + window.innerHeight;
+            const pageHeight = document.documentElement.scrollHeight;
+            
+            if (scrollPosition >= pageHeight - 100) {
+                scrollIndicator.classList.add('hidden');
+            } else {
+                scrollIndicator.classList.remove('hidden');
+            }
+        });
+    </script>
+
+    <!-- ===== 플로팅 챗봇 (호버 슬라이드) ===== -->
+    <div class="chat-fab-wrapper">
+        <!-- FAB 버튼 -->
+        <button class="float-chat-fab">
+            <i class="fas fa-robot"></i>
+            <span class="float-chat-label">AI 챗봇</span>
+            <span class="float-chat-ping"></span>
+        </button>
+
+        <!-- 호버 시 왼쪽으로 슬라이드인 -->
+        <div class="chat-hover-panel">
+            <div class="chatbot-window">
+                <div class="chatbot-header">
+                    <div class="chatbot-avatar"><i class="fas fa-robot"></i></div>
+                    <div class="chatbot-header-info">
+                        <h4>TG AI 도우미</h4>
+                        <span>🟢 온라인 · 즉시 응답</span>
+                    </div>
+                    <button class="chatbot-close" onclick="forceCloseChat()" title="닫기"><i class="fas fa-times"></i></button>
+                </div>
+                <div class="chatbot-messages" id="idxChatMessages">
+                    <div class="chat-msg bot">
+                        <div class="chat-bot-icon"><i class="fas fa-robot"></i></div>
+                        <div>
+                            <div class="chat-bubble">안녕하세요! 👋 TG AI 캠퍼스 AI 도우미입니다.<br>무엇이든 편하게 질문해 주세요!</div>
+                            <div class="chat-time">방금 전</div>
+                        </div>
+                    </div>
+                    <div class="chat-msg bot">
+                        <div class="chat-bot-icon"><i class="fas fa-robot"></i></div>
+                        <div>
+                            <div class="chat-bubble">자주 묻는 질문을 빠르게 확인해 보세요 👇</div>
+                            <div class="chat-time">방금 전</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="chatbot-quick-btns" id="idxQuickBtns">
+                    <button class="quick-chat-btn" onclick="sendIdxQuick('프롬프트 작성법이 궁금해요')">프롬프트 작성법</button>
+                    <button class="quick-chat-btn" onclick="sendIdxQuick('AI 기초 학습은 어떻게 시작하나요?')">AI 기초 학습</button>
+                    <button class="quick-chat-btn" onclick="sendIdxQuick('업무 자동화 방법을 알고 싶어요')">업무 자동화</button>
+                    <button class="quick-chat-btn" onclick="sendIdxQuick('추천 학습 순서를 알려주세요')">학습 순서 추천</button>
+                </div>
+                <div class="chatbot-input-area">
+                    <input type="text" class="chatbot-input" id="idxChatInput" placeholder="질문을 입력하세요..." onkeydown="if(event.key==='Enter') sendIdxMessage()">
+                    <button class="chatbot-send" onclick="sendIdxMessage()"><i class="fas fa-paper-plane"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+    /* ===== 래퍼: FAB 위치 기준점 ===== */
+    .chat-fab-wrapper {
+        position: fixed;
+        bottom: 160px;
+        right: 32px;
+        z-index: 9000;
+        width: 52px;
+        height: 52px;
+    }
+
+    /* FAB 원형 버튼 */
+    .float-chat-fab {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 3px;
+        width: 52px;
+        height: 52px;
+        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        box-shadow: 0 4px 16px rgba(59,130,246,0.4);
+        transition: box-shadow 0.2s;
+        font-family: inherit;
+        position: relative;
+    }
+    .float-chat-fab i { font-size: 1.1rem; }
+    .float-chat-label {
+        font-size: 0.55rem;
+        font-weight: 700;
+        letter-spacing: 0.03em;
+        white-space: nowrap;
+    }
+    .float-chat-ping {
+        position: absolute;
+        top: 4px; right: 4px;
+        width: 9px; height: 9px;
+        background: #10b981;
+        border-radius: 50%;
+        border: 2px solid white;
+        animation: pingPulse 2s infinite;
+    }
+    @keyframes pingPulse {
+        0%,100% { transform: scale(1); opacity: 1; }
+        50%      { transform: scale(1.4); opacity: 0.6; }
+    }
+
+    /* 챗봇 패널 — FAB 왼쪽에 absolute 배치, 기본 숨김 */
+    .chat-hover-panel {
+        position: absolute;
+        bottom: 0;
+        right: 64px;
+        transform: translateX(16px);
+        opacity: 0;
+        pointer-events: none;
+        transition: transform 0.35s cubic-bezier(0.25,0.8,0.25,1), opacity 0.3s ease;
+    }
+    /* JS가 .open 클래스 추가 시 슬라이드인 */
+    .chat-hover-panel.open {
+        transform: translateX(0);
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    /* 챗봇 창 */
+    .chatbot-window {
+        width: 380px; max-width: 95vw; height: 560px;
+        background: #fff; border-radius: 20px;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        display: flex; flex-direction: column; overflow: hidden;
+        animation: slideUpChat 0.3s ease;
+    }
+    @keyframes slideUpChat {
+        from { transform: translateY(30px); opacity: 0; }
+        to   { transform: translateY(0);   opacity: 1; }
+    }
+    .chatbot-header {
+        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+        color: white; padding: 18px 20px;
+        display: flex; align-items: center; gap: 12px;
+    }
+    .chatbot-avatar {
+        width: 42px; height: 42px;
+        background: rgba(255,255,255,0.25); border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 1.3rem;
+    }
+    .chatbot-header-info h4 { font-size: 1rem; font-weight: 700; margin: 0; }
+    .chatbot-header-info span { font-size: 0.8rem; opacity: 0.85; }
+    .chatbot-close {
+        margin-left: auto; background: none; border: none;
+        color: white; font-size: 1.3rem; cursor: pointer; opacity: 0.8;
+    }
+    .chatbot-close:hover { opacity: 1; }
+    .chatbot-messages {
+        flex: 1; padding: 18px; overflow-y: auto;
+        display: flex; flex-direction: column; gap: 12px;
+        background: #f8fafc;
+    }
+    .chat-msg { display: flex; gap: 8px; align-items: flex-end; }
+    .chat-msg.user { flex-direction: row-reverse; }
+    .chat-bubble {
+        max-width: 75%; padding: 10px 14px; border-radius: 16px;
+        font-size: 0.88rem; line-height: 1.5;
+    }
+    .chat-msg.bot .chat-bubble {
+        background: white; color: #1f2937;
+        border-bottom-left-radius: 4px;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    }
+    .chat-msg.user .chat-bubble {
+        background: #3b82f6; color: white;
+        border-bottom-right-radius: 4px;
+    }
+    .chat-bot-icon {
+        width: 28px; height: 28px;
+        background: linear-gradient(135deg, #3b82f6, #2563eb);
+        border-radius: 50%; display: flex; align-items: center;
+        justify-content: center; color: white; font-size: 0.75rem; flex-shrink: 0;
+    }
+    .chat-time { font-size: 0.7rem; color: #9ca3af; margin-top: 2px; }
+    .chat-msg.bot .chat-time { text-align: left; }
+    .chatbot-quick-btns { display: flex; flex-wrap: wrap; gap: 6px; padding: 10px 18px 0; }
+    .quick-chat-btn {
+        padding: 6px 12px; background: white;
+        border: 1.5px solid #3b82f6; color: #3b82f6;
+        border-radius: 20px; font-size: 0.8rem; font-weight: 500;
+        cursor: pointer; transition: all 0.2s;
+    }
+    .quick-chat-btn:hover { background: #3b82f6; color: white; }
+    .chatbot-input-area {
+        padding: 14px 16px; background: white;
+        border-top: 1px solid #e5e7eb; display: flex; gap: 8px;
+    }
+    .chatbot-input {
+        flex: 1; padding: 10px 14px;
+        border: 1.5px solid #e5e7eb; border-radius: 24px;
+        font-size: 0.9rem; outline: none; font-family: inherit;
+    }
+    .chatbot-input:focus { border-color: #3b82f6; }
+    .chatbot-send {
+        width: 40px; height: 40px; background: #3b82f6;
+        color: white; border: none; border-radius: 50%;
+        font-size: 1rem; cursor: pointer; transition: background 0.2s;
+        display: flex; align-items: center; justify-content: center;
+    }
+    .chatbot-send:hover { background: #2563eb; }
+    </style>
+
+    <script>
+    // ===== Index 챗봇 =====
+    const IDX_BOT_ANSWERS = {
+        '프롬프트': '프롬프트 작성 핵심은 <b>역할 지정 → 목표 명시 → 형식 지정</b> 3단계입니다.<br>예: "당신은 마케팅 전문가입니다. SNS용 홍보 문구 5개를 불릿 형식으로 작성해주세요." 처럼 구체적일수록 좋아요! 📝',
+        '기초': 'AI 기초 학습 추천 순서:<br>① <b>AI 기본 개념</b> → ② <b>생성형 AI 이해</b> → ③ <b>프롬프트 기초</b><br>각 매뉴얼은 15~40분 분량입니다! 🎓',
+        '자동화': '업무 자동화 시작 3단계:<br>① 반복 업무 목록 작성 → ② AI에 맥락 설명 → ③ 템플릿 저장·재사용<br>보고서·이메일·회의록부터 시작해보세요! ⚡',
+        '학습 순서': '수준별 추천 학습 순서:<br>🔰 입문: AI 기본개념 → 생성형AI → AI 대화기술<br>🚀 실전: 프롬프트 기초 → 업무 자동화 → 직무별 활용',
+    };
+
+    function idxGetBotReply(text) {
+        for (const [key, answer] of Object.entries(IDX_BOT_ANSWERS)) {
+            if (text.includes(key)) return answer;
+        }
+        return `"<b>${text}</b>"에 대한 답변을 준비 중입니다. 😊<br>더 구체적으로 질문해 주시거나 아래 빠른 버튼을 이용해보세요!`;
+    }
+
+    function idxGetTime() {
+        return new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' });
+    }
+
+    function idxAppendMessage(role, html) {
+        const box = document.getElementById('idxChatMessages');
+        const div = document.createElement('div');
+        div.className = `chat-msg ${role}`;
+        div.innerHTML = role === 'bot'
+            ? `<div class="chat-bot-icon"><i class="fas fa-robot"></i></div>
+               <div><div class="chat-bubble">${html}</div><div class="chat-time">${idxGetTime()}</div></div>`
+            : `<div><div class="chat-bubble">${html}</div><div class="chat-time">${idxGetTime()}</div></div>`;
+        box.appendChild(div);
+        box.scrollTop = box.scrollHeight;
+    }
+
+    function idxShowTyping() {
+        const box = document.getElementById('idxChatMessages');
+        const div = document.createElement('div');
+        div.className = 'chat-msg bot'; div.id = 'idxTyping';
+        div.innerHTML = `<div class="chat-bot-icon"><i class="fas fa-robot"></i></div>
+            <div><div class="chat-bubble" style="color:#9ca3af;">입력 중...</div></div>`;
+        box.appendChild(div); box.scrollTop = box.scrollHeight;
+    }
+
+    function sendIdxMessage() {
+        const input = document.getElementById('idxChatInput');
+        const text = input.value.trim();
+        if (!text) return;
+        idxAppendMessage('user', text);
+        input.value = '';
+        document.getElementById('idxQuickBtns').style.display = 'none';
+        idxShowTyping();
+        setTimeout(() => {
+            const t = document.getElementById('idxTyping'); if (t) t.remove();
+            idxAppendMessage('bot', idxGetBotReply(text));
+        }, 900);
+    }
+
+    function sendIdxQuick(text) {
+        document.getElementById('idxChatInput').value = text;
+        sendIdxMessage();
+    }
+
+    // ===== 호버 열기/닫기 (딜레이 + 입력 포커스 고정) =====
+    (function initChatHover() {
+        const wrapper = document.querySelector('.chat-fab-wrapper');
+        const panel   = document.querySelector('.chat-hover-panel');
+        const input   = document.getElementById('idxChatInput');
+        let closeTimer = null;
+        let inputFocused = false;
+
+        function openPanel()  { clearTimeout(closeTimer); panel.classList.add('open'); }
+        function closePanel() { if (!inputFocused) panel.classList.remove('open'); }
+
+        wrapper.addEventListener('mouseenter', openPanel);
+        wrapper.addEventListener('mouseleave', () => {
+            closeTimer = setTimeout(closePanel, 300);
+        });
+
+        // 입력 중엔 절대 닫히지 않음
+        input.addEventListener('focus', () => { inputFocused = true;  openPanel(); });
+        input.addEventListener('blur',  () => { inputFocused = false; });
+
+        // X 버튼 강제 닫기 (전역 함수로 노출)
+        window.forceCloseChat = function() {
+            inputFocused = false;
+            clearTimeout(closeTimer);
+            panel.classList.remove('open');
+            input.blur();
+        };
+    })();
+
+    </script>
+
+    <script>
+        // 스크롤 진입 시 애니메이션 (TG GATEWAY + TG HIGHLIGHT)
+        // rootMargin: 뷰포트 하단에서 150px 안으로 들어와야 발동 → 페이지 로드 시 즉시 실행 방지
+        const scrollObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) return;
+
+                // TG GATEWAY 테두리 애니메이션 - 카드별 순차 실행
+                if (entry.target.id === 'tg-gateway-section') {
+                    entry.target.querySelectorAll('.tg-gw-card').forEach((card, i) => {
+                        setTimeout(() => {
+                            card.classList.add('in-view');
+                            card.classList.add('txt-shown');
+                            setTimeout(() => card.classList.remove('in-view'), 1700);
+                        }, i * 180);
+                    });
+                }
+
+                // TG HIGHLIGHT 카드 페이드업 - 순차 실행
+                if (entry.target.id === 'tg-highlight-section') {
+                    entry.target.querySelectorAll('.tg-hl-card').forEach((card, i) => {
+                        setTimeout(() => {
+                            card.classList.add('in-view');
+                            card.classList.add('txt-shown');
+                        }, i * 150);
+                    });
+                }
+
+                scrollObserver.unobserve(entry.target); // 한 번만 실행
+            });
+        }, {
+            threshold: 0.25,
+            rootMargin: '0px 0px -150px 0px' // 화면 하단 150px 안으로 들어와야 발동
+        });
+
+        document.getElementById('tg-gateway-section') && scrollObserver.observe(document.getElementById('tg-gateway-section'));
+        document.getElementById('tg-highlight-section') && scrollObserver.observe(document.getElementById('tg-highlight-section'));
+    </script>
+</body>
+</html>

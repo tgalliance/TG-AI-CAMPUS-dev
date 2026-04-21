@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 모델 이해 - TG AI 캠퍼스</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/samsung-nav.css?v=3">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        .manual-container { display: flex; max-width: 1400px; margin: 50px auto; gap: 30px; padding: 0 20px; }
+        .manual-sidebar { width: 280px; background: white; border-radius: 15px; padding: 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); position: sticky; top: 100px; height: fit-content; }
+        .manual-sidebar h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 20px; color: #1a202c; }
+        .manual-sidebar ul { list-style: none; padding: 0; }
+        .manual-sidebar li { margin-bottom: 12px; }
+        .manual-sidebar a { color: #666; text-decoration: none; display: block; padding: 8px 12px; border-radius: 8px; transition: all 0.3s; }
+        .manual-sidebar a:hover, .manual-sidebar a.active { background: #ef4444; color: white; }
+        .manual-content { flex: 1; background: white; border-radius: 15px; padding: 50px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+        .manual-header { border-bottom: 3px solid #ef4444; padding-bottom: 30px; margin-bottom: 40px; }
+        .manual-header h1 { font-size: 2.5rem; font-weight: 700; color: #1a202c; margin-bottom: 15px; }
+        .manual-meta { display: flex; gap: 20px; color: #666; font-size: 0.95rem; flex-wrap: wrap; }
+        .manual-meta span { display: flex; align-items: center; gap: 8px; }
+        .pdf-button { position: fixed; bottom: 30px; right: 30px; background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); color: white; border: none; padding: 15px 30px; border-radius: 50px; font-size: 1rem; font-weight: 600; cursor: pointer; box-shadow: 0 4px 20px rgba(239, 68, 68, 0.4); transition: all 0.3s; z-index: 1000; }
+        .pdf-button:hover { transform: translateY(-3px); box-shadow: 0 6px 30px rgba(239, 68, 68, 0.6); }
+        .section { margin-bottom: 50px; scroll-margin-top: 140px; }
+        .section h2 { font-size: 1.8rem; font-weight: 700; color: #1a202c; margin-bottom: 20px; padding-left: 15px; border-left: 5px solid #ef4444; }
+        .section h3 { font-size: 1.3rem; font-weight: 600; color: #2d3748; margin: 30px 0 15px; }
+        .section p { font-size: 1.05rem; line-height: 1.8; color: #4a5568; margin-bottom: 15px; }
+        .prompt-box { background: #fef2f2; border: 2px solid #fca5a5; border-radius: 10px; padding: 25px; margin: 25px 0; }
+        .prompt-box .label { font-weight: 700; color: #b91c1c; margin-bottom: 15px; display: block; font-size: 1.1rem; }
+        .prompt-box pre { background: white; padding: 20px; border-radius: 8px; border: 1px solid #fecaca; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word; line-height: 1.6; }
+        .example-output { background: #fff7ed; border-left: 4px solid #f97316; padding: 20px 25px; border-radius: 10px; margin: 25px 0; }
+        .example-output::before { content: "✅ 예시 출력"; font-weight: 700; color: #c2410c; display: block; margin-bottom: 10px; }
+        .tip-box { background: #fefce8; border-left: 4px solid #eab308; padding: 20px 25px; border-radius: 10px; margin: 25px 0; }
+        .tip-box::before { content: "💡 모델 선택 팁"; font-weight: 700; color: #a16207; display: block; margin-bottom: 10px; }
+        .info-table { width: 100%; border-collapse: collapse; margin: 18px 0 26px; font-size: 0.96rem; }
+        .info-table th, .info-table td { border: 1px solid #cbd5e1; padding: 12px; text-align: left; vertical-align: top; }
+        .info-table th { background: #fef2f2; color: #991b1b; font-weight: 700; }
+        .team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin: 18px 0 26px; }
+        .team-card { background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 10px; padding: 14px; }
+        .team-card strong { color: #991b1b; display: block; margin-bottom: 6px; }
+        ul, ol { padding-left: 30px; margin: 20px 0; }
+        li { margin-bottom: 12px; line-height: 1.7; color: #4a5568; }
+        @media (max-width: 768px) {
+            .manual-container { flex-direction: column; }
+            .manual-sidebar { width: 100%; position: static; }
+            .manual-content { padding: 30px 20px; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="utility-bar">
+            <div class="container">
+                <div class="utility-wrapper">
+                    <a href="news.html" class="utility-link">TG 라운지</a>
+                    <a href="notices.html" class="utility-link">공지사항</a>
+                    <a href="tg-family.html" class="utility-link">TG패밀리</a>
+                    <a href="https://tgnco.kr/tg-alliance/" target="_blank" class="external-link tg-alliance">TG Alliance <i class="fas fa-external-link-alt"></i></a>
+                    <span class="external-link" style="color: #ff8c00; cursor: default;">TG 에듀테크</span>
+                </div>
+            </div>
+        </div>
+        <nav class="navbar">
+            <div class="container">
+                <div class="nav-wrapper">
+                    <div class="nav-left">
+                        <a href="index.html" class="logo"><i class="fas fa-brain"></i><span><span class="logo-tg">TG</span> AI 캠퍼스</span></a>
+                        <ul class="nav-menu">
+                            <li><a href="about.html">TG AI 캠퍼스소개</a></li>
+                            <li><a href="manuals.html">AI 활용메뉴얼</a></li>
+                            <li><a href="dictionary.html">AI 용어사전</a></li>
+                            <li><a href="recommended.html">AI 활용추천영상</a></li>
+                            <li><a href="curriculum.html">교육과정</a></li>
+                            <li><a href="support.html" style="color: #3b82f6; font-weight: 600;">나만의 AI 코치</a></li>
+                            <li><a href="dashboard.html">학습 현황</a></li>
+                        </ul>
+                    </div>
+                    <div class="nav-right">
+                        <div class="icon-actions">
+                            <a href="mypage.html" class="icon-link"><img src="assets/images/mypage-icon-new.png?v=2" alt="마이페이지" style="height: 20px;"></a>
+                            <a href="login.html" class="icon-link"><img src="assets/images/logout-icon.png" alt="로그인" style="height: 24px;"></a>
+                        </div>
+                        <button class="mobile-menu-toggle"><i class="fas fa-bars"></i></button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="manual-container">
+        <aside class="manual-sidebar">
+            <h3><i class="fas fa-list"></i> 목차</h3>
+            <ul>
+                <li><a href="#overview" class="active">1. 모델 생태계 개요</a></li>
+                <li><a href="#criteria">2. 모델 선택 기준</a></li>
+                <li><a href="#comparison">3. 대표 모델 비교표</a></li>
+                <li><a href="#usecases">4. 업무별 모델 매핑</a></li>
+                <li><a href="#evaluation">5. 성능 평가 방법</a></li>
+                <li><a href="#risk">6. 리스크와 한계</a></li>
+                <li><a href="#operation">7. 운영 전략</a></li>
+                <li><a href="#checklist">8. 도입 체크리스트</a></li>
+            </ul>
+            <hr style="margin: 30px 0; border: none; border-top: 1px solid #e2e8f0;">
+            <a href="manuals.html" class="btn btn-outline" style="width: 100%; text-align: center;"><i class="fas fa-arrow-left"></i> 목록으로</a>
+        </aside>
+
+        <main class="manual-content" id="manual-content">
+            <div class="manual-header">
+                <h1><i class="fas fa-brain"></i> AI 모델 이해</h1>
+                <div class="manual-meta">
+                    <span><i class="fas fa-clock"></i> 읽는 시간: 35분</span>
+                    <span><i class="fas fa-microchip"></i> 대상: 전 부서 실무자</span>
+                    <span><i class="fas fa-chart-line"></i> 핵심: 모델-업무 적합성 판단</span>
+                </div>
+            </div>
+
+            <section class="section" id="overview">
+                <h2>1. AI 모델 생태계 개요</h2>
+                <p>AI 모델은 범용 모델, 경량 모델, 특화 모델로 나눠 볼 수 있습니다. 모델을 잘 선택하려면 "정답률"만이 아니라 속도, 비용, 보안, 운영 난이도를 함께 고려해야 합니다.</p>
+                <table class="info-table">
+                    <thead><tr><th>모델 유형</th><th>강점</th><th>적합한 업무</th></tr></thead>
+                    <tbody>
+                        <tr><td>범용 LLM</td><td>높은 추론력, 다양한 작업 대응</td><td>기획, 문서 작성, 고난도 질의</td></tr>
+                        <tr><td>경량 모델</td><td>응답 속도 빠름, 비용 효율적</td><td>분류, 요약, 반복 질의 자동화</td></tr>
+                        <tr><td>특화 모델</td><td>도메인 정확도 높음</td><td>법무, 의료, 기술문서 검토</td></tr>
+                    </tbody>
+                </table>
+                <h3>모델 계층 구조 이해</h3>
+                <p>실무에서는 "하나의 모델로 모든 업무 해결"보다 계층 구조가 효과적입니다. 예를 들어 고객문의 1차 분류는 경량 모델이 처리하고, 고난도 질의만 고성능 모델로 보내면 비용과 품질의 균형을 맞출 수 있습니다.</p>
+                <table class="info-table">
+                    <thead><tr><th>처리 단계</th><th>권장 모델군</th><th>운영 목적</th></tr></thead>
+                    <tbody>
+                        <tr><td>1차 라우팅</td><td>경량 모델</td><td>빠른 분기, 비용 절감</td></tr>
+                        <tr><td>핵심 생성</td><td>고성능 모델</td><td>정확도/논리성 확보</td></tr>
+                        <tr><td>검증/후처리</td><td>규칙 + 경량 모델</td><td>안전성/일관성 강화</td></tr>
+                    </tbody>
+                </table>
+                <div class="tip-box">모델 선택의 출발점은 "우리 업무에서 어떤 실수를 줄여야 하는가"입니다. 성능지표보다 업무 실패비용을 먼저 정의하세요.</div>
+            </section>
+
+            <section class="section" id="criteria">
+                <h2>2. 모델 선택 기준</h2>
+                <p>모델 도입 시 5개 축(정확도, 지연시간, 비용, 보안, 운영성)으로 평가하면 의사결정이 빨라집니다. 각 항목별 최소 기준을 정한 뒤 후보 모델을 통과/탈락 방식으로 판단하세요.</p>
+                <table class="info-table">
+                    <thead><tr><th>평가 항목</th><th>질문</th><th>권장 기준 예시</th></tr></thead>
+                    <tbody>
+                        <tr><td>정확도</td><td>핵심 업무에서 오답률이 허용 범위인가?</td><td>Top3 시나리오 기준 90%+</td></tr>
+                        <tr><td>지연시간</td><td>사용자가 체감 가능한 속도인가?</td><td>P95 2초 이내</td></tr>
+                        <tr><td>비용</td><td>월 예산 내 운영 가능한가?</td><td>요청당 원가 목표 이하</td></tr>
+                        <tr><td>보안</td><td>민감정보 처리 정책을 만족하는가?</td><td>마스킹/감사로그 필수</td></tr>
+                    </tbody>
+                </table>
+                <h3>평가 점수 산식 예시</h3>
+                <p>점수는 가중치 기반으로 계산하면 조직 내 합의가 쉽습니다. 기준 예시: 정확도 35%, 속도 20%, 비용 20%, 보안 15%, 운영성 10%.</p>
+                <table class="info-table">
+                    <thead><tr><th>후보 모델</th><th>정확도</th><th>속도</th><th>비용</th><th>보안</th><th>총점</th></tr></thead>
+                    <tbody>
+                        <tr><td>후보 A</td><td>33</td><td>16</td><td>15</td><td>13</td><td>89</td></tr>
+                        <tr><td>후보 B</td><td>30</td><td>18</td><td>18</td><td>12</td><td>88</td></tr>
+                        <tr><td>후보 C</td><td>35</td><td>12</td><td>10</td><td>14</td><td>83</td></tr>
+                    </tbody>
+                </table>
+                <div class="prompt-box">
+                    <span class="label">🎯 실전 프롬프트:</span>
+                    <pre>당신은 AI 도입 컨설턴트입니다.
+우리 회사(인사/영업/기획팀)의 공통 업무에 사용할 모델 선택 기준표를
+정확도/속도/비용/보안/운영성 5개 항목으로 작성해 주세요.
+각 항목마다 필수 기준값과 탈락 기준을 함께 제시해 주세요.</pre>
+                </div>
+            </section>
+
+            <section class="section" id="comparison">
+                <h2>3. 대표 모델 비교표</h2>
+                <p>모델 비교는 감이 아니라 동일 테스트셋으로 해야 합니다. 동일 프롬프트, 동일 평가 기준, 동일 난이도 샘플로 비교하지 않으면 의사결정이 왜곡됩니다.</p>
+                <table class="info-table">
+                    <thead><tr><th>모델군</th><th>추론 품질</th><th>속도</th><th>비용</th><th>추천 상황</th></tr></thead>
+                    <tbody>
+                        <tr><td>고성능 모델</td><td>상</td><td>중</td><td>상</td><td>전략 문서, 난도 높은 분석</td></tr>
+                        <tr><td>균형형 모델</td><td>중상</td><td>중상</td><td>중</td><td>대부분의 일반 업무 자동화</td></tr>
+                        <tr><td>경량 모델</td><td>중</td><td>상</td><td>하</td><td>분류/태깅/단순 요약 대량 처리</td></tr>
+                    </tbody>
+                </table>
+                <h3>테스트셋 구성 방법</h3>
+                <ul>
+                    <li>기초 난이도 40%, 중간 난이도 40%, 고난도 20%로 균형 구성</li>
+                    <li>부서별 핵심 시나리오를 최소 10개 이상 포함</li>
+                    <li>실제 운영에서 자주 발생한 실패 질문을 우선 반영</li>
+                    <li>정답 템플릿과 평가 기준(논리성, 형식 준수, 사실성) 사전 고정</li>
+                </ul>
+                <div class="example-output">
+                    추천 운영안:  
+                    고난도 문서작성 -> 고성능 모델,  
+                    일상 질의/요약 -> 균형형 모델,  
+                    대량 분류 작업 -> 경량 모델 분리 운영
+                </div>
+            </section>
+
+            <section class="section" id="usecases">
+                <h2>4. 업무별 모델 매핑</h2>
+                <p>모델을 하나로 통일하면 간단해 보이지만, 비용과 품질이 동시에 비효율적일 수 있습니다. 업무 유형별로 모델을 나누는 "라우팅 전략"이 실무에서 더 효과적입니다.</p>
+                <div class="team-grid">
+                    <div class="team-card"><strong>활용팀: 인사/총무</strong> 채용공고, 면접 질문, 규정 요약은 균형형 모델로 안정 운영</div>
+                    <div class="team-card"><strong>활용팀: 영업/마케팅</strong> 제안서 초안/카피 생성은 고성능 모델 + 최종 검수</div>
+                    <div class="team-card"><strong>활용팀: IT/개발</strong> 코드 설명/리팩터링 아이디어는 고성능, 로그분석은 경량 혼합</div>
+                    <div class="team-card"><strong>활용팀: 고객지원</strong> FAQ 분류/티켓 태깅은 경량 모델로 대량 처리</div>
+                </div>
+                <table class="info-table">
+                    <thead><tr><th>업무 유형</th><th>추천 모델</th><th>운영 포인트</th></tr></thead>
+                    <tbody>
+                        <tr><td>전략 문서 작성</td><td>고성능</td><td>근거 출처 요구 프롬프트 사용</td></tr>
+                        <tr><td>요약/정리</td><td>균형형</td><td>형식 템플릿 고정으로 품질 안정화</td></tr>
+                        <tr><td>분류/태깅</td><td>경량</td><td>신뢰도 임계치 이하만 재검토</td></tr>
+                    </tbody>
+                </table>
+                <h3>실제 적용 시나리오</h3>
+                <table class="info-table">
+                    <thead><tr><th>시나리오</th><th>입력</th><th>권장 처리 경로</th><th>검수 방식</th></tr></thead>
+                    <tbody>
+                        <tr><td>영업 제안서 초안</td><td>고객사 정보 + 요구사항</td><td>고성능 모델 생성 -> 경량 검토</td><td>담당자 최종 검토</td></tr>
+                        <tr><td>FAQ 분류</td><td>고객 문의 텍스트</td><td>경량 모델 분류 -> 신뢰도 낮은 건 재분류</td><td>주간 샘플링</td></tr>
+                        <tr><td>회의록 요약</td><td>긴 텍스트/녹취</td><td>균형형 모델 요약 -> 템플릿 후처리</td><td>형식 자동 검증</td></tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section class="section" id="evaluation">
+                <h2>5. 성능 평가 방법</h2>
+                <p>실무 평가는 오프라인 테스트와 온라인 테스트를 분리해야 합니다. 오프라인에서 후보를 줄이고, 온라인에서 실제 사용자 지표를 확인한 뒤 확정하세요.</p>
+                <table class="info-table">
+                    <thead><tr><th>평가 단계</th><th>측정 지표</th><th>목표</th></tr></thead>
+                    <tbody>
+                        <tr><td>오프라인</td><td>정확도/F1/환각률</td><td>기준 모델 대비 5% 개선</td></tr>
+                        <tr><td>파일럿 운영</td><td>재질문율/만족도</td><td>재질문율 10% 감소</td></tr>
+                        <tr><td>정식 운영</td><td>SLA/비용/KPI</td><td>예산 내 KPI 달성</td></tr>
+                    </tbody>
+                </table>
+                <h3>정량 + 정성 평가 결합</h3>
+                <p>정량 지표만으로는 실제 만족도를 설명하기 어렵습니다. 팀 리더/현업 사용자가 평가 코멘트를 남기는 정성 평가를 같이 운영하면 모델 선택 정확도가 올라갑니다.</p>
+                <table class="info-table">
+                    <thead><tr><th>평가 유형</th><th>항목</th><th>기록 방식</th></tr></thead>
+                    <tbody>
+                        <tr><td>정량</td><td>정확도, 지연시간, 비용</td><td>자동 대시보드 수집</td></tr>
+                        <tr><td>정성</td><td>가독성, 맥락 이해, 실무 활용도</td><td>5점 척도 + 코멘트</td></tr>
+                        <tr><td>리스크</td><td>환각, 금칙어, 보안 위반</td><td>위반 건수/사례 기록</td></tr>
+                    </tbody>
+                </table>
+                <div class="prompt-box">
+                    <span class="label">🧪 실전 프롬프트:</span>
+                    <pre>후보 모델 3개를 비교하는 평가 리포트 템플릿을 만들어 주세요.
+필수 항목: 오프라인 정확도, 환각률, 응답시간, 비용, 사용자 만족도, 최종 추천.
+결과는 표 중심으로 작성해 주세요.</pre>
+                </div>
+            </section>
+
+            <section class="section" id="risk">
+                <h2>6. 리스크와 한계</h2>
+                <p>모델은 높은 성능을 보여도 환각, 편향, 보안 이슈가 발생할 수 있습니다. 따라서 "모델 성능"과 "운영 안전성"을 분리해 관리해야 합니다.</p>
+                <table class="info-table">
+                    <thead><tr><th>리스크</th><th>발생 상황</th><th>완화 방안</th></tr></thead>
+                    <tbody>
+                        <tr><td>환각</td><td>근거 없는 답변 생성</td><td>출처 요구 + 검증 프롬프트</td></tr>
+                        <tr><td>편향</td><td>특정 표현/집단 왜곡</td><td>금칙 규칙 + 샘플 점검</td></tr>
+                        <tr><td>보안</td><td>민감정보 포함 질의</td><td>마스킹 + 접근 통제 + 로그</td></tr>
+                    </tbody>
+                </table>
+                <h3>리스크 대응 운영 규칙</h3>
+                <ul>
+                    <li>고위험 답변 유형(법률/재무/개인정보)은 자동 경고 태그 부여</li>
+                    <li>근거 미제시 답변은 재생성 또는 검수 큐로 자동 이동</li>
+                    <li>금칙 규칙 위반 3회 이상 발생 시 모델 버전 롤백 검토</li>
+                    <li>리스크 사례를 주간 공유해 프롬프트/정책 개선</li>
+                </ul>
+                <div class="tip-box">"좋은 답변 생성"보다 "위험한 답변 차단"을 먼저 설계하면 운영 사고를 크게 줄일 수 있습니다.</div>
+            </section>
+
+            <section class="section" id="operation">
+                <h2>7. 운영 전략</h2>
+                <p>실제 운영에서는 단일 모델이 아니라 모델 라우팅, 캐시, fallback 전략을 함께 써야 안정성이 확보됩니다.</p>
+                <ul>
+                    <li>요청 난이도 기반 모델 라우팅(간단한 요청은 경량 모델)</li>
+                    <li>오류 발생 시 대체 모델 fallback</li>
+                    <li>고빈도 질문은 캐시 우선 응답</li>
+                </ul>
+                <table class="info-table">
+                    <thead><tr><th>운영 시나리오</th><th>전략</th><th>기대 효과</th></tr></thead>
+                    <tbody>
+                        <tr><td>트래픽 급증</td><td>경량 모델 비중 확대</td><td>지연시간 안정화</td></tr>
+                        <tr><td>고난도 질의 증가</td><td>고성능 모델 라우팅</td><td>품질 유지</td></tr>
+                        <tr><td>비용 초과 위험</td><td>요청별 토큰 제한 + 캐시 강화</td><td>비용 통제</td></tr>
+                    </tbody>
+                </table>
+                <h3>운영팀 액션 플랜</h3>
+                <div class="team-grid">
+                    <div class="team-card"><strong>운영 담당</strong> 일일 성능 모니터링, 임계치 초과 시 즉시 알림</div>
+                    <div class="team-card"><strong>모델 담당</strong> 주간 실패 패턴 분석, 프롬프트/정책 업데이트</div>
+                    <div class="team-card"><strong>현업 담당</strong> 실제 사용성 피드백 수집, 업무 적합성 평가</div>
+                    <div class="team-card"><strong>보안 담당</strong> 민감정보 처리 정책 및 감사로그 점검</div>
+                </div>
+            </section>
+
+            <section class="section" id="checklist">
+                <h2>8. 도입 체크리스트</h2>
+                <p>도입 전 체크리스트를 통일하면 팀별 품질 편차가 줄어듭니다. 아래 항목을 통과한 모델만 운영에 반영하세요.</p>
+                <ol>
+                    <li>핵심 업무 10개 테스트 시나리오 통과</li>
+                    <li>보안/컴플라이언스 검토 완료</li>
+                    <li>비용 한도 내 운영 가능성 확인</li>
+                    <li>Fallback/롤백 경로 사전 점검</li>
+                    <li>운영 대시보드/알림 설정 완료</li>
+                </ol>
+                <table class="info-table">
+                    <thead><tr><th>체크 항목</th><th>확인 질문</th><th>완료 기준</th></tr></thead>
+                    <tbody>
+                        <tr><td>기술 검증</td><td>핵심 업무 성능이 기준을 넘는가?</td><td>테스트 리포트 승인</td></tr>
+                        <tr><td>비용 검증</td><td>월간 사용량 기준 예산 내인가?</td><td>재무 승인 완료</td></tr>
+                        <tr><td>운영 검증</td><td>장애/롤백/알림 체계가 준비됐는가?</td><td>운영 시뮬레이션 통과</td></tr>
+                    </tbody>
+                </table>
+                <div class="prompt-box">
+                    <span class="label">📌 실전 프롬프트:</span>
+                    <pre>AI 모델 도입 의사결정 체크리스트를 만들어 주세요.
+항목: 기술성, 비용성, 보안성, 운영성, 조직 적용성.
+각 항목에 "통과/보완/탈락" 판단 기준을 표로 작성해 주세요.</pre>
+                </div>
+            </section>
+
+            <div style="text-align: center; margin-top: 60px; padding: 40px; background: linear-gradient(135deg, #ef444415 0%, #dc262615 100%); border-radius: 15px;">
+                <h3 style="font-size: 1.5rem; margin-bottom: 20px;">🚀 다음 단계: 도구와 모델을 함께 최적화</h3>
+                <p style="margin-bottom: 30px;">모델 이해를 바탕으로 AI 도구 선택 전략까지 연결하면 실무 적용 속도가 빨라집니다.</p>
+                <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                    <a href="manual-tools.html" class="btn btn-outline">AI 도구 선택 가이드</a>
+                    <a href="manual-start-guide.html" class="btn btn-outline">AI 활용 시작 가이드</a>
+                    <a href="manuals.html" class="btn btn-primary">전체 목록</a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <button class="pdf-button" onclick="downloadPDF()">
+        <i class="fas fa-file-pdf"></i> PDF 다운로드
+    </button>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo-section">
+                        <img src="assets/images/common/footer_tg.jpg" alt="TG 건물" class="footer-building-image">
+                        <div class="footer-text-content">
+                            <h4>TG AI 캠퍼스</h4>
+                            <p>AI 기술 교육 전문 플랫폼</p>
+                        </div>
+                    </div>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>AI 교육 과정</h4>
+                    <ul>
+                        <li><a href="manuals.html#tab-basics-link">기초편</a></li>
+                        <li><a href="manuals.html#tab-advanced-link">실전편</a></li>
+                        <li><a href="manuals.html#tab-prompt-link">프롬프트</a></li>
+                        <li><a href="manuals.html#tab-job-link">직무별 활용</a></li>
+                        <li><a href="manuals.html#tab-advanced-ai-link">AI 고도화</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>AI 실전</h4>
+                    <ul>
+                        <li><a href="manual-prompt-basic.html">프롬프트 작성법</a></li>
+                        <li><a href="manual-automation.html">업무 자동화</a></li>
+                        <li><a href="manual-workflow.html">워크플로우 구축</a></li>
+                        <li><a href="manual-collaboration.html">AI 협업 도구</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>학습 지원</h4>
+                    <ul>
+                        <li><a href="support.html">나만의 AI 코치</a></li>
+                        <li><a href="notices.html">공지사항</a></li>
+                        <li><a href="dictionary.html">AI 용어 사전</a></li>
+                        <li><a href="dashboard.html">학습 현황</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>TG 라운지</h4>
+                    <ul>
+                        <li><a href="about.html">TG AI 캠퍼스 소개</a></li>
+                        <li><a href="tg-family.html">TG 패밀리</a></li>
+                        <li><a href="news.html">TG Alliance 소식</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 TG AI 캠퍼스. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        async function downloadPDF() {
+            const button = document.querySelector('.pdf-button');
+            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 생성 중...';
+            button.disabled = true;
+            try {
+                const { jsPDF } = window.jspdf;
+                const content = document.getElementById('manual-content');
+                const canvas = await html2canvas(content, { scale: 2, useCORS: true, logging: false });
+                const imgData = canvas.toDataURL('image/png');
+                const pdf = new jsPDF('p', 'mm', 'a4');
+                const pageWidth = pdf.internal.pageSize.getWidth();
+                const pageHeight = pdf.internal.pageSize.getHeight();
+                const imgWidth = pageWidth - 20;
+                const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                let heightLeft = imgHeight;
+                let position = 10;
+                pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+                heightLeft -= pageHeight;
+                while (heightLeft >= 0) {
+                    position = heightLeft - imgHeight + 10;
+                    pdf.addPage();
+                    pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+                    heightLeft -= pageHeight;
+                }
+                pdf.save('TG_AI_모델_이해_매뉴얼.pdf');
+            } catch (error) {
+                alert('PDF 생성 중 오류가 발생했습니다.');
+                console.error(error);
+            } finally {
+                button.innerHTML = '<i class="fas fa-file-pdf"></i> PDF 다운로드';
+                button.disabled = false;
+            }
+        }
+
+        function scrollToHash(hash) {
+            const target = document.querySelector(hash);
+            if (target) {
+                const headerOffset = 120;
+                const elementPosition = target.getBoundingClientRect().top;
+                const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+            }
+        }
+
+        document.querySelectorAll('.manual-sidebar a[href^="#"]')?.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const href = this.getAttribute('href');
+                scrollToHash(href);
+                document.querySelectorAll('.manual-sidebar a').forEach(a => a.classList.remove('active'));
+                this.classList.add('active');
+                history.replaceState(null, '', href);
+            });
+        });
+
+        window.addEventListener('load', function() {
+            if (window.location.hash) {
+                setTimeout(() => {
+                    scrollToHash(window.location.hash);
+                    const activeLink = document.querySelector('.manual-sidebar a[href="' + window.location.hash + '"]');
+                    if (activeLink) {
+                        document.querySelectorAll('.manual-sidebar a').forEach(a => a.classList.remove('active'));
+                        activeLink.classList.add('active');
+                    }
+                }, 10);
+            }
+        });
+
+        document.querySelector('.mobile-menu-toggle')?.addEventListener('click', function() {
+            document.querySelector('.nav-menu').classList.toggle('active');
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>영상 재생 - TG에듀테크</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: #0f0f0f;
+            font-family: 'Noto Sans KR', sans-serif;
+            color: white;
+        }
+        
+        .player-wrapper {
+            width: 100%;
+            max-width: 100%;
+            margin: 0 auto;
+        }
+        
+        .video-container {
+            width: 100%;
+            height: 0;
+            padding-bottom: 56.25%; /* 16:9 비율 */
+            position: relative;
+            background: #000;
+        }
+        
+        .video-container iframe,
+        .video-container video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .video-info-section {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .video-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+        
+        .video-meta {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            color: #aaa;
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .video-meta span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .video-description {
+            color: #ccc;
+            line-height: 1.8;
+            margin-top: 20px;
+            padding: 20px;
+            background: #1a1a1a;
+            border-radius: 8px;
+        }
+        
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        
+        .back-button:hover {
+            background: #5a67d8;
+        }
+        
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #0f0f0f;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        
+        .spinner {
+            border: 4px solid #333;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .error-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #0f0f0f;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+        
+        .error-screen.show {
+            display: flex;
+        }
+        
+        .error-icon {
+            font-size: 5rem;
+            color: #ff6b6b;
+            margin-bottom: 20px;
+        }
+        
+        .error-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .error-message {
+            color: #aaa;
+            text-align: center;
+            margin-bottom: 30px;
+            max-width: 500px;
+        }
+        
+        @media (max-width: 768px) {
+            .video-title {
+                font-size: 1.3rem;
+            }
+            
+            .video-info-section {
+                padding: 15px;
+            }
+            
+            .video-meta {
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 로딩 화면 -->
+    <div id="loading" class="loading-screen">
+        <div class="spinner"></div>
+        <p style="color: #aaa; font-size: 1.1rem;">영상을 불러오는 중...</p>
+    </div>
+    
+    <!-- 에러 화면 -->
+    <div id="error" class="error-screen">
+        <i class="fas fa-exclamation-triangle error-icon"></i>
+        <h2 class="error-title">영상을 불러올 수 없습니다</h2>
+        <p class="error-message" id="errorMessage">영상 정보를 찾을 수 없습니다.</p>
+        <button class="back-button" onclick="goBack()">
+            <i class="fas fa-arrow-left"></i> 추천강의로 돌아가기
+        </button>
+    </div>
+    
+    <!-- 비디오 플레이어 -->
+    <div id="player" class="player-wrapper" style="display: none;">
+        <div class="video-container" id="videoContainer">
+            <!-- 동적으로 생성됨 -->
+        </div>
+        
+        <div class="video-info-section">
+            <h1 class="video-title" id="videoTitle">영상 제목</h1>
+            <div class="video-meta">
+                <span id="courseName"><i class="fas fa-book"></i> 강의명</span>
+                <span id="videoDuration"><i class="fas fa-clock"></i> 재생시간</span>
+            </div>
+            <div class="video-description" id="videoDescription">
+                영상 설명이 여기에 표시됩니다.
+            </div>
+            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                <button class="back-button" onclick="goBack()" style="flex: 1;">
+                    <i class="fas fa-arrow-left"></i> 추천강의로 돌아가기
+                </button>
+                <button class="back-button" onclick="openYouTube()" style="flex: 1; background: #ff0000;">
+                    <i class="fab fa-youtube"></i> YouTube에서 보기
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentVideoUrl = ''; // 전역 변수로 URL 저장
+        // URL에서 비디오 ID 가져오기
+        const urlParams = new URLSearchParams(window.location.search);
+        const videoId = urlParams.get('id');
+
+        console.log('📺 비디오 ID:', videoId);
+
+        // 페이지 로드 시 실행
+        if (videoId) {
+            loadVideo(videoId);
+        } else {
+            showError('영상 ID가 없습니다. URL을 확인해주세요.');
+        }
+
+        // 영상 로드
+        async function loadVideo(id) {
+            try {
+                console.log('🔍 영상 정보 조회 중:', id);
+                
+                // DB에서 영상 정보 가져오기
+                const response = await fetch(`tables/videos/${id}`);
+                
+                if (!response.ok) {
+                    throw new Error(`영상을 찾을 수 없습니다 (${response.status})`);
+                }
+                
+                const video = await response.json();
+                console.log('✅ 영상 정보:', video);
+                
+                // 강의 정보 가져오기
+                let courseName = '강의 정보 없음';
+                if (video.course_id) {
+                    try {
+                        const courseResponse = await fetch(`tables/courses/${video.course_id}`);
+                        if (courseResponse.ok) {
+                            const course = await courseResponse.json();
+                            courseName = course.title || '강의 정보 없음';
+                        }
+                    } catch (e) {
+                        console.log('⚠️ 강의 정보 로드 실패:', e);
+                    }
+                }
+                
+                // 플레이어 렌더링
+                renderPlayer(video, courseName);
+                
+            } catch (error) {
+                console.error('❌ 영상 로드 실패:', error);
+                showError(error.message || '영상을 불러오는 중 오류가 발생했습니다.');
+            }
+        }
+
+        // 플레이어 렌더링
+        function renderPlayer(video, courseName) {
+            console.log('🎬 플레이어 렌더링 시작');
+            
+            // 로딩 숨기기
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('player').style.display = 'block';
+            
+            // YouTube URL 정리
+            let videoUrl = video.video_url;
+            currentVideoUrl = videoUrl; // 전역 변수에 저장
+            
+            if (videoUrl.includes('youtube.com') || videoUrl.includes('youtu.be')) {
+                // watch?v= 형식을 embed로 변환
+                if (videoUrl.includes('watch?v=')) {
+                    const vId = videoUrl.split('watch?v=')[1].split('&')[0];
+                    videoUrl = `https://www.youtube.com/embed/${vId}`;
+                    console.log('🔄 URL 변환:', videoUrl);
+                }
+                // youtu.be 단축 URL 변환
+                else if (videoUrl.includes('youtu.be/')) {
+                    const vId = videoUrl.split('youtu.be/')[1].split('?')[0];
+                    videoUrl = `https://www.youtube.com/embed/${vId}`;
+                    console.log('🔄 URL 변환:', videoUrl);
+                }
+                // & 를 ? 로 수정
+                videoUrl = videoUrl.replace(/embed\/([^&?]+)&/, 'embed/$1?');
+                
+                console.log('📺 최종 YouTube URL:', videoUrl);
+                
+                // iframe 생성
+                document.getElementById('videoContainer').innerHTML = `
+                    <iframe
+                        src="${videoUrl}?autoplay=1&rel=0&modestbranding=1"
+                        frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowfullscreen>
+                    </iframe>
+                `;
+            } else {
+                // 일반 비디오 파일
+                document.getElementById('videoContainer').innerHTML = `
+                    <video controls autoplay>
+                        <source src="${videoUrl}" type="video/mp4">
+                        브라우저가 비디오 재생을 지원하지 않습니다.
+                    </video>
+                `;
+            }
+            
+            // 정보 업데이트
+            document.getElementById('videoTitle').textContent = video.title || '제목 없음';
+            document.getElementById('courseName').innerHTML = `<i class="fas fa-book"></i> ${courseName}`;
+            document.getElementById('videoDuration').innerHTML = `<i class="fas fa-clock"></i> ${video.duration || '시간 정보 없음'}`;
+            document.getElementById('videoDescription').textContent = video.description || '영상 설명이 없습니다.';
+            
+            // 페이지 제목 변경
+            document.title = `${video.title || '영상 재생'} - TG에듀테크`;
+            
+            console.log('✅ 플레이어 렌더링 완료');
+        }
+
+        // 에러 표시
+        function showError(message) {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('error').classList.add('show');
+            document.getElementById('errorMessage').textContent = message;
+            console.error('❌', message);
+        }
+
+        // 뒤로가기
+        function goBack() {
+            window.location.href = 'recommended.html';
+        }
+
+        // YouTube에서 보기
+        function openYouTube() {
+            // embed URL을 watch URL로 변환
+            let watchUrl = currentVideoUrl;
+            if (watchUrl.includes('/embed/')) {
+                const videoId = watchUrl.split('/embed/')[1].split('?')[0];
+                watchUrl = `https://www.youtube.com/watch?v=${videoId}`;
+            }
+            window.open(watchUrl, '_blank');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,1933 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>강좌 상세 - TG AI 캠퍼스</title>
+    <link rel="stylesheet" href="assets/css/style.css?v=7">
+    <link rel="stylesheet" href="assets/css/samsung-nav.css?v=7">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* 강좌 플레이어 전용 스타일 */
+        body {
+            background: #f9fafb;
+        }
+
+        /* 비디오 섹션 - 관련 강좌와 나란히 */
+        .video-section {
+            background: #f9fafb;
+            padding: 20px 20px 30px; /* 상단 여백 축소 */
+            margin-top: 0; /* 헤더 바로 아래 */
+        }
+
+        .video-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 280px;
+            gap: 30px;
+        }
+        
+        .video-container {
+            position: relative;
+            width: 100%;
+            height: 500px;
+            background: #000;
+            overflow: hidden;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 12px;
+        }
+        
+        .video-thumbnail {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            z-index: 1;
+        }
+        
+        .video-container:hover .video-overlay {
+            background: rgba(0, 0, 0, 0.5);
+        }
+        
+        .play-button {
+            width: 70px;
+            height: 70px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+        }
+        
+        .video-container:hover .play-button {
+            transform: scale(1.1);
+            background: #fff;
+        }
+        
+        .play-button i {
+            font-size: 1.8rem;
+            color: #667eea;
+            margin-left: 5px;
+        }
+        
+        .video-container.playing .video-overlay {
+            display: none;
+        }
+
+        /* 관련 강좌 (동영상 옆) */
+        .video-sidebar {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .video-sidebar h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .related-course-item {
+            background: #f9fafb;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 12px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .related-course-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .related-thumbnail {
+            width: 100%;
+            height: 100px;
+            object-fit: cover;
+        }
+
+        .related-info {
+            padding: 10px;
+        }
+
+        .related-title {
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+            line-height: 1.3;
+        }
+
+        .related-meta {
+            color: #6b7280;
+            font-size: 0.8rem;
+        }
+
+        .related-meta i {
+            margin-right: 3px;
+        }
+
+        /* 강좌 정보 영역 */
+        .course-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px; /* 40px → 30px */
+        }
+
+        /* 메인 콘텐츠 */
+        .main-content {
+            background: white;
+            border-radius: 15px;
+            padding: 35px; /* 40px → 35px */
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .course-header {
+            margin-bottom: 25px; /* 30px → 25px */
+            padding-bottom: 25px; /* 30px → 25px */
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .course-title {
+            font-size: 2rem; /* 2.5rem → 2rem */
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 15px;
+        }
+
+        .course-meta {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+            color: #6b7280;
+            font-size: 1rem;
+        }
+
+        .course-meta i {
+            color: #667eea;
+            margin-right: 8px;
+        }
+
+        .rating {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .stars {
+            color: #fbbf24;
+        }
+
+        /* 탭 메뉴 */
+        .course-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .course-tab {
+            padding: 15px 25px;
+            background: none;
+            border: none;
+            border-bottom: 3px solid transparent;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #6b7280;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .course-tab:hover {
+            color: #667eea;
+        }
+
+        .course-tab.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+
+        /* 탭 콘텐츠 */
+        .tab-panel {
+            display: none;
+        }
+
+        .tab-panel.active {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 개요 섹션 */
+        .overview-section h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 15px;
+            margin-top: 30px;
+        }
+
+        .overview-section h3:first-child {
+            margin-top: 0;
+        }
+
+        .overview-section p {
+            color: #4b5563;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        .learning-objectives {
+            background: #f3f4f6;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .learning-objectives ul {
+            list-style: none;
+            padding: 0;
+            margin: 15px 0 0 0;
+        }
+
+        .learning-objectives li {
+            padding: 12px 0;
+            color: #374151;
+            display: flex;
+            align-items: start;
+        }
+
+        .learning-objectives li:before {
+            content: "✓";
+            color: #10b981;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+
+        /* 커리큘럼 */
+        .curriculum-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .curriculum-item {
+            background: #f9fafb;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .curriculum-item:hover {
+            background: #f3f4f6;
+            transform: translateX(5px);
+        }
+
+        .curriculum-number {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .curriculum-info {
+            flex: 1;
+        }
+
+        .curriculum-title {
+            font-weight: 600;
+            color: #1f2937;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        .curriculum-duration {
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+
+        .curriculum-duration i {
+            margin-right: 5px;
+        }
+
+        /* 노트 섹션 */
+        .note-editor {
+            background: #f9fafb;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .note-editor textarea {
+            width: 100%;
+            min-height: 200px;
+            border: none;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+            resize: vertical;
+        }
+
+        .note-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .note-button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .note-button.primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .note-button.primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .note-button.secondary {
+            background: #e5e7eb;
+            color: #4b5563;
+        }
+
+        .note-button.secondary:hover {
+            background: #d1d5db;
+        }
+
+        .saved-notes {
+            margin-top: 30px;
+        }
+
+        .note-item {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border-left: 4px solid #667eea;
+        }
+
+        .note-timestamp {
+            color: #6b7280;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+
+        .note-content {
+            color: #374151;
+            line-height: 1.6;
+        }
+
+        /* Q&A 섹션 */
+        .qa-item {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .question {
+            margin-bottom: 15px;
+        }
+
+        .question-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+        }
+
+        .question-meta {
+            flex: 1;
+        }
+
+        .question-author {
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        .question-date {
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+
+        .question-content {
+            color: #374151;
+            line-height: 1.6;
+            margin-left: 55px;
+        }
+
+        .answer {
+            background: #f9fafb;
+            padding: 20px;
+            border-radius: 8px;
+            margin-left: 55px;
+            margin-top: 15px;
+        }
+
+        .answer-label {
+            color: #667eea;
+            font-weight: 700;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .answer-label i {
+            font-size: 1.2rem;
+        }
+
+        .answer-content {
+            color: #374151;
+            line-height: 1.6;
+        }
+
+        /* 사이드바 - 삭제됨 */
+        .sidebar {
+            display: none;
+        }
+
+        .course-info-card {
+            display: none;
+        }
+
+        .related-courses {
+            display: none;
+        }
+
+        /* 반응형 */
+        @media (max-width: 1024px) {
+            .video-wrapper {
+                grid-template-columns: 1fr;
+            }
+
+            .video-sidebar {
+                max-height: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .course-title {
+                font-size: 1.8rem;
+            }
+            
+            .course-meta {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .main-content {
+                padding: 25px 20px;
+            }
+            
+            .play-button {
+                width: 70px;
+                height: 70px;
+            }
+            
+            .play-button i {
+                font-size: 1.8rem;
+            }
+        }
+
+        /* Cursor 개발자를 위한 주석 영역 표시 */
+        [data-backend-integration] {
+            position: relative;
+        }
+
+        [data-backend-integration]:before {
+            content: "🔧 Backend Integration Point";
+            position: absolute;
+            top: -30px;
+            left: 0;
+            background: #fef3c7;
+            color: #92400e;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: none;
+        }
+
+        body.dev-mode [data-backend-integration]:before {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header / Navigation -->
+    <header class="header">
+        <!-- Top Utility Bar -->
+        <div class="utility-bar">
+            <div class="container">
+                <div class="utility-wrapper">
+                    <a href="news.html" class="utility-link">TG 라운지</a>
+                    <a href="notices.html" class="utility-link">공지사항</a>
+                    <a href="tg-family.html" class="utility-link">TG패밀리</a>
+                    <a href="https://tgnco.kr/tg-alliance/" target="_blank" class="external-link tg-alliance">
+                        TG Alliance <i class="fas fa-external-link-alt"></i>
+                    </a>
+                    <span class="external-link" style="color: #ff8c00; cursor: default;">
+                        TG 에듀테크
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Navigation Bar -->
+        <nav class="navbar">
+            <div class="container">
+                <div class="nav-wrapper">
+                    <!-- Left Side: Logo + Menu -->
+                    <div class="nav-left">
+                        <a href="index.html" class="logo">
+                            <i class="fas fa-brain"></i>
+                            <span><span class="logo-tg">TG</span> AI 캠퍼스</span>
+                        </a>
+                        
+                                                <ul class="nav-menu">
+                            <li><a href="about.html">TG AI 캠퍼스소개</a></li>
+                            <li><a href="manuals.html">AI 활용메뉴얼</a></li>
+                            <li><a href="dictionary.html">AI 용어사전</a></li>
+                            <li><a href="recommended.html">AI 활용추천영상</a></li>
+                            <li><a href="curriculum.html">교육과정</a></li>
+                            <li><a href="support.html" style="color: #3b82f6; font-weight: 600;">나만의 AI 코치</a></li>
+                            <li><a href="dashboard.html">학습 현황</a></li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Right Side: Search + Icons -->
+                    <div class="nav-right">
+                        <!-- Search -->
+                        <div class="search-wrapper">
+                            <form class="search-form">
+                                <button type="submit" class="search-btn">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                                <input type="text" class="search-input" placeholder="검색" autocomplete="off">
+                            </form>
+                        </div>
+                        
+                        <!-- Icon Actions -->
+                        <div class="icon-actions">
+                            <a href="mypage.html" class="icon-link" title="마이페이지">
+                                <img src="assets/images/mypage-icon-new.png?v=2" alt="마이페이지" class="icon-img mypage-icon" style="width: auto !important; height: 20px !important; max-height: 20px !important;">
+                            </a>
+                            <a href="login.html" class="icon-link" id="authIcon" title="로그인">
+                                <img src="assets/images/logout-icon.png" alt="로그인" class="icon-img" style="width: 24px !important; height: 24px !important; max-width: 24px !important; max-height: 24px !important;">
+                            </a>
+                        </div>
+                        
+                        <!-- Mobile Toggle -->
+                        <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                            <i class="fas fa-bars"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- 비디오 섹션 -->
+    <section class="video-section">
+        <div class="video-wrapper">
+            <!-- 동영상 -->
+            <div class="video-container" id="videoContainer" data-backend-integration="video-tracking">
+                <!-- 테스트용 직접 iframe -->
+                <iframe 
+                    id="videoFrame"
+                    style="
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                        border: none;
+                        border-radius: 12px;
+                        background: #000;
+                    "
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen>
+                </iframe>
+                <!-- 원래 썸네일은 주석 처리
+                <img src="https://img.youtube.com/vi/wP48xJLWuB0/maxresdefault.jpg" alt="강좌 썸네일" class="video-thumbnail" id="videoThumbnail">
+                <div class="video-overlay">
+                    <div class="play-button">
+                        <i class="fas fa-play"></i>
+                    </div>
+                </div>
+                -->
+            </div>
+
+            <!-- 관련 강좌 (동영상 옆) -->
+            <div class="video-sidebar">
+                <h3>🎓 관련 강좌</h3>
+                <div id="relatedCoursesContainer">
+                    <div class="related-course-item" onclick="location.href='course-view.html?id=102&video=EZ7QsUqhZ8U'">
+                        <img src="https://img.youtube.com/vi/EZ7QsUqhZ8U/sddefault.jpg" alt="AI 업무 자동화" class="related-thumbnail">
+                        <div class="related-info">
+                            <div class="related-title">AI로 업무 자동화하기</div>
+                            <div class="related-meta">
+                                <i class="fas fa-clock"></i> 25분 · 초급
+                            </div>
+                        </div>
+                    </div>
+                    <div class="related-course-item" onclick="location.href='course-view.html?id=201&video=bOII_roWlys'">
+                        <img src="https://img.youtube.com/vi/bOII_roWlys/sddefault.jpg" alt="프롬프트 엔지니어링" class="related-thumbnail">
+                        <div class="related-info">
+                            <div class="related-title">프롬프트 엔지니어링 기초</div>
+                            <div class="related-meta">
+                                <i class="fas fa-clock"></i> 40분 · 초급
+                            </div>
+                        </div>
+                    </div>
+                    <div class="related-course-item" onclick="location.href='course-view.html?id=301&video=OuMfeDIwi0Q'">
+                        <img src="https://img.youtube.com/vi/OuMfeDIwi0Q/sddefault.jpg" alt="마케팅 AI" class="related-thumbnail">
+                        <div class="related-info">
+                            <div class="related-title">마케팅 직무 AI 활용</div>
+                            <div class="related-meta">
+                                <i class="fas fa-clock"></i> 45분 · 초급
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 강좌 콘텐츠 -->
+    <section class="course-content">
+        <!-- 메인 콘텐츠 -->
+        <div class="main-content">
+            <!-- 강좌 헤더 -->
+            <div class="course-header">
+                <h1 class="course-title" id="courseTitle">AI 기초 완전 정복</h1>
+                <div class="course-meta">
+                    <div class="rating">
+                        <span class="stars">★★★★★</span>
+                        <span>4.8 (1,234명)</span>
+                    </div>
+                    <div>
+                        <i class="fas fa-user"></i>
+                        <span>TG AI 연구소</span>
+                    </div>
+                    <div>
+                        <i class="fas fa-clock"></i>
+                        <span>45분</span>
+                    </div>
+                    <div>
+                        <i class="fas fa-signal"></i>
+                        <span>초급</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 탭 메뉴 -->
+            <div class="course-tabs">
+                <button class="course-tab active" data-tab="overview">개요</button>
+                <button class="course-tab" data-tab="curriculum">커리큘럼</button>
+                <button class="course-tab" data-tab="notes" data-backend-integration="notes-system">노트</button>
+                <button class="course-tab" data-tab="qa" data-backend-integration="qa-system">Q&A</button>
+            </div>
+
+            <!-- 개요 탭 -->
+            <div class="tab-panel active" id="overview">
+                <div class="overview-section">
+                    <h3>강좌 소개</h3>
+                    <p>
+                        인공지능(AI)의 세계로 첫 걸음을 내딛는 분들을 위한 완벽한 입문 강좌입니다. 
+                        ChatGPT, Midjourney 등 실무에서 바로 활용 가능한 생성형 AI 도구들을 
+                        체계적으로 학습하며, AI 시대의 필수 역량을 갖추게 됩니다.
+                    </p>
+
+                    <div class="learning-objectives">
+                        <h3>학습 목표</h3>
+                        <ul>
+                            <li>인공지능(AI), 머신러닝(ML), 딥러닝(DL)의 기본 개념 이해</li>
+                            <li>ChatGPT를 활용한 업무 자동화 및 생산성 향상</li>
+                            <li>프롬프트 엔지니어링 기초 마스터</li>
+                            <li>생성형 AI 도구 활용 실전 예제 학습</li>
+                            <li>AI 윤리 및 보안 기본 원칙 습득</li>
+                        </ul>
+                    </div>
+
+                    <h3>이런 분들께 추천합니다</h3>
+                    <p>
+                        • AI를 처음 접하시는 분<br>
+                        • 업무에 AI를 활용하고 싶으신 분<br>
+                        • ChatGPT 등 AI 도구 사용법을 배우고 싶으신 분<br>
+                        • AI 트렌드를 이해하고 싶은 비즈니스 전문가
+                    </p>
+
+                    <h3>강사 소개</h3>
+                    <p>
+                        <strong>TG AI 연구소</strong><br>
+                        삼성전자 계열사의 AI 전문 연구팀으로, 실무 중심의 AI 교육 프로그램을 개발하고 있습니다.
+                        현장에서 검증된 노하우를 바탕으로 누구나 쉽게 따라할 수 있는 실용적인 AI 활용법을 제공합니다.
+                    </p>
+                </div>
+            </div>
+
+            <!-- 커리큘럼 탭 -->
+            <div class="tab-panel" id="curriculum">
+                <ul class="curriculum-list">
+                    <li class="curriculum-item">
+                        <div class="curriculum-number">1</div>
+                        <div class="curriculum-info">
+                            <div class="curriculum-title">AI 기본 개념 이해하기</div>
+                            <div class="curriculum-duration">
+                                <i class="fas fa-clock"></i> 10분
+                            </div>
+                        </div>
+                    </li>
+                    <li class="curriculum-item">
+                        <div class="curriculum-number">2</div>
+                        <div class="curriculum-info">
+                            <div class="curriculum-title">생성형 AI 도구 소개</div>
+                            <div class="curriculum-duration">
+                                <i class="fas fa-clock"></i> 12분
+                            </div>
+                        </div>
+                    </li>
+                    <li class="curriculum-item">
+                        <div class="curriculum-number">3</div>
+                        <div class="curriculum-info">
+                            <div class="curriculum-title">ChatGPT 활용 실습</div>
+                            <div class="curriculum-duration">
+                                <i class="fas fa-clock"></i> 15분
+                            </div>
+                        </div>
+                    </li>
+                    <li class="curriculum-item">
+                        <div class="curriculum-number">4</div>
+                        <div class="curriculum-info">
+                            <div class="curriculum-title">프롬프트 엔지니어링 기초</div>
+                            <div class="curriculum-duration">
+                                <i class="fas fa-clock"></i> 8분
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- 노트 탭 -->
+            <div class="tab-panel" id="notes" data-backend-integration="notes-crud">
+                <!-- 🔧 Cursor: localStorage를 서버 DB로 교체 -->
+                <div class="note-editor">
+                    <textarea id="noteTextarea" placeholder="강의를 들으며 메모하세요..."></textarea>
+                    <div class="note-actions">
+                        <button class="note-button primary" onclick="saveNote()">
+                            <i class="fas fa-save"></i> 저장하기
+                        </button>
+                        <button class="note-button secondary" onclick="clearNote()">
+                            <i class="fas fa-eraser"></i> 지우기
+                        </button>
+                    </div>
+                </div>
+
+                <div class="saved-notes" id="savedNotes">
+                    <!-- 저장된 노트가 여기 표시됩니다 -->
+                    <div class="note-item">
+                        <div class="note-timestamp">2026-03-31 14:30</div>
+                        <div class="note-content">
+                            AI는 인공지능(Artificial Intelligence)의 약자로, 머신러닝과 딥러닝을 포함하는 상위 개념입니다.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Q&A 탭 -->
+            <div class="tab-panel" id="qa" data-backend-integration="qa-system">
+                <!-- 🔧 Cursor: 질문 작성 폼과 답변 시스템 연동 -->
+                <div class="qa-item">
+                    <div class="question">
+                        <div class="question-header">
+                            <div class="user-avatar">김</div>
+                            <div class="question-meta">
+                                <div class="question-author">김철수</div>
+                                <div class="question-date">2026-03-30</div>
+                            </div>
+                        </div>
+                        <div class="question-content">
+                            ChatGPT와 Bard의 차이점이 무엇인가요? 어떤 상황에서 어떤 도구를 사용하는 것이 좋을까요?
+                        </div>
+                    </div>
+                    <div class="answer">
+                        <div class="answer-label">
+                            <i class="fas fa-check-circle"></i>
+                            강사 답변
+                        </div>
+                        <div class="answer-content">
+                            좋은 질문입니다! ChatGPT는 OpenAI의 GPT 모델 기반으로 대화와 콘텐츠 생성에 강점이 있고, 
+                            Bard는 Google의 검색 데이터를 활용해 최신 정보 제공에 유리합니다. 
+                            창의적 글쓰기는 ChatGPT, 실시간 정보 검색은 Bard를 추천드립니다.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="qa-item">
+                    <div class="question">
+                        <div class="question-header">
+                            <div class="user-avatar">박</div>
+                            <div class="question-meta">
+                                <div class="question-author">박영희</div>
+                                <div class="question-date">2026-03-29</div>
+                            </div>
+                        </div>
+                        <div class="question-content">
+                            프롬프트 엔지니어링을 효과적으로 학습하는 방법이 궁금합니다.
+                        </div>
+                    </div>
+                    <div class="answer">
+                        <div class="answer-label">
+                            <i class="fas fa-check-circle"></i>
+                            강사 답변
+                        </div>
+                        <div class="answer-content">
+                            실습이 가장 중요합니다! 다음 강좌인 "프롬프트 엔지니어링 마스터"를 추천드리며, 
+                            매일 다양한 프롬프트를 작성해보고 결과를 비교하는 연습을 해보세요. 
+                            실전 예제 50개를 제공하는 "실전 프롬프트 패턴 라이브러리" 매뉴얼도 참고하시면 좋습니다.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // 🎓 강좌 데이터베이스 (27개 영상)
+        const coursesDB = {
+            // ========== AI 업무활용 (8개) ==========
+            101: {
+                title: 'ChatGPT 업무 활용 완벽 가이드',
+                video: 'wP48xJLWuB0',
+                instructor: 'TG AI 연구소',
+                duration: '30분',
+                level: '초급',
+                rating: 4.8,
+                students: 1234,
+                description: '실무에 바로 적용 가능한 ChatGPT 활용법을 배웁니다.',
+                objectives: [
+                    'ChatGPT 기본 사용법 마스터',
+                    '업무별 프롬프트 작성 기법',
+                    '이메일, 보고서 자동 작성',
+                    '데이터 분석 및 요약',
+                    '창의적 아이디어 도출'
+                ],
+                curriculum: [
+                    { title: 'ChatGPT 시작하기', duration: '8분' },
+                    { title: '효과적인 질문 기법', duration: '10분' },
+                    { title: '업무 자동화 실습', duration: '12분' }
+                ]
+            },
+            102: {
+                title: 'AI로 업무 자동화하기',
+                video: 'EZ7QsUqhZ8U',
+                instructor: 'TG AI 연구소',
+                duration: '25분',
+                level: '초급',
+                rating: 4.7,
+                students: 987,
+                description: '반복 업무를 AI로 자동화하는 실전 노하우를 배웁니다.',
+                objectives: [
+                    '업무 자동화 기본 개념',
+                    'AI 도구 활용 전략',
+                    '자동화 워크플로우 설계',
+                    '효율성 측정 방법',
+                    '실전 사례 분석'
+                ],
+                curriculum: [
+                    { title: '자동화 개념', duration: '7분' },
+                    { title: '도구 활용법', duration: '10분' },
+                    { title: '실습 프로젝트', duration: '8분' }
+                ]
+            },
+            103: {
+                title: 'AI로 문서 작성 10배 빠르게',
+                video: 'L4xIFhMnGic',
+                instructor: 'TG AI 연구소',
+                duration: '28분',
+                level: '초급',
+                rating: 4.9,
+                students: 1456,
+                description: '보고서, 이메일, 기획서를 AI로 빠르게 작성합니다.',
+                objectives: [
+                    '문서 자동 생성 기법',
+                    '템플릿 활용 전략',
+                    '스타일 맞춤 작성',
+                    '품질 향상 팁',
+                    '실전 템플릿 50개'
+                ],
+                curriculum: [
+                    { title: '문서 생성 기초', duration: '10분' },
+                    { title: '템플릿 활용', duration: '12분' },
+                    { title: '고급 기법', duration: '6분' }
+                ]
+            },
+            104: {
+                title: 'AI 데이터 분석 실무',
+                video: 'v64KBprHfiE',
+                instructor: 'TG AI 연구소',
+                duration: '35분',
+                level: '중급',
+                rating: 4.8,
+                students: 1123,
+                description: '엑셀, 데이터 분석을 AI로 자동화합니다.',
+                objectives: [
+                    'AI 데이터 분석 기초',
+                    '엑셀 자동화',
+                    '시각화 기법',
+                    '인사이트 도출',
+                    '보고서 작성'
+                ],
+                curriculum: [
+                    { title: '데이터 분석 개요', duration: '8분' },
+                    { title: '엑셀 AI 활용', duration: '15분' },
+                    { title: '시각화 실습', duration: '12분' }
+                ]
+            },
+            105: {
+                title: 'AI 회의록 자동 생성',
+                video: 'D6xoPw4LRoI',
+                instructor: 'TG AI 연구소',
+                duration: '22분',
+                level: '초급',
+                rating: 4.6,
+                students: 856,
+                description: '회의 내용을 자동으로 요약하는 AI 기술을 배웁니다.',
+                objectives: [
+                    '회의록 자동 생성',
+                    '핵심 내용 요약',
+                    '액션 아이템 추출',
+                    '포맷 자동 정리',
+                    '공유 시스템 구축'
+                ],
+                curriculum: [
+                    { title: '회의록 AI 소개', duration: '6분' },
+                    { title: '자동 요약 기법', duration: '10분' },
+                    { title: '실전 활용', duration: '6분' }
+                ]
+            },
+            106: {
+                title: 'AI 이메일 자동 응답',
+                video: 'Tt1V1orkA18',
+                instructor: 'TG AI 연구소',
+                duration: '18분',
+                level: '초급',
+                rating: 4.5,
+                students: 723,
+                description: '스마트한 이메일 자동 응답 시스템을 구축합니다.',
+                objectives: [
+                    '이메일 자동 분류',
+                    '맞춤형 응답 생성',
+                    '톤 앤 매너 설정',
+                    '템플릿 관리',
+                    '효율성 극대화'
+                ],
+                curriculum: [
+                    { title: '자동 응답 개념', duration: '5분' },
+                    { title: '시스템 구축', duration: '8분' },
+                    { title: '고급 설정', duration: '5분' }
+                ]
+            },
+            107: {
+                title: 'AI로 업무 효율 3배 높이기',
+                video: 'OMipHEychrA',
+                instructor: 'TG AI 연구소',
+                duration: '32분',
+                level: '중급',
+                rating: 4.9,
+                students: 1678,
+                description: 'AI 도구로 생산성을 극대화하는 방법을 배웁니다.',
+                objectives: [
+                    '생산성 향상 전략',
+                    '시간 관리 최적화',
+                    '멀티 태스킹 자동화',
+                    '워크플로우 개선',
+                    '성과 측정'
+                ],
+                curriculum: [
+                    { title: '효율성 분석', duration: '8분' },
+                    { title: '최적화 전략', duration: '12분' },
+                    { title: '실전 적용', duration: '12분' }
+                ]
+            },
+            108: {
+                title: 'AI 프레젠테이션 자동 생성',
+                video: 'HuBTSpbfYL0',
+                instructor: 'TG AI 연구소',
+                duration: '26분',
+                level: '초급',
+                rating: 4.7,
+                students: 945,
+                description: 'PT 자료를 AI로 빠르게 제작합니다.',
+                objectives: [
+                    '슬라이드 자동 생성',
+                    '디자인 최적화',
+                    '콘텐츠 구조화',
+                    '시각화 요소 추가',
+                    '발표 스크립트 작성'
+                ],
+                curriculum: [
+                    { title: 'PT AI 도구', duration: '8분' },
+                    { title: '자동 생성 실습', duration: '12분' },
+                    { title: '고급 팁', duration: '6분' }
+                ]
+            },
+
+            // ========== 프롬프트 엔지니어링 (8개) ==========
+            201: {
+                title: '프롬프트 엔지니어링 기초',
+                video: 'bOII_roWlys',
+                instructor: 'TG AI 연구소',
+                duration: '40분',
+                level: '초급',
+                rating: 4.9,
+                students: 1890,
+                description: '효과적인 프롬프트 작성의 모든 것을 배웁니다.',
+                objectives: [
+                    '프롬프트 기본 원리',
+                    '명확한 지시 작성법',
+                    '컨텍스트 활용',
+                    '출력 형식 지정',
+                    '반복 개선 전략'
+                ],
+                curriculum: [
+                    { title: '프롬프트란?', duration: '10분' },
+                    { title: '작성 기법', duration: '15분' },
+                    { title: '실전 예제', duration: '15분' }
+                ]
+            },
+            202: {
+                title: '고급 프롬프트 기법',
+                video: 'KgKDiuskLug',
+                instructor: 'TG AI 연구소',
+                duration: '35분',
+                level: '중급',
+                rating: 4.8,
+                students: 1345,
+                description: '프로 수준의 프롬프트 작성 기술을 습득합니다.',
+                objectives: [
+                    'Chain of Thought',
+                    'Few-shot Learning',
+                    'Role-based Prompting',
+                    '복잡한 작업 분해',
+                    '품질 최적화'
+                ],
+                curriculum: [
+                    { title: '고급 기법 소개', duration: '10분' },
+                    { title: 'CoT 실습', duration: '12분' },
+                    { title: 'Few-shot 활용', duration: '13분' }
+                ]
+            },
+            203: {
+                title: '실전 프롬프트 패턴',
+                video: 'rMJErYfGLCU',
+                instructor: 'TG AI 연구소',
+                duration: '33분',
+                level: '중급',
+                rating: 4.7,
+                students: 1123,
+                description: '바로 사용 가능한 프롬프트 패턴 모음입니다.',
+                objectives: [
+                    '업무별 프롬프트 패턴',
+                    '재사용 가능한 템플릿',
+                    '패턴 커스터마이징',
+                    '라이브러리 구축',
+                    '팀 공유 전략'
+                ],
+                curriculum: [
+                    { title: '패턴 개요', duration: '8분' },
+                    { title: '업무별 패턴', duration: '15분' },
+                    { title: '커스터마이징', duration: '10분' }
+                ]
+            },
+            204: {
+                title: '프롬프트 최적화 전략',
+                video: '8C2Ub1HK4Ww',
+                instructor: 'TG AI 연구소',
+                duration: '42분',
+                level: '고급',
+                rating: 4.9,
+                students: 967,
+                description: 'AI 응답 품질을 극대화하는 최적화 방법을 배웁니다.',
+                objectives: [
+                    '출력 품질 분석',
+                    'A/B 테스팅',
+                    '반복 개선 프로세스',
+                    '파라미터 튜닝',
+                    '성능 측정'
+                ],
+                curriculum: [
+                    { title: '최적화 개념', duration: '10분' },
+                    { title: '테스팅 방법', duration: '15분' },
+                    { title: '실전 최적화', duration: '17분' }
+                ]
+            },
+            205: {
+                title: '프롬프트 체인 기법',
+                video: 'pJIQJ6npiP0',
+                instructor: 'TG AI 연구소',
+                duration: '38분',
+                level: '고급',
+                rating: 4.8,
+                students: 856,
+                description: '복잡한 작업을 단계별로 처리하는 체인 기법을 배웁니다.',
+                objectives: [
+                    '프롬프트 체이닝 개념',
+                    '단계별 처리 설계',
+                    '중간 결과 활용',
+                    '파이프라인 구축',
+                    '자동화 시스템'
+                ],
+                curriculum: [
+                    { title: '체이닝 기초', duration: '10분' },
+                    { title: '파이프라인 설계', duration: '15분' },
+                    { title: '실전 구현', duration: '13분' }
+                ]
+            },
+            206: {
+                title: '역할 기반 프롬프트 작성',
+                video: 'mC2b57u_s0k',
+                instructor: 'TG AI 연구소',
+                duration: '28분',
+                level: '중급',
+                rating: 4.6,
+                students: 745,
+                description: 'AI에게 전문가 역할을 부여하는 기법을 배웁니다.',
+                objectives: [
+                    '역할 설정 기법',
+                    '페르소나 디자인',
+                    '전문성 강화',
+                    '컨텍스트 구축',
+                    '일관성 유지'
+                ],
+                curriculum: [
+                    { title: '역할 기반 개념', duration: '8분' },
+                    { title: '페르소나 작성', duration: '12분' },
+                    { title: '실습', duration: '8분' }
+                ]
+            },
+            207: {
+                title: 'Few-shot 프롬프팅 실전',
+                video: 'OLwCy9adrNk',
+                instructor: 'TG AI 연구소',
+                duration: '31분',
+                level: '중급',
+                rating: 4.7,
+                students: 891,
+                description: '예제 기반 프롬프트 최적화를 배웁니다.',
+                objectives: [
+                    'Few-shot Learning 원리',
+                    '예제 선정 전략',
+                    '품질 높은 샘플 작성',
+                    'Zero-shot vs Few-shot',
+                    '실전 활용법'
+                ],
+                curriculum: [
+                    { title: 'Few-shot 개념', duration: '8분' },
+                    { title: '예제 작성', duration: '12분' },
+                    { title: '최적화', duration: '11분' }
+                ]
+            },
+            208: {
+                title: '프롬프트 라이브러리 구축',
+                video: 'bTi1HPSJiNA',
+                instructor: 'TG AI 연구소',
+                duration: '35분',
+                level: '중급',
+                rating: 4.8,
+                students: 1023,
+                description: '재사용 가능한 프롬프트 관리 시스템을 만듭니다.',
+                objectives: [
+                    '라이브러리 설계',
+                    '카테고리 분류',
+                    '버전 관리',
+                    '팀 공유 시스템',
+                    '지속적 개선'
+                ],
+                curriculum: [
+                    { title: '라이브러리 구조', duration: '10분' },
+                    { title: '관리 시스템', duration: '15분' },
+                    { title: '공유 전략', duration: '10분' }
+                ]
+            },
+
+            // ========== 직무별 AI 활용 (7개) ==========
+            301: {
+                title: '마케팅 직무 AI 활용',
+                video: 'OuMfeDIwi0Q',
+                instructor: 'TG AI 연구소',
+                duration: '45분',
+                level: '초급',
+                rating: 4.8,
+                students: 1234,
+                description: '마케팅 업무에 AI를 적용하는 방법을 배웁니다.',
+                objectives: [
+                    'AI 마케팅 전략',
+                    '카피라이팅 자동화',
+                    'SNS 콘텐츠 생성',
+                    '고객 데이터 분석',
+                    '캠페인 최적화'
+                ],
+                curriculum: [
+                    { title: '마케팅 AI 개요', duration: '10분' },
+                    { title: '콘텐츠 생성', duration: '15분' },
+                    { title: '데이터 분석', duration: '20분' }
+                ]
+            },
+            302: {
+                title: '개발자를 위한 AI 코딩',
+                video: '7uhCHa11DGw',
+                instructor: 'TG AI 연구소',
+                duration: '50분',
+                level: '중급',
+                rating: 4.9,
+                students: 1678,
+                description: 'Copilot, ChatGPT로 개발 생산성을 향상시킵니다.',
+                objectives: [
+                    'GitHub Copilot 활용',
+                    'ChatGPT 코드 생성',
+                    '디버깅 자동화',
+                    '코드 리뷰 AI',
+                    '페어 프로그래밍'
+                ],
+                curriculum: [
+                    { title: 'AI 코딩 도구', duration: '12분' },
+                    { title: 'Copilot 실습', duration: '18분' },
+                    { title: '실전 프로젝트', duration: '20분' }
+                ]
+            },
+            303: {
+                title: '기획·전략 직무 AI 활용',
+                video: 'L4xIFhMnGic',
+                instructor: 'TG AI 연구소',
+                duration: '38분',
+                level: '중급',
+                rating: 4.7,
+                students: 945,
+                description: '기획 업무 효율화를 위한 AI 도구를 배웁니다.',
+                objectives: [
+                    '시장 조사 자동화',
+                    '경쟁사 분석',
+                    '사업 계획서 작성',
+                    '트렌드 분석',
+                    '전략 수립'
+                ],
+                curriculum: [
+                    { title: '기획 AI 소개', duration: '10분' },
+                    { title: '조사·분석', duration: '15분' },
+                    { title: '전략 수립', duration: '13분' }
+                ]
+            },
+            304: {
+                title: 'HR 직무 AI 혁신',
+                video: 'Q9z6zgvqvm0',
+                instructor: 'TG AI 연구소',
+                duration: '42분',
+                level: '초급',
+                rating: 4.6,
+                students: 812,
+                description: '채용, 교육, 평가 업무를 AI로 자동화합니다.',
+                objectives: [
+                    'AI 채용 프로세스',
+                    '면접 질문 생성',
+                    '인재 평가',
+                    '교육 계획 수립',
+                    '성과 관리'
+                ],
+                curriculum: [
+                    { title: 'HR AI 개요', duration: '10분' },
+                    { title: '채용 자동화', duration: '15분' },
+                    { title: '평가·교육', duration: '17분' }
+                ]
+            },
+            305: {
+                title: '재무·회계 AI 실무',
+                video: 'dk-w3NvyTCg',
+                instructor: 'TG AI 연구소',
+                duration: '40분',
+                level: '중급',
+                rating: 4.8,
+                students: 1089,
+                description: '재무 분석과 보고서를 AI로 자동화합니다.',
+                objectives: [
+                    '재무제표 분석',
+                    '예산 계획 수립',
+                    '보고서 자동 생성',
+                    '리스크 분석',
+                    '예측 모델링'
+                ],
+                curriculum: [
+                    { title: '재무 AI 도구', duration: '10분' },
+                    { title: '분석 자동화', duration: '15분' },
+                    { title: '보고서 생성', duration: '15분' }
+                ]
+            },
+            306: {
+                title: '영업 직무 AI 활용',
+                video: 'HXNRGPH300k',
+                instructor: 'TG AI 연구소',
+                duration: '36분',
+                level: '초급',
+                rating: 4.7,
+                students: 923,
+                description: '고객 관리와 제안서 작성을 자동화합니다.',
+                objectives: [
+                    'CRM 자동화',
+                    '제안서 자동 작성',
+                    '고객 데이터 분석',
+                    '영업 전략 수립',
+                    '성과 추적'
+                ],
+                curriculum: [
+                    { title: '영업 AI 개요', duration: '8분' },
+                    { title: 'CRM 활용', duration: '15분' },
+                    { title: '제안서 작성', duration: '13분' }
+                ]
+            },
+            307: {
+                title: '디자이너를 위한 AI',
+                video: 'keAqH1qalnI',
+                instructor: 'TG AI 연구소',
+                duration: '44분',
+                level: '중급',
+                rating: 4.9,
+                students: 1456,
+                description: '이미지 생성과 디자인을 AI로 자동화합니다.',
+                objectives: [
+                    'AI 이미지 생성',
+                    'Midjourney 활용',
+                    '디자인 자동화',
+                    '스타일 가이드',
+                    '크리에이티브 워크플로우'
+                ],
+                curriculum: [
+                    { title: '디자인 AI 도구', duration: '12분' },
+                    { title: '이미지 생성', duration: '18분' },
+                    { title: '실전 프로젝트', duration: '14분' }
+                ]
+            },
+
+            // ========== 최신 트렌드 (4개) ==========
+            401: {
+                title: '2026 AI 최신 트렌드',
+                video: 'IwbUxvakOmQ',
+                instructor: 'TG AI 연구소',
+                duration: '30분',
+                level: '전체',
+                rating: 4.8,
+                students: 1789,
+                description: '지금 알아야 할 AI 기술 동향을 파악합니다.',
+                objectives: [
+                    '2026 AI 트렌드',
+                    '주요 모델 비교',
+                    '산업별 적용 사례',
+                    '미래 전망',
+                    '투자 기회'
+                ],
+                curriculum: [
+                    { title: '트렌드 개요', duration: '10분' },
+                    { title: '주요 기술', duration: '12분' },
+                    { title: '미래 전망', duration: '8분' }
+                ]
+            },
+            402: {
+                title: 'GPT-5 완벽 분석',
+                video: 'HyLGGy_vwJM',
+                instructor: 'TG AI 연구소',
+                duration: '28분',
+                level: '전체',
+                rating: 4.7,
+                students: 1456,
+                description: '차세대 AI 모델의 모든 것을 알아봅니다.',
+                objectives: [
+                    'GPT-5 핵심 기능',
+                    'GPT-4와 비교',
+                    '활용 시나리오',
+                    '비즈니스 기회',
+                    '실전 적용'
+                ],
+                curriculum: [
+                    { title: 'GPT-5 소개', duration: '8분' },
+                    { title: '기능 분석', duration: '12분' },
+                    { title: '활용법', duration: '8분' }
+                ]
+            },
+            403: {
+                title: '멀티모달 AI의 혁명',
+                video: 'OMipHEychrA',
+                instructor: 'TG AI 연구소',
+                duration: '32분',
+                level: '전체',
+                rating: 4.9,
+                students: 1678,
+                description: '텍스트, 이미지, 음성 통합 AI 기술을 배웁니다.',
+                objectives: [
+                    '멀티모달 AI 개념',
+                    '통합 활용 전략',
+                    '실전 사례',
+                    '크리에이티브 활용',
+                    '미래 전망'
+                ],
+                curriculum: [
+                    { title: '멀티모달 소개', duration: '10분' },
+                    { title: '통합 활용', duration: '15분' },
+                    { title: '실전 사례', duration: '7분' }
+                ]
+            },
+            404: {
+                title: 'AI 에이전트 시대',
+                video: '1P4-DU36dQI',
+                instructor: 'TG AI 연구소',
+                duration: '35분',
+                level: '전체',
+                rating: 4.8,
+                students: 1567,
+                description: '자율적으로 작동하는 AI 에이전트의 미래를 탐구합니다.',
+                objectives: [
+                    'AI 에이전트 개념',
+                    '자동화 시스템',
+                    '실전 구축',
+                    '비즈니스 적용',
+                    '미래 전망'
+                ],
+                curriculum: [
+                    { title: '에이전트 소개', duration: '10분' },
+                    { title: '시스템 구축', duration: '15분' },
+                    { title: '실전 적용', duration: '10분' }
+                ]
+            }
+        };
+                    '직원 데이터 분석'
+                ],
+                curriculum: [
+                    { title: 'HR AI 개론', duration: '10분' },
+                    { title: '채용 자동화', duration: '10분' },
+                    { title: '면접 AI 활용', duration: '8분' },
+                    { title: '교육 계획 수립', duration: '7분' }
+                ]
+            },
+            10: {
+                title: '재무·회계 AI 실무',
+                video: 'YVWXgvbMeys',
+                instructor: 'TG AI 연구소',
+                duration: '45분',
+                level: '중급',
+                rating: 4.7,
+                students: 823,
+                description: '재무 분석, 예산 관리, 보고서 작성을 AI로 자동화합니다.',
+                objectives: [
+                    'AI 재무 분석',
+                    '예산 자동 생성',
+                    '재무 보고서 자동화',
+                    '리스크 분석',
+                    '예측 모델링'
+                ],
+                curriculum: [
+                    { title: '재무 AI 개론', duration: '10분' },
+                    { title: '분석 자동화', duration: '15분' },
+                    { title: '보고서 생성', duration: '12분' },
+                    { title: '예측 모델', duration: '8분' }
+                ]
+            },
+            11: {
+                title: '기획·전략 AI 활용',
+                video: 'sTeoEFzVNSc',
+                instructor: 'TG AI 연구소',
+                duration: '38분',
+                level: '중급',
+                rating: 4.6,
+                students: 745,
+                description: '시장 분석, 전략 수립, 기획서 작성에 AI를 활용합니다.',
+                objectives: [
+                    '시장 조사 자동화',
+                    '경쟁사 분석',
+                    '전략 기획서 작성',
+                    '데이터 기반 의사결정',
+                    '트렌드 예측'
+                ],
+                curriculum: [
+                    { title: '기획 AI 개론', duration: '10분' },
+                    { title: '시장 분석', duration: '12분' },
+                    { title: '기획서 작성', duration: '10분' },
+                    { title: '전략 수립', duration: '6분' }
+                ]
+            },
+            12: {
+                title: 'AI 워크플로우 구축',
+                video: 'jacBgJIso_0',
+                instructor: 'TG AI 연구소',
+                duration: '48분',
+                level: '고급',
+                rating: 4.8,
+                students: 934,
+                description: '복잡한 업무 프로세스를 AI 워크플로우로 자동화합니다.',
+                objectives: [
+                    '워크플로우 설계 원칙',
+                    'AI 도구 통합',
+                    '자동화 파이프라인',
+                    '프로세스 최적화',
+                    '성능 모니터링'
+                ],
+                curriculum: [
+                    { title: '워크플로우 개념', duration: '12분' },
+                    { title: '설계 방법론', duration: '15분' },
+                    { title: '도구 통합', duration: '12분' },
+                    { title: '최적화 전략', duration: '9분' }
+                ]
+            },
+            13: {
+                title: 'AI 에이전트 활용법',
+                video: 'MLBaYdIb7SY',
+                instructor: 'TG AI 연구소',
+                duration: '42분',
+                level: '고급',
+                rating: 4.7,
+                students: 812,
+                description: 'AutoGPT, BabyAGI 등 AI 에이전트를 활용하여 복잡한 작업을 자동화합니다.',
+                objectives: [
+                    'AI 에이전트 개념 이해',
+                    'AutoGPT 활용법',
+                    '작업 자동화 설계',
+                    '에이전트 커스터마이징',
+                    '실무 적용 전략'
+                ],
+                curriculum: [
+                    { title: 'AI 에이전트 소개', duration: '10분' },
+                    { title: 'AutoGPT 실습', duration: '15분' },
+                    { title: '작업 자동화', duration: '10분' },
+                    { title: '고급 활용법', duration: '7분' }
+                ]
+            },
+            14: {
+                title: '팀 AI 협업 전략',
+                video: 'KjJa6Y-3nFs',
+                instructor: 'TG AI 연구소',
+                duration: '40분',
+                level: '고급',
+                rating: 4.6,
+                students: 691,
+                description: '팀 전체가 AI를 활용하여 협업 효율을 극대화하는 전략을 배웁니다.',
+                objectives: [
+                    '팀 AI 도입 전략',
+                    '협업 도구 통합',
+                    'AI 문화 구축',
+                    '성과 측정 지표',
+                    '변화 관리'
+                ],
+                curriculum: [
+                    { title: 'AI 팀 협업 개론', duration: '10분' },
+                    { title: '도구 통합 방법', duration: '12분' },
+                    { title: '문화 구축', duration: '10분' },
+                    { title: '성과 측정', duration: '8분' }
+                ]
+            }
+        };
+
+        // 페이지 로드 시 강좌 정보 로드
+        window.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const courseId = parseInt(urlParams.get('id')) || 1;
+            const videoId = urlParams.get('video');
+            
+            const course = coursesDB[courseId];
+            if (!course) {
+                alert('강좌를 찾을 수 없습니다.');
+                location.href = 'courses.html';
+                return;
+            }
+            
+            // 강좌 정보 업데이트
+            document.getElementById('courseTitle').textContent = course.title;
+            document.querySelector('.course-meta').innerHTML = `
+                <div class="rating">
+                    <span class="stars">★★★★★</span>
+                    <span>${course.rating} (${course.students}명)</span>
+                </div>
+                <div>
+                    <i class="fas fa-user"></i>
+                    <span>${course.instructor}</span>
+                </div>
+                <div>
+                    <i class="fas fa-clock"></i>
+                    <span>${course.duration}</span>
+                </div>
+                <div>
+                    <i class="fas fa-signal"></i>
+                    <span>${course.level}</span>
+                </div>
+            `;
+            
+            // 비디오 iframe 설정
+            const actualVideoId = videoId || course.video;
+            const videoFrame = document.getElementById('videoFrame');
+            if (videoFrame && actualVideoId) {
+                videoFrame.src = `https://www.youtube-nocookie.com/embed/${actualVideoId}?rel=0&modestbranding=1`;
+            }
+
+            // 썸네일 요소가 있을 경우에만 업데이트
+            const thumbnail = document.getElementById('videoThumbnail');
+            if (thumbnail && actualVideoId) {
+                thumbnail.src = `https://img.youtube.com/vi/${actualVideoId}/maxresdefault.jpg`;
+                thumbnail.alt = course.title;
+                thumbnail.onerror = function() {
+                    if (this.src.includes('maxresdefault')) {
+                        this.src = `https://img.youtube.com/vi/${actualVideoId}/hqdefault.jpg`;
+                    } else if (this.src.includes('hqdefault')) {
+                        this.src = `https://img.youtube.com/vi/${actualVideoId}/sddefault.jpg`;
+                    }
+                };
+            }
+            
+            // 개요 탭 업데이트
+            const objectives = course.objectives.map(obj => `<li>${obj}</li>`).join('');
+            document.querySelector('.learning-objectives ul').innerHTML = objectives;
+            
+            // 커리큘럼 탭 업데이트
+            const curriculum = course.curriculum.map((item, index) => `
+                <li class="curriculum-item">
+                    <div class="curriculum-number">${index + 1}</div>
+                    <div class="curriculum-info">
+                        <div class="curriculum-title">${item.title}</div>
+                        <div class="curriculum-duration">
+                            <i class="fas fa-clock"></i> ${item.duration}
+                        </div>
+                    </div>
+                </li>
+            `).join('');
+            document.querySelector('.curriculum-list').innerHTML = curriculum;
+            
+            loadNotes();
+        });
+
+        // 탭 전환
+        document.querySelectorAll('.course-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                // 모든 탭 비활성화
+                document.querySelectorAll('.course-tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+                
+                // 선택한 탭 활성화
+                tab.classList.add('active');
+                const tabId = tab.getAttribute('data-tab');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+
+        // 페이지 완전 로드 후 유튜브 영상 임베드
+        window.onload = function() {
+            // coursesDB가 정의되었는지 확인
+            if (typeof coursesDB === 'undefined') {
+                console.error('coursesDB is not defined');
+                return;
+            }
+            
+            // URL 파라미터에서 video ID 읽어서 해당 유튜브 임베드로 변경
+            const urlParams = new URLSearchParams(window.location.search);
+            const videoId = urlParams.get('video');
+            const courseId = parseInt(urlParams.get('id')) || 1;
+            const course = coursesDB[courseId];
+            
+            // video 파라미터가 있으면 우선 사용, 없으면 DB에서 가져오기
+            const actualVideoId = videoId || (course ? course.video : null);
+            
+            console.log('Video ID:', actualVideoId); // 디버깅용
+            console.log('Course ID:', courseId); // 디버깅용
+            console.log('Course:', course); // 디버깅용
+            
+            if (actualVideoId) {
+                // 기존 videoFrame iframe src만 업데이트 (DOM 초기화 없이)
+                const existingFrame = document.getElementById('videoFrame');
+                if (existingFrame) {
+                    existingFrame.src = `https://www.youtube-nocookie.com/embed/${actualVideoId}?rel=0&modestbranding=1`;
+                    console.log('videoFrame src updated by window.onload');
+                } else {
+                    console.warn('videoFrame not found in window.onload');
+                }
+            } else {
+                console.error('No video ID found');
+            }
+        };
+
+        // 비디오 재생 (유튜브 임베드) - 클릭 이벤트는 필요 없지만 남겨둠
+        document.getElementById('videoContainer').addEventListener('click', function() {
+            // 이미 자동 재생되었으므로 아무 작업 안 함
+        });
+
+        // 노트 저장 (localStorage - Cursor에서 DB로 교체 필요)
+        function saveNote() {
+            // 🔧 Cursor: 서버 API로 POST 요청
+            const noteText = document.getElementById('noteTextarea').value;
+            if (!noteText.trim()) {
+                alert('노트 내용을 입력해주세요.');
+                return;
+            }
+            
+            const note = {
+                content: noteText,
+                timestamp: new Date().toLocaleString('ko-KR'),
+                courseId: 1 // URL 파라미터에서 가져오기
+            };
+            
+            // localStorage에 임시 저장 (Cursor에서 DB로 교체)
+            let notes = JSON.parse(localStorage.getItem('courseNotes') || '[]');
+            notes.unshift(note);
+            localStorage.setItem('courseNotes', JSON.stringify(notes));
+            
+            alert('노트가 저장되었습니다!');
+            document.getElementById('noteTextarea').value = '';
+            loadNotes();
+        }
+
+        function clearNote() {
+            document.getElementById('noteTextarea').value = '';
+        }
+
+        function loadNotes() {
+            // 🔧 Cursor: 서버에서 GET 요청으로 노트 불러오기
+            const notes = JSON.parse(localStorage.getItem('courseNotes') || '[]');
+            const container = document.getElementById('savedNotes');
+            
+            if (notes.length === 0) {
+                container.innerHTML = '<p style="text-align:center; color:#6b7280; padding:40px;">저장된 노트가 없습니다.</p>';
+                return;
+            }
+            
+            container.innerHTML = notes.map(note => `
+                <div class="note-item">
+                    <div class="note-timestamp">${note.timestamp}</div>
+                    <div class="note-content">${note.content}</div>
+                </div>
+            `).join('');
+        }
+
+        function startLearning() {
+            // 🔧 Cursor: 학습 시작 시 DB에 기록
+            alert('학습을 시작합니다! 동영상을 클릭하여 시청하세요.');
+            document.getElementById('videoContainer').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // 페이지 로드 시 노트 불러오기
+        window.addEventListener('DOMContentLoaded', () => {
+            loadNotes();
+            
+            // URL 파라미터로 강좌 정보 로드 (예시)
+            // 🔧 Cursor: 서버에서 강좌 데이터 가져오기
+            const urlParams = new URLSearchParams(window.location.search);
+            const courseId = urlParams.get('id') || '1';
+            
+            // courseId에 따라 강좌 정보 동적 로드
+            console.log('Course ID:', courseId);
+        });
+
+        // 모바일 메뉴 토글
+        document.querySelector('.mobile-menu-toggle')?.addEventListener('click', function() {
+            document.querySelector('.nav-menu').classList.toggle('active');
+        });
+    </script>
+
+    <!-- 유튜브 자동 임베드 스크립트 -->
+    <script>
+        // 페이지 로드 후 즉시 실행
+        setTimeout(function() {
+            console.log('YouTube embed script starting...');
+            
+            // URL 파라미터에서 video ID 읽기
+            const urlParams = new URLSearchParams(window.location.search);
+            let videoId = urlParams.get('video');
+            const courseId = parseInt(urlParams.get('id')) || 1;
+            
+            // URL video 파라미터가 있으면 우선 사용, 없으면 하드코딩 fallback
+            const embeddableVideos = {
+                101: 'JmhxyA0dK3w',
+                102: 'k3V_x6GnDHE',
+                103: 'XxxVb8vLj-A',
+                104: 'aircAruvnKk',
+                105: 'UKh_Q_r2sYs',
+                106: 'nKYKQOHwZ_E',
+                107: 'R9OHn5zg4qE',
+                108: 'i_H5fjqy8_I'
+            };
+
+            // URL에 video 파라미터가 있으면 그것을 최우선 사용
+            if (!videoId) {
+                videoId = embeddableVideos[courseId] || embeddableVideos[101];
+            }
+            
+            console.log('URL params - original videoId:', urlParams.get('video'), 'new videoId:', videoId, 'courseId:', courseId);
+            
+            // videoId가 있으면 iframe에 src 설정
+            if (videoId) {
+                const iframe = document.getElementById('videoFrame');
+                console.log('iframe found:', iframe);
+                
+                if (iframe) {
+                    // youtube-nocookie 도메인으로 임베드 (보안 정책 완화)
+                    iframe.src = `https://www.youtube-nocookie.com/embed/${videoId}?rel=0&modestbranding=1`;
+                    console.log('iframe src set to:', iframe.src);
+
+                    // 컨테이너 클릭 시 autoplay로 전환
+                    document.getElementById('videoContainer').addEventListener('click', function() {
+                        iframe.src = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1`;
+                    });
+                    
+                    // iframe 로드 확인
+                    iframe.onload = function() {
+                        console.log('iframe loaded successfully');
+                    };
+                    
+                    iframe.onerror = function() {
+                        console.error('iframe failed to load');
+                    };
+                } else {
+                    console.error('iframe not found');
+                }
+            } else {
+                console.error('No video ID found in URL');
+            }
+        }, 100); // 100ms 지연으로 DOM 완전 로드 보장
+    </script>
+</body>
+</html>

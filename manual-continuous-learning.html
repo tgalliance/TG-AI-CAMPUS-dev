@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>지속적 학습 및 개선 - TG AI 캠퍼스</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/samsung-nav.css?v=3">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        .manual-container { display: flex; max-width: 1400px; margin: 50px auto; gap: 30px; padding: 0 20px; }
+        .manual-sidebar { width: 280px; background: white; border-radius: 15px; padding: 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); position: sticky; top: 100px; height: fit-content; }
+        .manual-sidebar h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 20px; color: #1a202c; }
+        .manual-sidebar ul { list-style: none; padding: 0; }
+        .manual-sidebar li { margin-bottom: 12px; }
+        .manual-sidebar a { color: #666; text-decoration: none; display: block; padding: 8px 12px; border-radius: 8px; transition: all 0.3s; }
+        .manual-sidebar a:hover, .manual-sidebar a.active { background: #ec4899; color: white; }
+        .manual-content { flex: 1; background: white; border-radius: 15px; padding: 50px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+        .manual-header { border-bottom: 3px solid #ec4899; padding-bottom: 30px; margin-bottom: 40px; }
+        .manual-header h1 { font-size: 2.5rem; font-weight: 700; color: #1a202c; margin-bottom: 15px; }
+        .manual-meta { display: flex; gap: 20px; color: #666; font-size: 0.95rem; flex-wrap: wrap; }
+        .manual-meta span { display: flex; align-items: center; gap: 8px; }
+        .pdf-button { position: fixed; bottom: 30px; right: 30px; background: linear-gradient(135deg, #ec4899 0%, #db2777 100%); color: white; border: none; padding: 15px 30px; border-radius: 50px; font-size: 1rem; font-weight: 600; cursor: pointer; box-shadow: 0 4px 20px rgba(236, 72, 153, 0.4); transition: all 0.3s; z-index: 1000; }
+        .pdf-button:hover { transform: translateY(-3px); box-shadow: 0 6px 30px rgba(236, 72, 153, 0.6); }
+        .section { margin-bottom: 50px; scroll-margin-top: 140px; }
+        .section h2 { font-size: 1.8rem; font-weight: 700; color: #1a202c; margin-bottom: 20px; padding-left: 15px; border-left: 5px solid #ec4899; }
+        .section h3 { font-size: 1.3rem; font-weight: 600; color: #2d3748; margin: 30px 0 15px; }
+        .section p { font-size: 1.05rem; line-height: 1.8; color: #4a5568; margin-bottom: 15px; }
+        .prompt-box { background: #fdf2f8; border: 2px solid #f9a8d4; border-radius: 10px; padding: 25px; margin: 25px 0; }
+        .prompt-box .label { font-weight: 700; color: #be185d; margin-bottom: 15px; display: block; font-size: 1.1rem; }
+        .prompt-box pre { background: white; padding: 20px; border-radius: 8px; border: 1px solid #fbcfe8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word; line-height: 1.6; }
+        .example-output { background: #fff1f2; border-left: 4px solid #f43f5e; padding: 20px 25px; border-radius: 10px; margin: 25px 0; }
+        .example-output::before { content: "✅ 개선 예시"; font-weight: 700; color: #e11d48; display: block; margin-bottom: 10px; }
+        .tip-box { background: #fdf4ff; border-left: 4px solid #d946ef; padding: 20px 25px; border-radius: 10px; margin: 25px 0; }
+        .tip-box::before { content: "💡 개선 사이클 팁"; font-weight: 700; color: #a21caf; display: block; margin-bottom: 10px; }
+        .info-table { width: 100%; border-collapse: collapse; margin: 18px 0 26px; font-size: 0.96rem; }
+        .info-table th, .info-table td { border: 1px solid #cbd5e1; padding: 12px; text-align: left; vertical-align: top; }
+        .info-table th { background: #fdf2f8; color: #9d174d; font-weight: 700; }
+        .team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin: 18px 0 26px; }
+        .team-card { background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 10px; padding: 14px; }
+        .team-card strong { color: #9d174d; display: block; margin-bottom: 6px; }
+        ul, ol { padding-left: 30px; margin: 20px 0; }
+        li { margin-bottom: 12px; line-height: 1.7; color: #4a5568; }
+        @media (max-width: 768px) {
+            .manual-container { flex-direction: column; }
+            .manual-sidebar { width: 100%; position: static; }
+            .manual-content { padding: 30px 20px; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="utility-bar">
+            <div class="container">
+                <div class="utility-wrapper">
+                    <a href="news.html" class="utility-link">TG 라운지</a>
+                    <a href="notices.html" class="utility-link">공지사항</a>
+                    <a href="tg-family.html" class="utility-link">TG패밀리</a>
+                    <a href="https://tgnco.kr/tg-alliance/" target="_blank" class="external-link tg-alliance">TG Alliance <i class="fas fa-external-link-alt"></i></a>
+                    <span class="external-link" style="color: #ff8c00; cursor: default;">TG 에듀테크</span>
+                </div>
+            </div>
+        </div>
+        <nav class="navbar">
+            <div class="container">
+                <div class="nav-wrapper">
+                    <div class="nav-left">
+                        <a href="index.html" class="logo"><i class="fas fa-brain"></i><span><span class="logo-tg">TG</span> AI 캠퍼스</span></a>
+                        <ul class="nav-menu">
+                            <li><a href="about.html">TG AI 캠퍼스소개</a></li>
+                            <li><a href="manuals.html">AI 활용메뉴얼</a></li>
+                            <li><a href="dictionary.html">AI 용어사전</a></li>
+                            <li><a href="recommended.html">AI 활용추천영상</a></li>
+                            <li><a href="curriculum.html">교육과정</a></li>
+                            <li><a href="support.html" style="color: #3b82f6; font-weight: 600;">나만의 AI 코치</a></li>
+                            <li><a href="dashboard.html">학습 현황</a></li>
+                        </ul>
+                    </div>
+                    <div class="nav-right">
+                        <div class="icon-actions">
+                            <a href="mypage.html" class="icon-link"><img src="assets/images/mypage-icon-new.png?v=2" alt="마이페이지" style="height: 20px;"></a>
+                            <a href="login.html" class="icon-link"><img src="assets/images/logout-icon.png" alt="로그인" style="height: 24px;"></a>
+                        </div>
+                        <button class="mobile-menu-toggle"><i class="fas fa-bars"></i></button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="manual-container">
+        <aside class="manual-sidebar">
+            <h3><i class="fas fa-list"></i> 목차</h3>
+            <ul>
+                <li><a href="#concept" class="active">1. 지속적 개선 개념</a></li>
+                <li><a href="#signals">2. 피드백 신호 수집</a></li>
+                <li><a href="#dataset">3. 재학습 데이터셋</a></li>
+                <li><a href="#retraining">4. 재학습 파이프라인</a></li>
+                <li><a href="#evaluation">5. 평가/승인 기준</a></li>
+                <li><a href="#abtest">6. 온라인 실험</a></li>
+                <li><a href="#ops">7. 운영 자동화</a></li>
+                <li><a href="#governance">8. 주기 운영 체계</a></li>
+            </ul>
+            <hr style="margin: 30px 0; border: none; border-top: 1px solid #e2e8f0;">
+            <a href="manuals.html" class="btn btn-outline" style="width: 100%; text-align: center;"><i class="fas fa-arrow-left"></i> 목록으로</a>
+        </aside>
+
+        <main class="manual-content" id="manual-content">
+            <div class="manual-header">
+                <h1><i class="fas fa-sync-alt"></i> 지속적 학습 및 개선</h1>
+                <div class="manual-meta">
+                    <span><i class="fas fa-clock"></i> 읽는 시간: 30분</span>
+                    <span><i class="fas fa-robot"></i> 대상: AI 운영 담당자</span>
+                    <span><i class="fas fa-repeat"></i> 핵심: 피드백 루프 구축</span>
+                </div>
+            </div>
+
+            <section class="section" id="concept">
+                <h2>1. 지속적 개선의 기본 개념</h2>
+                <p>AI 시스템은 배포 후 성능이 자연스럽게 감소할 수 있습니다. 운영 중 데이터를 학습에 반영하는 폐쇄 루프를 만들면 성능 하락을 빠르게 복구할 수 있습니다.</p>
+                <h3>핵심 목표</h3>
+                <ul>
+                    <li>성능 하락 조기 감지</li>
+                    <li>원인 데이터 자동 수집</li>
+                    <li>재학습-검증-배포 주기의 단축</li>
+                </ul>
+                <h3>왜 성능이 떨어지는가?</h3>
+                <p>성능 하락은 대체로 데이터 분포 변화, 사용자 질의 패턴 변화, 정책 변경에 의해 발생합니다. 따라서 모델 자체보다 "운영 환경 변화"를 감지하는 체계를 먼저 구축해야 합니다.</p>
+                <ul>
+                    <li>신규 상품/서비스 출시로 용어 체계가 바뀌는 경우</li>
+                    <li>이벤트/프로모션으로 문의 유형이 급변하는 경우</li>
+                    <li>내부 업무 프로세스 변경으로 정답 정의가 달라지는 경우</li>
+                </ul>
+                <table class="info-table">
+                    <thead>
+                        <tr><th>변화 유형</th><th>대표 징후</th><th>권장 대응</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>데이터 드리프트</td><td>입력 분포 급변</td><td>샘플 점검 + 피처 재정의</td></tr>
+                        <tr><td>개념 드리프트</td><td>정답 기준 변화</td><td>라벨 정책 업데이트 + 재학습</td></tr>
+                        <tr><td>행동 변화</td><td>재질문/이탈 증가</td><td>응답전략 개선 + A/B 검증</td></tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section class="section" id="signals">
+                <h2>2. 피드백 신호 수집</h2>
+                <p>개선의 출발점은 신뢰할 수 있는 피드백입니다. 사용자 수정, 재질문, 이탈, 불만족 응답 등 행동 신호를 구조화해 수집해야 합니다.</p>
+                <h3>수집 대상 예시</h3>
+                <ul>
+                    <li>사용자 만족도 점수(CSAT)</li>
+                    <li>재질문/재시도 비율</li>
+                    <li>오답 신고 및 수동 수정 기록</li>
+                    <li>상담원 전환 비율</li>
+                </ul>
+                <h3>신호 신뢰도 등급화</h3>
+                <p>모든 신호를 동일하게 취급하면 노이즈가 증가합니다. 신호를 신뢰도 A/B/C로 나누고, 재학습 반영 가중치를 다르게 적용하면 품질이 안정됩니다.</p>
+                <ul>
+                    <li>A등급: 명시적 오답 신고, 상담원 수정 완료 데이터</li>
+                    <li>B등급: 재질문/재시도, 낮은 만족도 응답</li>
+                    <li>C등급: 체류시간 감소, 조기 이탈 같은 간접 행동 신호</li>
+                </ul>
+                <div class="team-grid">
+                    <div class="team-card">
+                        <strong>활용팀: 고객지원팀</strong>
+                        오답 신고 태깅, 상담원 수정 피드백 제공
+                    </div>
+                    <div class="team-card">
+                        <strong>활용팀: 데이터팀</strong>
+                        신호 정제, 가중치 적용, 데이터셋 반영
+                    </div>
+                    <div class="team-card">
+                        <strong>활용팀: AI운영팀</strong>
+                        신호 임계치 관리, 개선 사이클 실행
+                    </div>
+                </div>
+                <div class="prompt-box">
+                    <span class="label">🔁 실전 프롬프트:</span>
+                    <pre>당신은 AI 운영 분석가입니다.
+챗봇 서비스에서 지속적 개선을 위한
+핵심 피드백 신호 8개를 우선순위로 정리하고,
+각 신호의 수집 방법과 해석 기준을 제시해 주세요.</pre>
+                </div>
+                <div class="example-output">
+                    "상담원 재작성 비율"이 주간 8%를 넘으면  
+                    신규 오답 패턴이 증가한 것으로 판단해 재학습 후보로 분류합니다.
+                </div>
+            </section>
+
+            <section class="section" id="dataset">
+                <h2>3. 재학습 데이터셋 구성</h2>
+                <p>재학습 데이터는 최신성과 품질의 균형이 중요합니다. 최신 로그만 넣으면 편향이 생기고, 오래된 데이터만 쓰면 변화 대응이 느려집니다.</p>
+                <ul>
+                    <li>최근 1~3개월 운영 데이터 우선 반영</li>
+                    <li>오답 케이스를 샘플링해 가중치 부여</li>
+                    <li>클래스 불균형을 보정하는 증강/리샘플링 적용</li>
+                </ul>
+                <h3>데이터셋 구성 비율 가이드</h3>
+                <ul>
+                    <li>기본 안정셋: 50~70%</li>
+                    <li>최신 트렌드셋: 20~30%</li>
+                    <li>오답 보강셋: 10~20%</li>
+                </ul>
+                <table class="info-table">
+                    <thead>
+                        <tr><th>데이터셋 유형</th><th>구성 목적</th><th>점검 항목</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>기본 안정셋</td><td>기존 성능 유지</td><td>라벨 품질, 중복 여부</td></tr>
+                        <tr><td>최신 트렌드셋</td><td>환경 변화 반영</td><td>최근성, 분포 편향</td></tr>
+                        <tr><td>오답 보강셋</td><td>취약 패턴 개선</td><td>과적합 위험, 가중치 균형</td></tr>
+                    </tbody>
+                </table>
+                <p>도메인에 따라 비율은 달라질 수 있지만, 오답 보강셋이 지나치게 커지면 과적합이 발생할 수 있습니다. 그래서 교차 검증과 홀드아웃 테스트를 반드시 병행해야 합니다.</p>
+                <div class="example-output">
+                    기본셋 70% + 최신셋 20% + 오답강화셋 10% 구성으로
+                    최신성, 안정성, 취약영역 보완을 동시에 달성할 수 있습니다.
+                </div>
+            </section>
+
+            <section class="section" id="retraining">
+                <h2>4. 재학습 파이프라인 자동화</h2>
+                <p>재학습은 수동 요청이 아니라 조건 기반 자동 실행으로 전환해야 합니다. 데이터 편차 또는 성능 하락이 기준치를 넘으면 파이프라인이 자동으로 시작되도록 설계하세요.</p>
+                <h3>자동화 흐름</h3>
+                <ol>
+                    <li>지표 모니터링 -> 임계치 초과 감지</li>
+                    <li>데이터 추출/정제/품질 검증</li>
+                    <li>모델 학습 및 후보 버전 생성</li>
+                    <li>평가 통과 시 스테이징 배포</li>
+                </ol>
+                <h3>트리거 설계 예시</h3>
+                <ul>
+                    <li>정확도 주간 평균 3% 하락 시 재학습 큐 생성</li>
+                    <li>드리프트 지수 0.2 초과 시 데이터 검수 자동 실행</li>
+                    <li>상담원 전환율 10% 초과 시 오답 분석 태스크 자동 발행</li>
+                </ul>
+                <table class="info-table">
+                    <thead>
+                        <tr><th>트리거</th><th>자동 실행 작업</th><th>승인 필요 여부</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>정확도 하락</td><td>재학습 파이프라인 시작</td><td>필요</td></tr>
+                        <tr><td>드리프트 상승</td><td>데이터 검수 + 샘플링 리포트 생성</td><td>불필요</td></tr>
+                        <tr><td>오답 증가</td><td>오답 클러스터링 + 개선 후보 생성</td><td>필요</td></tr>
+                    </tbody>
+                </table>
+                <p>자동화 도입 초기에는 완전 자동 배포보다 "자동 학습 + 수동 승인" 방식이 안전합니다. 일정 기간 안정화 후 자동 승격 범위를 넓혀가는 접근을 권장합니다.</p>
+            </section>
+
+            <section class="section" id="evaluation">
+                <h2>5. 평가와 승인 기준</h2>
+                <p>새 모델이 항상 더 좋은 것은 아닙니다. 오프라인 지표와 온라인 지표를 함께 확인하는 이중 검증 체계가 필요합니다.</p>
+                <h3>권장 승인 기준</h3>
+                <ul>
+                    <li>핵심 지표 3개 이상 개선 또는 동등 유지</li>
+                    <li>P95 응답속도 악화 없음</li>
+                    <li>금지 답변/안전성 규칙 위반 증가 없음</li>
+                </ul>
+                <h3>평가 지표 패키지</h3>
+                <ul>
+                    <li>정확도/정밀도/재현율/F1</li>
+                    <li>의도분류 실패율, 환각률, 금칙어 위반률</li>
+                    <li>사용자 만족도, 재질문율, 상담원 전환율</li>
+                </ul>
+                <div class="prompt-box">
+                    <span class="label">📊 실전 프롬프트:</span>
+                    <pre>오프라인/온라인 이중 평가 리포트 템플릿을 만들어 주세요.
+필수 항목: 성능지표, 안전성지표, 사용자지표, 승격 여부, 리스크 요약.
+운영팀이 바로 사용할 수 있게 표 중심으로 작성해 주세요.</pre>
+                </div>
+                <p>평가 리포트에는 "개선된 항목"뿐 아니라 "악화된 항목"을 동일 비중으로 기재하세요. 악화가 경미해도 누적되면 운영 리스크가 될 수 있습니다.</p>
+                <div class="tip-box">
+                    품질 게이트를 명확히 문서화하면 담당자 변경이 있어도 동일한 기준으로 운영할 수 있습니다.
+                </div>
+            </section>
+
+            <section class="section" id="abtest">
+                <h2>6. 온라인 실험과 롤백</h2>
+                <p>A/B 테스트는 모델 개선 효과를 검증하는 가장 안전한 방법입니다. 개선 폭이 작아도 실제 사용자 지표에서 의미 있는 차이가 있는지 확인하세요.</p>
+                <ul>
+                    <li>트래픽 10%로 시작해 단계적 확대</li>
+                    <li>CTR, 해결률, 이탈률, 만족도 동시에 측정</li>
+                    <li>악화 지표 발생 시 자동 롤백 트리거</li>
+                </ul>
+                <h3>실험 설계 체크리스트</h3>
+                <ol>
+                    <li>가설 정의: 어떤 지표가 얼마나 개선되어야 하는가?</li>
+                    <li>표본 크기 산정: 최소 유의미 트래픽 확보</li>
+                    <li>실험 기간 설정: 요일 편차와 시즌성 반영</li>
+                    <li>중단 조건 정의: 안전성/품질 악화 시 즉시 종료</li>
+                </ol>
+                <table class="info-table">
+                    <thead>
+                        <tr><th>실험 단계</th><th>권장 트래픽</th><th>중단 조건</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>파일럿</td><td>5~10%</td><td>오류율 2배 초과</td></tr>
+                        <tr><td>확장</td><td>25~50%</td><td>만족도 5% 이상 하락</td></tr>
+                        <tr><td>전환</td><td>100%</td><td>핵심 KPI 악화</td></tr>
+                    </tbody>
+                </table>
+                <div class="example-output">
+                    A/B 14일 운영 결과:  
+                    해결률 +4.2%, 재질문율 -6.1%, 만족도 +3.4% 개선으로 승격 승인
+                </div>
+            </section>
+
+            <section class="section" id="ops">
+                <h2>7. 운영 자동화와 알림</h2>
+                <p>지속적 개선은 사람이 모든 이벤트를 수동으로 확인하기 어렵습니다. 알림, 리포트, 작업 생성까지 자동화해 운영 부담을 줄이세요.</p>
+                <ul>
+                    <li>지표 이상 탐지 시 채널 알림 발송</li>
+                    <li>주간 개선 리포트 자동 생성</li>
+                    <li>재학습 후보 데이터셋 자동 스냅샷 보관</li>
+                </ul>
+                <h3>알림 정책 설계</h3>
+                <ul>
+                    <li>경고(Warning): 추세 악화 시작, 담당자 확인 요청</li>
+                    <li>심각(Critical): 임계치 초과, 즉시 대응 및 회의 소집</li>
+                    <li>복구(Recovery): 지표 정상화 알림으로 대응 종료 확인</li>
+                </ul>
+                <div class="team-grid">
+                    <div class="team-card">
+                        <strong>활용팀: 운영팀</strong>
+                        경고/심각 알림 우선 대응, 상태 공유
+                    </div>
+                    <div class="team-card">
+                        <strong>활용팀: 모델팀</strong>
+                        재학습/평가 파이프라인 실행
+                    </div>
+                    <div class="team-card">
+                        <strong>활용팀: 기획팀</strong>
+                        사용자 영향 확인, 정책/우선순위 조정
+                    </div>
+                </div>
+                <p>알림이 너무 많으면 무시됩니다. 동일 유형 알림을 그룹핑하고, 1차 자동 진단 결과를 함께 제공하면 대응 속도와 정확도가 높아집니다.</p>
+            </section>
+
+            <section class="section" id="governance">
+                <h2>8. 주기 운영 체계와 역할 분담</h2>
+                <p>개선 사이클이 안정되려면 역할과 주기가 명확해야 합니다. 데이터/모델/서비스 담당자의 책임 경계를 문서화하고 회고를 정례화하세요.</p>
+                <h3>권장 운영 리듬</h3>
+                <ol>
+                    <li>일일: 이상 지표 모니터링</li>
+                    <li>주간: 오답 유형 분석 및 우선순위 조정</li>
+                    <li>월간: 재학습/배포 효과 리뷰와 다음 목표 설정</li>
+                </ol>
+                <h3>역할 분담 예시</h3>
+                <ul>
+                    <li>데이터 담당: 수집/품질/셋 구성 책임</li>
+                    <li>모델 담당: 학습/평가/배포 승인 책임</li>
+                    <li>서비스 담당: 사용자 영향/비즈니스 KPI 모니터링 책임</li>
+                    <li>운영 관리자: 알림/장애/회고 프로세스 총괄</li>
+                </ul>
+                <table class="info-table">
+                    <thead>
+                        <tr><th>운영 주기</th><th>회의 목적</th><th>결정 산출물</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>일일</td><td>이상 징후 점검</td><td>즉시 조치 목록</td></tr>
+                        <tr><td>주간</td><td>오답 패턴 리뷰</td><td>개선 백로그 우선순위</td></tr>
+                        <tr><td>월간</td><td>성과/리스크 종합 평가</td><td>다음 달 목표 및 승인 계획</td></tr>
+                    </tbody>
+                </table>
+                <p>매월 회고에서는 "무엇이 좋아졌는가"보다 "왜 개선되지 않았는가"를 우선 분석하세요. 개선 지연의 원인이 데이터 부족인지, 승인 병목인지, 실험 설계 문제인지 구분하면 다음 사이클의 성공률이 높아집니다.</p>
+                <div class="prompt-box">
+                    <span class="label">📌 운영 회고 프롬프트:</span>
+                    <pre>지난 4주간 AI 개선 사이클을 회고해 주세요.
+항목: 목표 대비 성과, 실패 원인 3가지, 즉시 개선 액션 5가지,
+다음 달 지표 목표(정확도/재질문율/만족도) 제안.</pre>
+                </div>
+            </section>
+
+            <div style="text-align: center; margin-top: 60px; padding: 40px; background: linear-gradient(135deg, #ec489915 0%, #db277715 100%); border-radius: 15px;">
+                <h3 style="font-size: 1.5rem; margin-bottom: 20px;">🎯 다음 단계: 운영 성과를 구조화</h3>
+                <p style="margin-bottom: 30px;">지속적 학습 체계를 데이터 아키텍처/배포 전략과 연결하면 성능과 안정성을 동시에 높일 수 있습니다.</p>
+                <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                    <a href="manual-data-architecture.html" class="btn btn-outline">데이터 아키텍처 설계</a>
+                    <a href="manual-deployment.html" class="btn btn-outline">모델 배포 및 스케일링</a>
+                    <a href="manuals.html" class="btn btn-primary">전체 목록</a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <button class="pdf-button" onclick="downloadPDF()">
+        <i class="fas fa-file-pdf"></i> PDF 다운로드
+    </button>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo-section">
+                        <img src="assets/images/common/footer_tg.jpg" alt="TG 건물" class="footer-building-image">
+                        <div class="footer-text-content">
+                            <h4>TG AI 캠퍼스</h4>
+                            <p>AI 기술 교육 전문 플랫폼</p>
+                        </div>
+                    </div>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>AI 교육 과정</h4>
+                    <ul>
+                        <li><a href="manuals.html#tab-basics-link">기초편</a></li>
+                        <li><a href="manuals.html#tab-advanced-link">실전편</a></li>
+                        <li><a href="manuals.html#tab-prompt-link">프롬프트</a></li>
+                        <li><a href="manuals.html#tab-job-link">직무별 활용</a></li>
+                        <li><a href="manuals.html#tab-advanced-ai-link">AI 고도화</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>AI 실전</h4>
+                    <ul>
+                        <li><a href="manual-prompt-basic.html">프롬프트 작성법</a></li>
+                        <li><a href="manual-automation.html">업무 자동화</a></li>
+                        <li><a href="manual-workflow.html">워크플로우 구축</a></li>
+                        <li><a href="manual-collaboration.html">AI 협업 도구</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>학습 지원</h4>
+                    <ul>
+                        <li><a href="support.html">나만의 AI 코치</a></li>
+                        <li><a href="notices.html">공지사항</a></li>
+                        <li><a href="dictionary.html">AI 용어 사전</a></li>
+                        <li><a href="dashboard.html">학습 현황</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>TG 라운지</h4>
+                    <ul>
+                        <li><a href="about.html">TG AI 캠퍼스 소개</a></li>
+                        <li><a href="tg-family.html">TG 패밀리</a></li>
+                        <li><a href="news.html">TG Alliance 소식</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 TG AI 캠퍼스. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        async function downloadPDF() {
+            const button = document.querySelector('.pdf-button');
+            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 생성 중...';
+            button.disabled = true;
+
+            try {
+                const { jsPDF } = window.jspdf;
+                const content = document.getElementById('manual-content');
+                const canvas = await html2canvas(content, { scale: 2, useCORS: true, logging: false });
+                const imgData = canvas.toDataURL('image/png');
+                const pdf = new jsPDF('p', 'mm', 'a4');
+                const pageWidth = pdf.internal.pageSize.getWidth();
+                const pageHeight = pdf.internal.pageSize.getHeight();
+                const imgWidth = pageWidth - 20;
+                const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                let heightLeft = imgHeight;
+                let position = 10;
+
+                pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+                heightLeft -= pageHeight;
+
+                while (heightLeft >= 0) {
+                    position = heightLeft - imgHeight + 10;
+                    pdf.addPage();
+                    pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+                    heightLeft -= pageHeight;
+                }
+
+                pdf.save('TG_AI_지속적_학습_및_개선_매뉴얼.pdf');
+            } catch (error) {
+                alert('PDF 생성 중 오류가 발생했습니다.');
+                console.error(error);
+            } finally {
+                button.innerHTML = '<i class="fas fa-file-pdf"></i> PDF 다운로드';
+                button.disabled = false;
+            }
+        }
+
+        function scrollToHash(hash) {
+            const target = document.querySelector(hash);
+            if (target) {
+                const headerOffset = 120;
+                const elementPosition = target.getBoundingClientRect().top;
+                const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+            }
+        }
+
+        document.querySelectorAll('.manual-sidebar a[href^="#"]')?.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const href = this.getAttribute('href');
+                scrollToHash(href);
+                document.querySelectorAll('.manual-sidebar a').forEach(a => a.classList.remove('active'));
+                this.classList.add('active');
+                history.replaceState(null, '', href);
+            });
+        });
+
+        window.addEventListener('load', function() {
+            if (window.location.hash) {
+                setTimeout(() => {
+                    scrollToHash(window.location.hash);
+                    const activeLink = document.querySelector('.manual-sidebar a[href="' + window.location.hash + '"]');
+                    if (activeLink) {
+                        document.querySelectorAll('.manual-sidebar a').forEach(a => a.classList.remove('active'));
+                        activeLink.classList.add('active');
+                    }
+                }, 10);
+            }
+        });
+
+        document.querySelector('.mobile-menu-toggle')?.addEventListener('click', function() {
+            document.querySelector('.nav-menu').classList.toggle('active');
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 기본 개념 - TG AI 캠퍼스</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/samsung-nav.css?v=3">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        .manual-container { display: flex; max-width: 1400px; margin: 50px auto; gap: 30px; padding: 0 20px; }
+        .manual-sidebar { width: 280px; background: white; border-radius: 15px; padding: 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); position: sticky; top: 100px; height: fit-content; }
+        .manual-sidebar h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 20px; color: #1a202c; }
+        .manual-sidebar ul { list-style: none; padding: 0; }
+        .manual-sidebar li { margin-bottom: 12px; }
+        .manual-sidebar a { color: #666; text-decoration: none; display: block; padding: 8px 12px; border-radius: 8px; transition: all 0.3s; }
+        .manual-sidebar a:hover, .manual-sidebar a.active { background: #667eea; color: white; }
+        .manual-content { flex: 1; background: white; border-radius: 15px; padding: 50px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+        .manual-header { border-bottom: 3px solid #667eea; padding-bottom: 30px; margin-bottom: 40px; }
+        .manual-header h1 { font-size: 2.5rem; font-weight: 700; color: #1a202c; margin-bottom: 15px; }
+        .manual-meta { display: flex; gap: 20px; color: #666; font-size: 0.95rem; }
+        .manual-meta span { display: flex; align-items: center; gap: 8px; }
+        .pdf-button { position: fixed; bottom: 30px; right: 30px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 15px 30px; border-radius: 50px; font-size: 1rem; font-weight: 600; cursor: pointer; box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4); transition: all 0.3s; z-index: 1000; }
+        .pdf-button:hover { transform: translateY(-3px); box-shadow: 0 6px 30px rgba(102, 126, 234, 0.6); }
+        .section { margin-bottom: 50px; }
+        .section h2 { font-size: 1.8rem; font-weight: 700; color: #1a202c; margin-bottom: 20px; padding-left: 15px; border-left: 5px solid #667eea; }
+        .section h3 { font-size: 1.3rem; font-weight: 600; color: #2d3748; margin: 30px 0 15px; }
+        .section p { font-size: 1.05rem; line-height: 1.8; color: #4a5568; margin-bottom: 15px; }
+        .highlight-box { background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%); border-left: 4px solid #667eea; padding: 20px 25px; border-radius: 10px; margin: 25px 0; }
+        .tip-box { background: #f0fff4; border-left: 4px solid #48bb78; padding: 20px 25px; border-radius: 10px; margin: 25px 0; }
+        .tip-box::before { content: "💡 알아두기"; font-weight: 700; color: #48bb78; display: block; margin-bottom: 10px; }
+        ul, ol { padding-left: 30px; margin: 20px 0; }
+        li { margin-bottom: 12px; line-height: 1.7; color: #4a5568; }
+        @media (max-width: 768px) {
+            .manual-container { flex-direction: column; }
+            .manual-sidebar { width: 100%; position: static; }
+            .manual-content { padding: 30px 20px; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="utility-bar">
+            <div class="container">
+                <div class="utility-wrapper">
+                    <a href="news.html" class="utility-link">TG 라운지</a>
+                    <a href="notices.html" class="utility-link">공지사항</a>
+                    <a href="tg-family.html" class="utility-link">TG패밀리</a>
+                    <a href="https://tgnco.kr/tg-alliance/" target="_blank" class="external-link tg-alliance">TG Alliance <i class="fas fa-external-link-alt"></i></a>
+                    <span class="external-link" style="color: #ff8c00; cursor: default;">
+                        TG 에듀테크
+                    </span>
+                </div>
+            </div>
+        </div>
+        <nav class="navbar">
+            <div class="container">
+                <div class="nav-wrapper">
+                    <div class="nav-left">
+                        <a href="index.html" class="logo"><i class="fas fa-brain"></i><span><span class="logo-tg">TG</span> AI 캠퍼스</span></a>
+                                                <ul class="nav-menu">
+                            <li><a href="about.html">TG AI 캠퍼스소개</a></li>
+                            <li><a href="manuals.html">AI 활용메뉴얼</a></li>
+                            <li><a href="dictionary.html">AI 용어사전</a></li>
+                            <li><a href="recommended.html">AI 활용추천영상</a></li>
+                            <li><a href="curriculum.html">교육과정</a></li>
+                            <li><a href="support.html" style="color: #3b82f6; font-weight: 600;">나만의 AI 코치</a></li>
+                            <li><a href="dashboard.html">학습 현황</a></li>
+                        </ul>
+                    </div>
+                    <div class="nav-right">
+                        <div class="icon-actions">
+                            <a href="mypage.html" class="icon-link"><img src="assets/images/mypage-icon-new.png?v=2" alt="마이페이지" style="height: 20px;"></a>
+                            <a href="login.html" class="icon-link"><img src="assets/images/logout-icon.png" alt="로그인" style="height: 24px;"></a>
+                        </div>
+                        <button class="mobile-menu-toggle"><i class="fas fa-bars"></i></button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="manual-container">
+        <aside class="manual-sidebar">
+            <h3><i class="fas fa-list"></i> 목차</h3>
+            <ul>
+                <li><a href="#what-is-ai" class="active">1. AI란 무엇인가?</a></li>
+                <li><a href="#types">2. AI 유형</a></li>
+                <li><a href="#ml-dl">3. 머신러닝 vs 딥러닝</a></li>
+                <li><a href="#generative-ai">4. 생성형 AI</a></li>
+                <li><a href="#business">5. 비즈니스 활용</a></li>
+            </ul>
+            <hr style="margin: 30px 0; border: none; border-top: 1px solid #e2e8f0;">
+            <a href="manuals.html" class="btn btn-outline" style="width: 100%; text-align: center;">
+                <i class="fas fa-arrow-left"></i> 목록으로
+            </a>
+        </aside>
+
+        <main class="manual-content" id="manual-content">
+            <div class="manual-header">
+                <h1><i class="fas fa-lightbulb"></i> AI 기본 개념</h1>
+                <div class="manual-meta">
+                    <span><i class="fas fa-clock"></i> 읽는 시간: 15분</span>
+                    <span><i class="fas fa-signal"></i> 난이도: 입문</span>
+                    <span><i class="fas fa-user"></i> 대상: 전 직원</span>
+                </div>
+            </div>
+
+            <section class="section" id="what-is-ai">
+                <h2>1. AI(인공지능)란 무엇인가?</h2>
+                <p>
+                    AI(Artificial Intelligence, 인공지능)는 인간의 학습능력, 추론능력, 지각능력을 인공적으로 구현한 컴퓨터 프로그램 또는 시스템입니다.
+                </p>
+                <div class="highlight-box">
+                    <strong>간단히 말하면:</strong><br>
+                    "사람처럼 생각하고, 배우고, 문제를 해결하는 컴퓨터 기술"
+                </div>
+                <h3>AI의 역사</h3>
+                <ul>
+                    <li><strong>1956년:</strong> "인공지능"이라는 용어 탄생 (다트머스 회의)</li>
+                    <li><strong>1997년:</strong> IBM 딥블루, 체스 세계 챔피언 카스파로프 격파</li>
+                    <li><strong>2016년:</strong> 알파고, 바둑 세계 챔피언 이세돌 승리</li>
+                    <li><strong>2022년:</strong> ChatGPT 출시, 생성형 AI 대중화</li>
+                    <li><strong>2026년 현재:</strong> 거의 모든 산업에서 AI 활용 중</li>
+                </ul>
+            </section>
+
+            <section class="section" id="types">
+                <h2>2. AI의 유형</h2>
+                <h3>📊 기능 기준 분류</h3>
+                <ul>
+                    <li><strong>약인공지능 (Narrow AI):</strong> 특정 작업만 수행 (음성인식, 이미지 분류 등) - 현재 대부분의 AI</li>
+                    <li><strong>강인공지능 (General AI):</strong> 사람처럼 다양한 작업 수행 - 아직 개발 중</li>
+                    <li><strong>초인공지능 (Super AI):</strong> 인간을 뛰어넘는 지능 - 이론적 단계</li>
+                </ul>
+                <div class="tip-box">
+                    현재 ChatGPT, Claude, Gemini 등 우리가 사용하는 AI는 모두 "약인공지능"입니다.
+                    특정 작업(텍스트 생성, 이미지 생성 등)에는 뛰어나지만, 범용적 지능은 없습니다.
+                </div>
+            </section>
+
+            <section class="section" id="ml-dl">
+                <h2>3. 머신러닝 vs 딥러닝</h2>
+                <h3>🤖 머신러닝 (Machine Learning)</h3>
+                <p>
+                    데이터를 학습해서 패턴을 찾고 예측하는 기술입니다.
+                    명시적으로 프로그래밍하지 않아도 컴퓨터가 스스로 학습합니다.
+                </p>
+                <div class="highlight-box">
+                    <strong>예시:</strong><br>
+                    • 스팸 메일 필터링<br>
+                    • 상품 추천 시스템 (넷플릭스, 쿠팡)<br>
+                    • 주가 예측
+                </div>
+                <h3>🧠 딥러닝 (Deep Learning)</h3>
+                <p>
+                    머신러닝의 한 분야로, 인간의 뇌 신경망을 모방한 "인공신경망"을 사용합니다.
+                    더 복잡한 문제를 해결할 수 있습니다.
+                </p>
+                <div class="highlight-box">
+                    <strong>예시:</strong><br>
+                    • 이미지 인식 (얼굴 인식)<br>
+                    • 음성 인식 (시리, 빅스비)<br>
+                    • 자율주행 자동차<br>
+                    • ChatGPT 같은 언어 모델
+                </div>
+                <div class="tip-box">
+                    <strong>관계:</strong> AI > 머신러닝 > 딥러닝<br>
+                    딥러닝은 머신러닝의 일부이고, 머신러닝은 AI의 일부입니다.
+                </div>
+            </section>
+
+            <section class="section" id="generative-ai">
+                <h2>4. 생성형 AI (Generative AI)</h2>
+                <p>
+                    2022년 이후 가장 뜨거운 화두! 새로운 콘텐츠를 "생성"하는 AI입니다.
+                </p>
+                <h3>🎨 생성형 AI로 만들 수 있는 것</h3>
+                <ul>
+                    <li><strong>텍스트:</strong> ChatGPT, Claude, Gemini → 글, 코드, 번역</li>
+                    <li><strong>이미지:</strong> Midjourney, DALL-E, Stable Diffusion → 그림, 사진</li>
+                    <li><strong>영상:</strong> Runway, Pika → 동영상 생성</li>
+                    <li><strong>음악:</strong> Suno, Udio → 음악 작곡</li>
+                    <li><strong>음성:</strong> ElevenLabs → 사람 목소리 합성</li>
+                </ul>
+                <div class="highlight-box">
+                    <strong>왜 중요한가?</strong><br>
+                    과거 AI는 "분석"만 했습니다 (이게 고양이인지 개인지 판별).<br>
+                    생성형 AI는 "창작"을 합니다 (고양이 그림을 새로 그림).<br>
+                    → 콘텐츠 제작 시간이 90% 단축됩니다!
+                </div>
+            </section>
+
+            <section class="section" id="business">
+                <h2>5. 비즈니스에서의 AI 활용</h2>
+                <h3>💼 부서별 활용 사례</h3>
+                <ul>
+                    <li><strong>마케팅:</strong> 광고 문구 생성, SNS 콘텐츠 제작, 고객 세그먼트 분석</li>
+                    <li><strong>영업:</strong> 리드 스코어링, 영업 이메일 자동화, 고객 이탈 예측</li>
+                    <li><strong>고객센터:</strong> 챗봇, FAQ 자동 응답, 감정 분석</li>
+                    <li><strong>인사:</strong> 이력서 스크리닝, 면접 질문 생성, 온보딩 자료 작성</li>
+                    <li><strong>재무:</strong> 재무제표 분석, 이상 거래 탐지, 예산 예측</li>
+                    <li><strong>개발:</strong> 코드 자동 완성, 버그 탐지, 문서 자동 생성</li>
+                </ul>
+                <div class="tip-box">
+                    <strong>TG Alliance에서 AI를 어떻게 활용할까요?</strong><br>
+                    • 보고서 작성 시간 50% 단축<br>
+                    • 반복 작업 자동화로 창의적 업무에 집중<br>
+                    • 데이터 기반 의사결정 강화<br>
+                    • 고객 응대 품질 향상
+                </div>
+            </section>
+
+            <div style="text-align: center; margin-top: 60px; padding: 40px; background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%); border-radius: 15px;">
+                <h3 style="font-size: 1.5rem; margin-bottom: 20px;">다음 단계</h3>
+                <p style="margin-bottom: 30px;">AI 기본 개념을 이해했다면, 이제 실전으로!</p>
+                <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                    <a href="dictionary.html" class="btn btn-outline">AI 용어 사전</a>
+                    <a href="manual-prompt-basic.html" class="btn btn-primary">프롬프트 작성법</a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <button class="pdf-button" onclick="downloadPDF()">
+        <i class="fas fa-file-pdf"></i> PDF 다운로드
+    </button>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo-section">
+                        <img src="assets/images/common/footer_tg.jpg" alt="TG 건물" class="footer-building-image">
+                        <div class="footer-text-content">
+                            <h4>TG AI 캠퍼스</h4>
+                            <p>AI 기술 교육 전문 플랫폼</p>
+                        </div>
+                    </div>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>AI 교육 과정</h4>
+                    <ul>
+                        <li><a href="manuals.html#tab-basics-link">기초편</a></li>
+                        <li><a href="manuals.html#tab-advanced-link">실전편</a></li>
+                        <li><a href="manuals.html#tab-prompt-link">프롬프트</a></li>
+                        <li><a href="manuals.html#tab-job-link">직무별 활용</a></li>
+                        <li><a href="manuals.html#tab-advanced-ai-link">AI 고도화</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>AI 실전</h4>
+                    <ul>
+                        <li><a href="manual-prompt-basic.html">프롬프트 작성법</a></li>
+                        <li><a href="manual-automation.html">업무 자동화</a></li>
+                        <li><a href="manual-workflow.html">워크플로우 구축</a></li>
+                        <li><a href="manual-collaboration.html">AI 협업 도구</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>학습 지원</h4>
+                    <ul>
+                        <li><a href="support.html">나만의 AI 코치</a></li>
+                        <li><a href="notices.html">공지사항</a></li>
+                        <li><a href="dictionary.html">AI 용어 사전</a></li>
+                        <li><a href="dashboard.html">학습 현황</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>TG 라운지</h4>
+                    <ul>
+                        <li><a href="about.html">TG AI 캠퍼스 소개</a></li>
+                        <li><a href="tg-family.html">TG 패밀리</a></li>
+                        <li><a href="news.html">TG Alliance 소식</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 TG AI 캠퍼스. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.querySelectorAll('.manual-sidebar a[href^="#"]').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const headerOffset = 120;
+                    const elementPosition = target.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                    
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+                    
+                    document.querySelectorAll('.manual-sidebar a').forEach(a => a.classList.remove('active'));
+                    this.classList.add('active');
+                }
+            });
+        });
+
+        async function downloadPDF() {
+            const button = document.querySelector('.pdf-button');
+            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 생성 중...';
+            button.disabled = true;
+            try {
+                const { jsPDF } = window.jspdf;
+                const content = document.getElementById('manual-content');
+                const canvas = await html2canvas(content, { scale: 2, useCORS: true, logging: false });
+                const imgData = canvas.toDataURL('image/png');
+                const pdf = new jsPDF('p', 'mm', 'a4');
+                const pageWidth = pdf.internal.pageSize.getWidth();
+                const pageHeight = pdf.internal.pageSize.getHeight();
+                const imgWidth = pageWidth - 20;
+                const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                let heightLeft = imgHeight;
+                let position = 10;
+                pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+                heightLeft -= pageHeight;
+                while (heightLeft >= 0) {
+                    position = heightLeft - imgHeight + 10;
+                    pdf.addPage();
+                    pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+                    heightLeft -= pageHeight;
+                }
+                pdf.save('TG_AI_기본개념.pdf');
+                button.innerHTML = '<i class="fas fa-check"></i> 완료!';
+                setTimeout(() => {
+                    button.innerHTML = '<i class="fas fa-file-pdf"></i> PDF 다운로드';
+                    button.disabled = false;
+                }, 2000);
+            } catch (error) {
+                alert('PDF 생성 중 오류가 발생했습니다.');
+                button.innerHTML = '<i class="fas fa-file-pdf"></i> PDF 다운로드';
+                button.disabled = false;
+            }
+        }
+        document.querySelector('.mobile-menu-toggle')?.addEventListener('click', function() {
+            document.querySelector('.nav-menu').classList.toggle('active');
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 고도화 기법 - TG AI 캠퍼스</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/enhanced-styles.css">
+    <link rel="stylesheet" href="assets/css/sections.css">
+    <link rel="stylesheet" href="assets/css/samsung-nav.css?v=3">
+    <link rel="stylesheet" href="assets/css/apple-style.css">
+    <link rel="stylesheet" href="assets/css/scroll-indicator.css">
+    <link rel="stylesheet" href="assets/css/tg-news-style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .manual-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .manual-header {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 60px 0;
+            text-align: center;
+            border-radius: 12px;
+            margin-bottom: 40px;
+        }
+        
+        .manual-content {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .section {
+            margin-bottom: 40px;
+        }
+        
+        .section h2 {
+            color: #f5576c;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            padding-left: 15px;
+            border-left: 4px solid #f5576c;
+        }
+        
+        .section h3 {
+            color: #333;
+            font-size: 1.3rem;
+            margin: 20px 0 10px;
+        }
+        
+        .code-block {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .tip-box {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        
+        .example-box {
+            background: #f3e5f5;
+            border-left: 4px solid #9c27b0;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <header>
+        <div class="utility-bar">
+            <div class="container">
+                <div class="utility-wrapper">
+                    <a href="news.html" class="utility-link">TG 라운지</a>
+                    <a href="notices.html" class="utility-link">공지사항</a>
+                    <a href="tg-family.html" class="utility-link">TG패밀리</a>
+                    <a href="https://tgnco.kr/tg-alliance/" target="_blank" class="external-link tg-alliance">
+                        TG Alliance <i class="fas fa-external-link-alt"></i>
+                    </a>
+                    <span class="external-link" style="color: #ff8c00; cursor: default;">
+                        TG 에듀테크
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <nav class="navbar">
+            <div class="container">
+                <div class="nav-wrapper">
+                    <div class="nav-left">
+                        <a href="index.html" class="logo">
+                            <i class="fas fa-brain"></i>
+                            <span><span class="logo-tg">TG</span> AI 캠퍼스</span>
+                        </a>
+                        
+                                                <ul class="nav-menu">
+                            <li><a href="about.html">TG AI 캠퍼스소개</a></li>
+                            <li><a href="manuals.html">AI 활용메뉴얼</a></li>
+                            <li><a href="dictionary.html">AI 용어사전</a></li>
+                            <li><a href="recommended.html">AI 활용추천영상</a></li>
+                            <li><a href="curriculum.html">교육과정</a></li>
+                            <li><a href="support.html" style="color: #3b82f6; font-weight: 600;">나만의 AI 코치</a></li>
+                            <li><a href="dashboard.html">학습 현황</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="nav-right">
+                        <div class="search-wrapper">
+                            <form class="search-form">
+                                <button type="submit" class="search-btn">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                                <input type="text" class="search-input" placeholder="검색" autocomplete="off">
+                            </form>
+                        </div>
+                        
+                        <div class="nav-icons">
+                            <a href="mypage.html" class="nav-icon">
+                                <i class="fas fa-user"></i>
+                            </a>
+                        </div>
+                        
+                        <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                            <i class="fas fa-bars"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="manual-container">
+        <div class="manual-header">
+            <h1><i class="fas fa-rocket"></i> AI 고도화 기법</h1>
+            <p>Advanced RAG, Vector DB, Fine-tuning 실전 적용</p>
+        </div>
+
+        <div class="manual-content">
+            <div class="section">
+                <h2><i class="fas fa-book"></i> Advanced RAG 기법</h2>
+                
+                <h3>1. RAG의 기본 개념</h3>
+                <p>RAG(Retrieval-Augmented Generation)는 검색 기반 생성 기법으로, 외부 지식베이스에서 관련 정보를 검색하여 LLM의 응답 품질을 향상시킵니다.</p>
+                
+                <div class="code-block">
+# 기본 RAG 파이프라인
+def basic_rag_pipeline(query, vector_db):
+    # 1. 쿼리 임베딩
+    query_embedding = embed_query(query)
+    
+    # 2. 관련 문서 검색
+    relevant_docs = vector_db.search(query_embedding, k=5)
+    
+    # 3. 컨텍스트 구성
+    context = "\n".join(relevant_docs)
+    
+    # 4. 프롬프트 생성
+    prompt = f"""다음 컨텍스트를 바탕으로 질문에 답변해주세요:
+
+컨텍스트:
+{context}
+
+질문: {query}
+
+답변:"""
+    
+    # 5. LLM 호출
+    response = llm.generate(prompt)
+    return response
+                </div>
+
+                <div class="tip-box">
+                    <strong>💡 팁:</strong> RAG의 성능은 검색 품질과 컨텍스트의 관련성에 직접적으로 영향을 받습니다.
+                </div>
+
+                <h3>2. 고급 RAG 기법들</h3>
+                
+                <h4>Hybrid Search</h4>
+                <p>키워드 검색과 시맨틱 검색을 결합하여 더 정확한 검색 결과를 얻습니다.</p>
+                
+                <div class="code-block">
+def hybrid_search(query, vector_db, keyword_index):
+    # 키워드 검색
+    keyword_results = keyword_index.search(query, k=10)
+    
+    # 벡터 검색
+    vector_results = vector_db.search(embed_query(query), k=10)
+    
+    # 결과 결합 및 재랭킹
+    combined_results = merge_and_rerank(keyword_results, vector_results)
+    return combined_results[:5]
+                </div>
+
+                <h4>Multi-Query RAG</h4>
+                <p>하나의 질문을 여러 개의 관련 질문으로 확장하여 더 포괄적인 정보를 검색합니다.</p>
+                
+                <div class="example-box">
+                    <strong>📝 예시:</strong><br>
+                    원본 질문: "AI의 미래는 어떻게 될까?"<br>
+                    확장 질문들:<br>
+                    • "인공지능 기술의 발전 방향"<br>
+                    • "AI가 사회에 미치는 영향"<br>
+                    • "머신러닝의 미래 전망"
+                </div>
+            </div>
+
+            <div class="section">
+                <h2><i class="fas fa-database"></i> Vector Database 활용</h2>
+                
+                <h3>1. Vector DB 종류와 특징</h3>
+                <ul>
+                    <li><strong>ChromaDB:</strong> 오픈소스, 경량급, Python 친화적</li>
+                    <li><strong>Pinecone:</strong> 관리형 서비스, 높은 성능</li>
+                    <li><strong>Weaviate:</strong> GraphQL 지원, 하이브리드 검색</li>
+                    <li><strong>FAISS:</strong> Facebook 개발, 고성능 벡터 검색</li>
+                </ul>
+
+                <h3>2. Vector DB 구축 실전</h3>
+                
+                <div class="code-block">
+import chromadb
+from sentence_transformers import SentenceTransformer
+
+# ChromaDB 초기화
+client = chromadb.Client()
+collection = client.create_collection("ai_manuals")
+
+# 임베딩 모델 로드
+model = SentenceTransformer('all-MiniLM-L6-v2')
+
+# 문서 임베딩 및 저장
+documents = [
+    "AI 기본 개념과 원리",
+    "머신러닝 알고리즘 종류",
+    "딥러닝 신경망 구조",
+    # ... 더 많은 문서들
+]
+
+embeddings = model.encode(documents)
+
+for i, (doc, embedding) in enumerate(zip(documents, embeddings)):
+    collection.add(
+        ids=[f"doc_{i}"],
+        embeddings=[embedding.tolist()],
+        documents=[doc],
+        metadatas=[{"source": f"manual_section_{i}"}]
+    )
+                </div>
+
+                <div class="tip-box">
+                    <strong>💡 팁:</strong> 임베딩 모델 선택은 도메인 특성과 언어에 맞춰야 합니다. 한국어 전용 모델을 사용하면 더 좋은 결과를 얻을 수 있습니다.
+                </div>
+            </div>
+
+            <div class="section">
+                <h2><i class="fas fa-cogs"></i> Fine-tuning 실전</h2>
+                
+                <h3>1. Fine-tuning의 필요성</h3>
+                <p>특정 도메인이나 작업에 맞춰 LLM을 최적화하여 더 정확하고 일관된 결과를 얻을 수 있습니다.</p>
+
+                <h3>2. Fine-tuning 과정</h3>
+                
+                <div class="code-block">
+from transformers import AutoTokenizer, AutoModelForCausalLM, TrainingArguments, Trainer
+
+# 모델과 토크나이저 로드
+model_name = "beomi/KoGPT-6B"
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+model = AutoModelForCausalLM.from_pretrained(model_name)
+
+# 데이터셋 준비
+train_dataset = prepare_finetuning_data()
+
+# 훈련 설정
+training_args = TrainingArguments(
+    output_dir="./results",
+    num_train_epochs=3,
+    per_device_train_batch_size=4,
+    save_steps=500,
+    save_total_limit=2,
+    logging_steps=100,
+    learning_rate=5e-5,
+)
+
+# 트레이너 초기화
+trainer = Trainer(
+    model=model,
+    args=training_args,
+    train_dataset=train_dataset,
+)
+
+# Fine-tuning 실행
+trainer.train()
+                </div>
+
+                <h3>3. PEFT(Parameter-Efficient Fine-Tuning)</h3>
+                <p>전체 모델이 아닌 일부 파라미터만 튜닝하여 메모리 사용량을 줄이고 훈련 속도를 높입니다.</p>
+
+                <div class="example-box">
+                    <strong>📝 PEFT 방법들:</strong><br>
+                    • <strong>LoRA (Low-Rank Adaptation):</strong> 저랭크 행렬로 파라미터 효율적 조정<br>
+                    • <strong>QLoRA:</strong> 양자화된 LoRA, 더 적은 메모리 사용<br>
+                    • <strong>Adapter Layers:</strong> 작은 어댑터 레이어 추가
+                </div>
+            </div>
+
+            <div class="section">
+                <h2><i class="fas fa-rocket"></i> 실전 적용 사례</h2>
+                
+                <h3>1. 기업 문서 검색 시스템</h3>
+                <p>기업 내부 문서들을 Vector DB에 저장하고, RAG를 통해 직원들이 필요한 정보를 빠르게 찾을 수 있게 합니다.</p>
+
+                <h3>2. 고객 지원 챗봇</h3>
+                <p>제품 매뉴얼과 FAQ를 RAG 시스템에 통합하여 고객 문의에 정확하고 일관된 답변을 제공합니다.</p>
+
+                <h3>3. 연구 논문 요약</h3>
+                <p>학술 논문들을 벡터화하고, 연구자가 관련 논문을 찾고 요약받을 수 있는 시스템을 구축합니다.</p>
+
+                <div class="tip-box">
+                    <strong>💡 성공 전략:</strong><br>
+                    1. 고품질 데이터 수집과 전처리<br>
+                    2. 적절한 임베딩 모델 선택<br>
+                    3. 지속적인 성능 모니터링<br>
+                    4. 사용자 피드백 기반 개선
+                </div>
+            </div>
+
+            <div class="section">
+                <h2><i class="fas fa-check-circle"></i> 성능 평가 및 최적화</h2>
+                
+                <h3>1. 평가 지표</h3>
+                <ul>
+                    <li><strong>Retrieval Metrics:</strong> Precision, Recall, F1-Score, MRR</li>
+                    <li><strong>Generation Metrics:</strong> BLEU, ROUGE, BERTScore</li>
+                    <li><strong>End-to-End Metrics:</strong> Faithfulness, Answer Relevancy</li>
+                </ul>
+
+                <h3>2. 최적화 기법</h3>
+                <ul>
+                    <li><strong>Chunking Strategy:</strong> 문서 분할 크기 최적화</li>
+                    <li><strong>Embedding Model Tuning:</strong> 도메인 특화 임베딩</li>
+                    <li><strong>Reranking:</strong> 검색 결과 재순위화</li>
+                    <li><strong>Caching:</strong> 반복 검색 결과 캐싱</li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo-section">
+                        <img src="assets/images/common/footer_tg.jpg" alt="TG 건물" class="footer-building-image">
+                        <div class="footer-text-content">
+                            <h4>TG AI 캠퍼스</h4>
+                            <p>AI 기술 교육 전문 플랫폼</p>
+                        </div>
+                    </div>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>AI 교육 과정</h4>
+                    <ul>
+                        <li><a href="manuals.html#tab-basics-link">기초편</a></li>
+                        <li><a href="manuals.html#tab-advanced-link">실전편</a></li>
+                        <li><a href="manuals.html#tab-prompt-link">프롬프트</a></li>
+                        <li><a href="manuals.html#tab-job-link">직무별 활용</a></li>
+                        <li><a href="manuals.html#tab-advanced-ai-link">AI 고도화</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>AI 실전</h4>
+                    <ul>
+                        <li><a href="manual-prompt-basic.html">프롬프트 작성법</a></li>
+                        <li><a href="manual-automation.html">업무 자동화</a></li>
+                        <li><a href="manual-workflow.html">워크플로우 구축</a></li>
+                        <li><a href="manual-collaboration.html">AI 협업 도구</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>학습 지원</h4>
+                    <ul>
+                        <li><a href="support.html">나만의 AI 코치</a></li>
+                        <li><a href="notices.html">공지사항</a></li>
+                        <li><a href="dictionary.html">AI 용어 사전</a></li>
+                        <li><a href="dashboard.html">학습 현황</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>TG 라운지</h4>
+                    <ul>
+                        <li><a href="about.html">TG AI 캠퍼스 소개</a></li>
+                        <li><a href="tg-family.html">TG 패밀리</a></li>
+                        <li><a href="news.html">TG Alliance 소식</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 TG AI 캠퍼스. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="assets/js/script.js"></script>
+</body>
+</html>

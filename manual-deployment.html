@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>모델 배포 및 스케일링 - TG AI 캠퍼스</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/samsung-nav.css?v=3">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        .manual-container { display: flex; max-width: 1400px; margin: 50px auto; gap: 30px; padding: 0 20px; }
+        .manual-sidebar { width: 280px; background: white; border-radius: 15px; padding: 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); position: sticky; top: 100px; height: fit-content; }
+        .manual-sidebar h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 20px; color: #1a202c; }
+        .manual-sidebar ul { list-style: none; padding: 0; }
+        .manual-sidebar li { margin-bottom: 12px; }
+        .manual-sidebar a { color: #666; text-decoration: none; display: block; padding: 8px 12px; border-radius: 8px; transition: all 0.3s; }
+        .manual-sidebar a:hover, .manual-sidebar a.active { background: #10b981; color: white; }
+        .manual-content { flex: 1; background: white; border-radius: 15px; padding: 50px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+        .manual-header { border-bottom: 3px solid #10b981; padding-bottom: 30px; margin-bottom: 40px; }
+        .manual-header h1 { font-size: 2.5rem; font-weight: 700; color: #1a202c; margin-bottom: 15px; }
+        .manual-meta { display: flex; gap: 20px; color: #666; font-size: 0.95rem; flex-wrap: wrap; }
+        .manual-meta span { display: flex; align-items: center; gap: 8px; }
+        .pdf-button { position: fixed; bottom: 30px; right: 30px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; border: none; padding: 15px 30px; border-radius: 50px; font-size: 1rem; font-weight: 600; cursor: pointer; box-shadow: 0 4px 20px rgba(16, 185, 129, 0.4); transition: all 0.3s; z-index: 1000; }
+        .pdf-button:hover { transform: translateY(-3px); box-shadow: 0 6px 30px rgba(16, 185, 129, 0.6); }
+        .section { margin-bottom: 50px; scroll-margin-top: 140px; }
+        .section h2 { font-size: 1.8rem; font-weight: 700; color: #1a202c; margin-bottom: 20px; padding-left: 15px; border-left: 5px solid #10b981; }
+        .section h3 { font-size: 1.3rem; font-weight: 600; color: #2d3748; margin: 30px 0 15px; }
+        .section p { font-size: 1.05rem; line-height: 1.8; color: #4a5568; margin-bottom: 15px; }
+        .prompt-box { background: #ecfdf5; border: 2px solid #86efac; border-radius: 10px; padding: 25px; margin: 25px 0; }
+        .prompt-box .label { font-weight: 700; color: #059669; margin-bottom: 15px; display: block; font-size: 1.1rem; }
+        .prompt-box pre { background: white; padding: 20px; border-radius: 8px; border: 1px solid #bbf7d0; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word; line-height: 1.6; }
+        .example-output { background: #f0fdf4; border-left: 4px solid #22c55e; padding: 20px 25px; border-radius: 10px; margin: 25px 0; }
+        .example-output::before { content: "✅ 운영 예시"; font-weight: 700; color: #16a34a; display: block; margin-bottom: 10px; }
+        .tip-box { background: #f7fee7; border-left: 4px solid #65a30d; padding: 20px 25px; border-radius: 10px; margin: 25px 0; }
+        .tip-box::before { content: "💡 배포 팁"; font-weight: 700; color: #4d7c0f; display: block; margin-bottom: 10px; }
+        .info-table { width: 100%; border-collapse: collapse; margin: 18px 0 26px; font-size: 0.96rem; }
+        .info-table th, .info-table td { border: 1px solid #cbd5e1; padding: 12px; text-align: left; vertical-align: top; }
+        .info-table th { background: #ecfdf5; color: #166534; font-weight: 700; }
+        .team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin: 18px 0 26px; }
+        .team-card { background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 10px; padding: 14px; }
+        .team-card strong { color: #166534; display: block; margin-bottom: 6px; }
+        ul, ol { padding-left: 30px; margin: 20px 0; }
+        li { margin-bottom: 12px; line-height: 1.7; color: #4a5568; }
+        @media (max-width: 768px) {
+            .manual-container { flex-direction: column; }
+            .manual-sidebar { width: 100%; position: static; }
+            .manual-content { padding: 30px 20px; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="utility-bar">
+            <div class="container">
+                <div class="utility-wrapper">
+                    <a href="news.html" class="utility-link">TG 라운지</a>
+                    <a href="notices.html" class="utility-link">공지사항</a>
+                    <a href="tg-family.html" class="utility-link">TG패밀리</a>
+                    <a href="https://tgnco.kr/tg-alliance/" target="_blank" class="external-link tg-alliance">TG Alliance <i class="fas fa-external-link-alt"></i></a>
+                    <span class="external-link" style="color: #ff8c00; cursor: default;">TG 에듀테크</span>
+                </div>
+            </div>
+        </div>
+        <nav class="navbar">
+            <div class="container">
+                <div class="nav-wrapper">
+                    <div class="nav-left">
+                        <a href="index.html" class="logo"><i class="fas fa-brain"></i><span><span class="logo-tg">TG</span> AI 캠퍼스</span></a>
+                        <ul class="nav-menu">
+                            <li><a href="about.html">TG AI 캠퍼스소개</a></li>
+                            <li><a href="manuals.html">AI 활용메뉴얼</a></li>
+                            <li><a href="dictionary.html">AI 용어사전</a></li>
+                            <li><a href="recommended.html">AI 활용추천영상</a></li>
+                            <li><a href="curriculum.html">교육과정</a></li>
+                            <li><a href="support.html" style="color: #3b82f6; font-weight: 600;">나만의 AI 코치</a></li>
+                            <li><a href="dashboard.html">학습 현황</a></li>
+                        </ul>
+                    </div>
+                    <div class="nav-right">
+                        <div class="icon-actions">
+                            <a href="mypage.html" class="icon-link"><img src="assets/images/mypage-icon-new.png?v=2" alt="마이페이지" style="height: 20px;"></a>
+                            <a href="login.html" class="icon-link"><img src="assets/images/logout-icon.png" alt="로그인" style="height: 24px;"></a>
+                        </div>
+                        <button class="mobile-menu-toggle"><i class="fas fa-bars"></i></button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="manual-container">
+        <aside class="manual-sidebar">
+            <h3><i class="fas fa-list"></i> 목차</h3>
+            <ul>
+                <li><a href="#strategy" class="active">1. 배포 전략 선택</a></li>
+                <li><a href="#environments">2. 환경 분리/승격</a></li>
+                <li><a href="#release">3. 릴리스 패턴</a></li>
+                <li><a href="#scaling">4. 스케일링 설계</a></li>
+                <li><a href="#latency">5. 성능 최적화</a></li>
+                <li><a href="#resilience">6. 장애 대응/복구</a></li>
+                <li><a href="#cost">7. 비용 최적화</a></li>
+                <li><a href="#checklist">8. 운영 체크리스트</a></li>
+            </ul>
+            <hr style="margin: 30px 0; border: none; border-top: 1px solid #e2e8f0;">
+            <a href="manuals.html" class="btn btn-outline" style="width: 100%; text-align: center;"><i class="fas fa-arrow-left"></i> 목록으로</a>
+        </aside>
+
+        <main class="manual-content" id="manual-content">
+            <div class="manual-header">
+                <h1><i class="fas fa-cloud-arrow-up"></i> 모델 배포 및 스케일링</h1>
+                <div class="manual-meta">
+                    <span><i class="fas fa-clock"></i> 읽는 시간: 30분</span>
+                    <span><i class="fas fa-server"></i> 대상: 운영/개발 담당자</span>
+                    <span><i class="fas fa-bolt"></i> 핵심: 안정성 + 확장성</span>
+                </div>
+            </div>
+
+            <section class="section" id="strategy">
+                <h2>1. 배포 전략 선택</h2>
+                <p>모델 배포는 단순 업로드가 아니라 서비스 리스크 관리입니다. 트래픽 특성과 실패 비용을 고려해 배포 전략을 먼저 선택해야 합니다.</p>
+                <ul>
+                    <li>실시간 API 배포: 응답 지연에 민감한 서비스</li>
+                    <li>배치 배포: 대량 처리와 비용 효율 중심 서비스</li>
+                    <li>하이브리드 배포: 핵심 업무는 실시간, 대량 분석은 배치로 분리</li>
+                </ul>
+                <h3>선택 기준 매트릭스</h3>
+                <p>서비스별 목표 지표를 먼저 확정한 뒤 배포 전략을 선택하세요. 예를 들어 고객 응대 시스템은 지연시간과 가용성이 우선이고, 야간 리포트 생성은 비용과 처리량이 우선입니다.</p>
+                <ul>
+                    <li>지연 민감도: 실시간 API 우선</li>
+                    <li>트래픽 변동성: 오토스케일링 친화 구조 우선</li>
+                    <li>예산 제약: 배치 + 캐시 조합으로 단가 최적화</li>
+                </ul>
+                <table class="info-table">
+                    <thead>
+                        <tr><th>서비스 유형</th><th>권장 전략</th><th>주요 이유</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>고객 응대</td><td>실시간 + Canary</td><td>지연 민감, 품질 변동 즉시 감지 필요</td></tr>
+                        <tr><td>정기 리포트</td><td>배치 + 재처리 큐</td><td>비용 효율, 대량 처리 안정성</td></tr>
+                        <tr><td>추천/검색</td><td>하이브리드</td><td>핵심 요청은 실시간, 보조 연산은 배치</td></tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section class="section" id="environments">
+                <h2>2. 환경 분리와 승격 체계</h2>
+                <p>개발/스테이징/운영 환경을 분리하면 배포 품질을 높일 수 있습니다. 모델, 피처, 인프라 버전이 함께 승격되도록 파이프라인을 설계하세요.</p>
+                <h3>권장 흐름</h3>
+                <ol>
+                    <li>개발 환경에서 기능 검증</li>
+                    <li>스테이징에서 부하/호환성 테스트</li>
+                    <li>운영 환경으로 점진 배포</li>
+                </ol>
+                <h3>승격 게이트 정의</h3>
+                <ul>
+                    <li>기능 테스트 통과율 95% 이상</li>
+                    <li>부하 테스트에서 P95 응답시간 기준 충족</li>
+                    <li>보안 스캔 및 취약점 점검 완료</li>
+                    <li>롤백 절차 리허설 완료</li>
+                </ul>
+                <div class="team-grid">
+                    <div class="team-card">
+                        <strong>활용팀: 개발팀</strong>
+                        기능/회귀 테스트, API 호환성 검증 담당
+                    </div>
+                    <div class="team-card">
+                        <strong>활용팀: 운영팀</strong>
+                        배포 승인, 장애 복구 경로 점검 담당
+                    </div>
+                    <div class="team-card">
+                        <strong>활용팀: 보안팀</strong>
+                        취약점 스캔, 접근 정책 승인 담당
+                    </div>
+                </div>
+                <p>승격은 "누가 승인했는가"가 반드시 남아야 합니다. 승인 로그를 남기지 않으면 장애 발생 시 원인 역추적이 어려워지고 동일 실수가 반복될 수 있습니다.</p>
+                <div class="prompt-box">
+                    <span class="label">🚦 실전 프롬프트:</span>
+                    <pre>당신은 MLOps 리드입니다.
+개발-스테이징-운영 3단계 배포 체계를 설계하고,
+각 단계별 승인 조건과 롤백 조건을 제안해 주세요.
+표 형식으로 작성해 주세요.</pre>
+                </div>
+            </section>
+
+            <section class="section" id="release">
+                <h2>3. 릴리스 패턴 (Blue/Green, Canary, A/B)</h2>
+                <p>릴리스 패턴은 장애 범위를 줄이는 핵심 도구입니다. 모델 성능 변동이 큰 AI 서비스에서는 단계적 배포가 필수입니다.</p>
+                <ul>
+                    <li><strong>Blue/Green:</strong> 새 환경 전체 검증 후 전환</li>
+                    <li><strong>Canary:</strong> 일부 트래픽으로 성능/안정성 관찰</li>
+                    <li><strong>A/B 테스트:</strong> 신규 모델 효과를 계량적으로 비교</li>
+                </ul>
+                <h3>릴리스 패턴 선택 가이드</h3>
+                <p>Blue/Green은 전환이 빠르지만 인프라 비용이 높고, Canary는 안정적이지만 관찰 기간이 필요합니다. A/B는 제품 KPI 검증에 강점이 있으나 실험 설계 역량이 필요합니다.</p>
+                <ul>
+                    <li>고위험 변경: Blue/Green + 즉시 롤백 준비</li>
+                    <li>중위험 변경: Canary 단계 확대(5% -> 25% -> 50% -> 100%)</li>
+                    <li>성능 비교 목적: A/B로 사용자 그룹별 효과 측정</li>
+                </ul>
+                <table class="info-table">
+                    <thead>
+                        <tr><th>패턴</th><th>장점</th><th>주의사항</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Blue/Green</td><td>즉시 전환/즉시 롤백 가능</td><td>인프라 2배 필요</td></tr>
+                        <tr><td>Canary</td><td>리스크 분산, 지표 관찰 용이</td><td>관찰 기간 관리 필요</td></tr>
+                        <tr><td>A/B</td><td>KPI 개선 검증에 강함</td><td>실험 설계 오류 시 해석 왜곡</td></tr>
+                    </tbody>
+                </table>
+                <div class="example-output">
+                    1주차: 5% Canary -> 오류율/응답속도 확인<br>
+                    2주차: 30% 확대 -> KPI 개선 여부 검증<br>
+                    3주차: 100% 전환 -> 이전 버전은 대기 상태 유지
+                </div>
+            </section>
+
+            <section class="section" id="scaling">
+                <h2>4. 스케일링 설계</h2>
+                <p>예측 요청량은 시간대별로 크게 달라집니다. 수직/수평 확장 전략을 나누고, 트래픽 급증 시 임계치를 기준으로 자동 확장 정책을 적용하세요.</p>
+                <h3>스케일링 기준</h3>
+                <ul>
+                    <li>CPU 사용률, 메모리, 큐 길이, 응답 지연시간</li>
+                    <li>분당 요청 수(RPS) 기반 인스턴스 자동 증가</li>
+                    <li>유휴 시간대 자동 축소로 비용 절감</li>
+                </ul>
+                <h3>운영 시뮬레이션 항목</h3>
+                <ul>
+                    <li>프로모션/이벤트 시간대 트래픽 3배 가정 부하 테스트</li>
+                    <li>외부 API 지연 시 내부 큐 적체 시나리오 점검</li>
+                    <li>스케일 아웃 후 캐시 미스 증가 여부 확인</li>
+                </ul>
+                <div class="prompt-box">
+                    <span class="label">📈 실전 프롬프트:</span>
+                    <pre>서비스 트래픽이 평시 대비 4배 증가하는 상황을 가정해,
+오토스케일링 기준(CPU/RPS/Latency)과 단계별 확장 수치를
+표 형식으로 설계해 주세요.</pre>
+                </div>
+                <p>스케일링은 인스턴스 수만 늘린다고 끝나지 않습니다. 데이터베이스 연결 수, 캐시 히트율, 메시지 큐 소비 속도까지 함께 조정해야 병목이 이동하지 않습니다.</p>
+            </section>
+
+            <section class="section" id="latency">
+                <h2>5. 성능 최적화 (Latency/Throughput)</h2>
+                <p>배포 후 사용자 경험은 평균이 아닌 꼬리 지연(P95/P99)에서 결정됩니다. 캐싱, 배치 추론, 모델 경량화를 조합해 최적화하세요.</p>
+                <ul>
+                    <li>반복 요청 캐시 적용으로 응답시간 단축</li>
+                    <li>요청 병합(Batching)으로 처리량 향상</li>
+                    <li>모델 양자화/압축으로 추론 비용 절감</li>
+                </ul>
+                <h3>지연시간 개선 체크리스트</h3>
+                <ol>
+                    <li>입력 전처리 시간과 모델 추론 시간을 분리 측정</li>
+                    <li>네트워크 왕복 시간과 내부 처리 시간을 분리 분석</li>
+                    <li>Top N 느린 요청 샘플을 수집해 공통 원인 파악</li>
+                    <li>고비용 프롬프트/피처를 경량화하고 재검증</li>
+                </ol>
+                <table class="info-table">
+                    <thead>
+                        <tr><th>최적화 기법</th><th>기대 효과</th><th>적용 시점</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>캐시</td><td>반복 요청 지연 30~50% 감소</td><td>동일 질의 비율이 높을 때</td></tr>
+                        <tr><td>배치 추론</td><td>처리량 1.5~2배 향상</td><td>요청 밀집 구간이 있을 때</td></tr>
+                        <tr><td>모델 경량화</td><td>GPU/CPU 비용 절감</td><td>품질 유지 범위 확인 후</td></tr>
+                    </tbody>
+                </table>
+                <div class="example-output">
+                    캐시 적용 전 P95 720ms -> 적용 후 430ms,  
+                    배치 추론 적용 전 처리량 180rps -> 적용 후 310rps
+                </div>
+            </section>
+
+            <section class="section" id="resilience">
+                <h2>6. 장애 대응과 복구 전략</h2>
+                <p>운영 장애는 피할 수 없으므로 복구 시간을 줄이는 설계가 중요합니다. 헬스체크, 서킷브레이커, 자동 롤백을 표준으로 설정하세요.</p>
+                <h3>운영 보호장치</h3>
+                <ul>
+                    <li>헬스체크 실패 시 자동 트래픽 차단</li>
+                    <li>오류율 임계치 초과 시 직전 모델로 롤백</li>
+                    <li>장애 알림 후 15분 내 원인 분류 프로세스 운영</li>
+                </ul>
+                <h3>장애 등급 체계</h3>
+                <ul>
+                    <li><strong>SEV-1:</strong> 전체 서비스 영향, 즉시 롤백 + 비상 채널 가동</li>
+                    <li><strong>SEV-2:</strong> 일부 사용자 영향, 우회 경로 활성화 후 원인 분석</li>
+                    <li><strong>SEV-3:</strong> 성능 저하, 다음 배포 이전 개선 반영</li>
+                </ul>
+                <table class="info-table">
+                    <thead>
+                        <tr><th>장애 등급</th><th>초기 대응 시간</th><th>필수 액션</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>SEV-1</td><td>5분 이내</td><td>롤백/고객공지/임원보고</td></tr>
+                        <tr><td>SEV-2</td><td>15분 이내</td><td>우회경로/원인분석/상황공유</td></tr>
+                        <tr><td>SEV-3</td><td>60분 이내</td><td>장애기록/개선과제 등록</td></tr>
+                    </tbody>
+                </table>
+                <p>장애 복구는 기술만으로 해결되지 않습니다. 커뮤니케이션 템플릿(상황 공유, 고객 안내, 내부 보고)을 미리 준비하면 혼선을 줄일 수 있습니다.</p>
+                <div class="tip-box">
+                    장애 대응 문서는 반드시 훈련해야 효과가 있습니다. 분기별 모의 장애 훈련(Game Day)으로 복구 절차를 점검하세요.
+                </div>
+            </section>
+
+            <section class="section" id="cost">
+                <h2>7. 비용 최적화 전략</h2>
+                <p>성능 개선과 비용 절감은 동시에 달성해야 합니다. 모델별 비용 구조를 투명하게 측정하고, 업무 중요도에 따라 자원 우선순위를 나누세요.</p>
+                <ul>
+                    <li>모델/요청 단위 원가를 대시보드로 공개</li>
+                    <li>비핵심 트래픽은 저비용 모델로 라우팅</li>
+                    <li>야간/휴일 배치 작업으로 자원 단가 최적화</li>
+                </ul>
+                <h3>비용 관리 프레임워크</h3>
+                <ul>
+                    <li>요청당 비용(Cost per Request)과 성공당 비용(Cost per Success) 분리 측정</li>
+                    <li>부서/서비스별 예산 한도와 초과 알림 정책 적용</li>
+                    <li>비용 급증 구간의 프롬프트 길이/모델 크기/재시도율 분석</li>
+                </ul>
+                <div class="team-grid">
+                    <div class="team-card">
+                        <strong>활용팀: 재무팀</strong>
+                        월별 예산 한도/초과 경보 운영
+                    </div>
+                    <div class="team-card">
+                        <strong>활용팀: 플랫폼팀</strong>
+                        모델 라우팅 최적화, 인프라 비용 개선
+                    </div>
+                    <div class="team-card">
+                        <strong>활용팀: 서비스기획팀</strong>
+                        품질과 비용의 균형 기준 의사결정
+                    </div>
+                </div>
+                <p>비용 최적화는 성능을 희생하는 것이 아니라 낭비를 제거하는 작업입니다. 동일 품질을 유지하는 더 작은 모델이나 캐시 전략을 병행하면 운영비를 큰 폭으로 줄일 수 있습니다.</p>
+            </section>
+
+            <section class="section" id="checklist">
+                <h2>8. 배포 전/후 운영 체크리스트</h2>
+                <p>체크리스트는 배포 품질을 표준화하는 가장 빠른 방법입니다. 배포 전 검증과 배포 후 관찰 지표를 분리해 운영하세요.</p>
+                <ol>
+                    <li>모델/데이터 버전 일치 여부 확인</li>
+                    <li>테스트 케이스 통과율과 회귀 테스트 결과 확인</li>
+                    <li>모니터링 알람/대시보드/로그 경로 사전 점검</li>
+                    <li>롤백 명령과 담당자 연락 체계 사전 공유</li>
+                </ol>
+                <h3>배포 후 24시간 집중 관찰 항목</h3>
+                <ul>
+                    <li>오류율, 타임아웃, 재시도 비율 변화</li>
+                    <li>고객 불만/문의 증가 여부</li>
+                    <li>핵심 KPI(전환율, 해결률, 응답만족도) 변화</li>
+                    <li>비용 지표 급증 여부</li>
+                </ul>
+                <table class="info-table">
+                    <thead>
+                        <tr><th>시점</th><th>확인 항목</th><th>판단 기준</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>배포 직후 1시간</td><td>오류율/헬스체크</td><td>기준 대비 2배 이내</td></tr>
+                        <tr><td>배포 후 6시간</td><td>P95 지연/재시도율</td><td>기준 대비 15% 이내</td></tr>
+                        <tr><td>배포 후 24시간</td><td>KPI/비용/CS 문의량</td><td>악화 없음 또는 개선</td></tr>
+                    </tbody>
+                </table>
+                <div class="prompt-box">
+                    <span class="label">📝 운영 프롬프트:</span>
+                    <pre>신규 모델 배포 후 24시간 모니터링 리포트를 작성해 주세요.
+필수 항목: 오류율, 응답지연, 사용자 영향, 롤백 필요 여부, 다음 액션.
+경영진용 요약 5줄 + 운영팀 상세 체크리스트 형식으로 작성해 주세요.</pre>
+                </div>
+            </section>
+
+            <div style="text-align: center; margin-top: 60px; padding: 40px; background: linear-gradient(135deg, #10b98115 0%, #05966915 100%); border-radius: 15px;">
+                <h3 style="font-size: 1.5rem; margin-bottom: 20px;">📈 다음 단계: 운영 데이터를 학습으로 연결</h3>
+                <p style="margin-bottom: 30px;">배포 안정화 이후에는 피드백 루프를 구축해 지속적으로 성능을 개선하세요.</p>
+                <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                    <a href="manual-continuous-learning.html" class="btn btn-outline">지속적 학습 및 개선</a>
+                    <a href="manual-ai-optimization.html" class="btn btn-outline">AI 성능 최적화</a>
+                    <a href="manuals.html" class="btn btn-primary">전체 목록</a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <button class="pdf-button" onclick="downloadPDF()">
+        <i class="fas fa-file-pdf"></i> PDF 다운로드
+    </button>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo-section">
+                        <img src="assets/images/common/footer_tg.jpg" alt="TG 건물" class="footer-building-image">
+                        <div class="footer-text-content">
+                            <h4>TG AI 캠퍼스</h4>
+                            <p>AI 기술 교육 전문 플랫폼</p>
+                        </div>
+                    </div>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>AI 교육 과정</h4>
+                    <ul>
+                        <li><a href="manuals.html#tab-basics-link">기초편</a></li>
+                        <li><a href="manuals.html#tab-advanced-link">실전편</a></li>
+                        <li><a href="manuals.html#tab-prompt-link">프롬프트</a></li>
+                        <li><a href="manuals.html#tab-job-link">직무별 활용</a></li>
+                        <li><a href="manuals.html#tab-advanced-ai-link">AI 고도화</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>AI 실전</h4>
+                    <ul>
+                        <li><a href="manual-prompt-basic.html">프롬프트 작성법</a></li>
+                        <li><a href="manual-automation.html">업무 자동화</a></li>
+                        <li><a href="manual-workflow.html">워크플로우 구축</a></li>
+                        <li><a href="manual-collaboration.html">AI 협업 도구</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>학습 지원</h4>
+                    <ul>
+                        <li><a href="support.html">나만의 AI 코치</a></li>
+                        <li><a href="notices.html">공지사항</a></li>
+                        <li><a href="dictionary.html">AI 용어 사전</a></li>
+                        <li><a href="dashboard.html">학습 현황</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>TG 라운지</h4>
+                    <ul>
+                        <li><a href="about.html">TG AI 캠퍼스 소개</a></li>
+                        <li><a href="tg-family.html">TG 패밀리</a></li>
+                        <li><a href="news.html">TG Alliance 소식</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 TG AI 캠퍼스. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        async function downloadPDF() {
+            const button = document.querySelector('.pdf-button');
+            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 생성 중...';
+            button.disabled = true;
+
+            try {
+                const { jsPDF } = window.jspdf;
+                const content = document.getElementById('manual-content');
+                const canvas = await html2canvas(content, { scale: 2, useCORS: true, logging: false });
+                const imgData = canvas.toDataURL('image/png');
+                const pdf = new jsPDF('p', 'mm', 'a4');
+                const pageWidth = pdf.internal.pageSize.getWidth();
+                const pageHeight = pdf.internal.pageSize.getHeight();
+                const imgWidth = pageWidth - 20;
+                const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                let heightLeft = imgHeight;
+                let position = 10;
+
+                pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+                heightLeft -= pageHeight;
+
+                while (heightLeft >= 0) {
+                    position = heightLeft - imgHeight + 10;
+                    pdf.addPage();
+                    pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+                    heightLeft -= pageHeight;
+                }
+
+                pdf.save('TG_AI_모델_배포_및_스케일링_매뉴얼.pdf');
+            } catch (error) {
+                alert('PDF 생성 중 오류가 발생했습니다.');
+                console.error(error);
+            } finally {
+                button.innerHTML = '<i class="fas fa-file-pdf"></i> PDF 다운로드';
+                button.disabled = false;
+            }
+        }
+
+        function scrollToHash(hash) {
+            const target = document.querySelector(hash);
+            if (target) {
+                const headerOffset = 120;
+                const elementPosition = target.getBoundingClientRect().top;
+                const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+            }
+        }
+
+        document.querySelectorAll('.manual-sidebar a[href^="#"]')?.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const href = this.getAttribute('href');
+                scrollToHash(href);
+                document.querySelectorAll('.manual-sidebar a').forEach(a => a.classList.remove('active'));
+                this.classList.add('active');
+                history.replaceState(null, '', href);
+            });
+        });
+
+        window.addEventListener('load', function() {
+            if (window.location.hash) {
+                setTimeout(() => {
+                    scrollToHash(window.location.hash);
+                    const activeLink = document.querySelector('.manual-sidebar a[href="' + window.location.hash + '"]');
+                    if (activeLink) {
+                        document.querySelectorAll('.manual-sidebar a').forEach(a => a.classList.remove('active'));
+                        activeLink.classList.add('active');
+                    }
+                }, 10);
+            }
+        });
+
+        document.querySelector('.mobile-menu-toggle')?.addEventListener('click', function() {
+            document.querySelector('.nav-menu').classList.toggle('active');
+        });
+    </script>
+</body>
+</html>
