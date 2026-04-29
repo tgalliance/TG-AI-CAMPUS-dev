@@ -673,10 +673,9 @@
     <section class="video-section">
         <div class="video-wrapper">
             <!-- 동영상 -->
-            <div class="video-container" id="videoContainer" data-backend-integration="video-tracking">
-                <!-- 테스트용 직접 iframe -->
-                <iframe 
-                    id="videoFrame"
+            <div class="video-container" id="videoContainer">
+                <video
+                    id="videoPlayer"
                     style="
                         position: absolute;
                         top: 0;
@@ -686,18 +685,14 @@
                         border: none;
                         border-radius: 12px;
                         background: #000;
+                        object-fit: cover;
                     "
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowfullscreen>
-                </iframe>
-                <!-- 원래 썸네일은 주석 처리
-                <img src="https://img.youtube.com/vi/wP48xJLWuB0/maxresdefault.jpg" alt="강좌 썸네일" class="video-thumbnail" id="videoThumbnail">
-                <div class="video-overlay">
-                    <div class="play-button">
-                        <i class="fas fa-play"></i>
-                    </div>
-                </div>
-                -->
+                    src="assets/videos/courses/course-video.mp4"
+                    autoplay
+                    muted
+                    playsinline
+                    controls>
+                </video>
             </div>
 
             <!-- 관련 강좌 (동영상 옆) -->
@@ -765,10 +760,10 @@
 
             <!-- 탭 메뉴 -->
             <div class="course-tabs">
-                <button class="course-tab active" data-tab="overview">개요</button>
-                <button class="course-tab" data-tab="curriculum">커리큘럼</button>
-                <button class="course-tab" data-tab="notes" data-backend-integration="notes-system">노트</button>
-                <button class="course-tab" data-tab="qa" data-backend-integration="qa-system">Q&A</button>
+                <button class="course-tab active" data-tab="overview" onclick="switchTab(this,'overview')">개요</button>
+                <button class="course-tab" data-tab="curriculum" onclick="switchTab(this,'curriculum')">커리큘럼</button>
+                <button class="course-tab" data-tab="notes" onclick="switchTab(this,'notes')">노트</button>
+                <button class="course-tab" data-tab="qa" onclick="switchTab(this,'qa')">Q&A</button>
             </div>
 
             <!-- 개요 탭 -->
@@ -935,6 +930,18 @@
         </div>
     </section>
 
+    <script>
+        function switchTab(clickedBtn, tabId) {
+            document.querySelectorAll('.course-tab').forEach(function(btn) {
+                btn.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-panel').forEach(function(panel) {
+                panel.classList.remove('active');
+            });
+            clickedBtn.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        }
+    </script>
     <script>
         // 🎓 강좌 데이터베이스 (27개 영상)
         const coursesDB = {
@@ -1700,11 +1707,10 @@
                 </div>
             `;
             
-            // 비디오 iframe 설정
-            const actualVideoId = videoId || course.video;
-            const videoFrame = document.getElementById('videoFrame');
-            if (videoFrame && actualVideoId) {
-                videoFrame.src = `https://www.youtube-nocookie.com/embed/${actualVideoId}?rel=0&modestbranding=1`;
+            // 로컬 video 엘리먼트 자동재생 보장
+            const videoPlayer = document.getElementById('videoPlayer');
+            if (videoPlayer) {
+                videoPlayer.play().catch(() => {});
             }
 
             // 썸네일 요소가 있을 경우에만 업데이트
@@ -1756,45 +1762,13 @@
             });
         });
 
-        // 페이지 완전 로드 후 유튜브 영상 임베드
+        // 로컬 동영상 자동재생 보장 (muted autoplay)
         window.onload = function() {
-            // coursesDB가 정의되었는지 확인
-            if (typeof coursesDB === 'undefined') {
-                console.error('coursesDB is not defined');
-                return;
-            }
-            
-            // URL 파라미터에서 video ID 읽어서 해당 유튜브 임베드로 변경
-            const urlParams = new URLSearchParams(window.location.search);
-            const videoId = urlParams.get('video');
-            const courseId = parseInt(urlParams.get('id')) || 1;
-            const course = coursesDB[courseId];
-            
-            // video 파라미터가 있으면 우선 사용, 없으면 DB에서 가져오기
-            const actualVideoId = videoId || (course ? course.video : null);
-            
-            console.log('Video ID:', actualVideoId); // 디버깅용
-            console.log('Course ID:', courseId); // 디버깅용
-            console.log('Course:', course); // 디버깅용
-            
-            if (actualVideoId) {
-                // 기존 videoFrame iframe src만 업데이트 (DOM 초기화 없이)
-                const existingFrame = document.getElementById('videoFrame');
-                if (existingFrame) {
-                    existingFrame.src = `https://www.youtube-nocookie.com/embed/${actualVideoId}?rel=0&modestbranding=1`;
-                    console.log('videoFrame src updated by window.onload');
-                } else {
-                    console.warn('videoFrame not found in window.onload');
-                }
-            } else {
-                console.error('No video ID found');
+            const videoPlayer = document.getElementById('videoPlayer');
+            if (videoPlayer) {
+                videoPlayer.play().catch(() => {});
             }
         };
-
-        // 비디오 재생 (유튜브 임베드) - 클릭 이벤트는 필요 없지만 남겨둠
-        document.getElementById('videoContainer').addEventListener('click', function() {
-            // 이미 자동 재생되었으므로 아무 작업 안 함
-        });
 
         // 노트 저장 (localStorage - Cursor에서 DB로 교체 필요)
         function saveNote() {
@@ -1868,66 +1842,5 @@
         });
     </script>
 
-    <!-- 유튜브 자동 임베드 스크립트 -->
-    <script>
-        // 페이지 로드 후 즉시 실행
-        setTimeout(function() {
-            console.log('YouTube embed script starting...');
-            
-            // URL 파라미터에서 video ID 읽기
-            const urlParams = new URLSearchParams(window.location.search);
-            let videoId = urlParams.get('video');
-            const courseId = parseInt(urlParams.get('id')) || 1;
-            
-            // URL video 파라미터가 있으면 우선 사용, 없으면 하드코딩 fallback
-            const embeddableVideos = {
-                101: 'JmhxyA0dK3w',
-                102: 'k3V_x6GnDHE',
-                103: 'XxxVb8vLj-A',
-                104: 'aircAruvnKk',
-                105: 'UKh_Q_r2sYs',
-                106: 'nKYKQOHwZ_E',
-                107: 'R9OHn5zg4qE',
-                108: 'i_H5fjqy8_I'
-            };
-
-            // URL에 video 파라미터가 있으면 그것을 최우선 사용
-            if (!videoId) {
-                videoId = embeddableVideos[courseId] || embeddableVideos[101];
-            }
-            
-            console.log('URL params - original videoId:', urlParams.get('video'), 'new videoId:', videoId, 'courseId:', courseId);
-            
-            // videoId가 있으면 iframe에 src 설정
-            if (videoId) {
-                const iframe = document.getElementById('videoFrame');
-                console.log('iframe found:', iframe);
-                
-                if (iframe) {
-                    // youtube-nocookie 도메인으로 임베드 (보안 정책 완화)
-                    iframe.src = `https://www.youtube-nocookie.com/embed/${videoId}?rel=0&modestbranding=1`;
-                    console.log('iframe src set to:', iframe.src);
-
-                    // 컨테이너 클릭 시 autoplay로 전환
-                    document.getElementById('videoContainer').addEventListener('click', function() {
-                        iframe.src = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1`;
-                    });
-                    
-                    // iframe 로드 확인
-                    iframe.onload = function() {
-                        console.log('iframe loaded successfully');
-                    };
-                    
-                    iframe.onerror = function() {
-                        console.error('iframe failed to load');
-                    };
-                } else {
-                    console.error('iframe not found');
-                }
-            } else {
-                console.error('No video ID found in URL');
-            }
-        }, 100); // 100ms 지연으로 DOM 완전 로드 보장
-    </script>
 </body>
 </html>
